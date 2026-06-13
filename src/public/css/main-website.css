@@ -123,6 +123,7 @@ BASE & RESET
   outline-color: var(--ring);
   margin: 0;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -850,6 +851,14 @@ BOTTOM SHEET MODAL
   border-radius: 4px;
   margin: 12px auto;
   flex-shrink: 0;
+}
+
+.sheet-header-title {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--foreground);
+  margin: 0 0 16px 0;
 }
 
 .bottom-sheet-content {
