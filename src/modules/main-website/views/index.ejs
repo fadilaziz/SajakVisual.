@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SajakVisual - Undangan Digital</title>
+
+    <!-- Phosphor Icons for Clean Look -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/css/main-website.css" />
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Header -->
+      <header class="header reveal-on-scroll">
+        <div class="greeting">
+          <img src="/img/logo_sajakvisual.png" alt="Sajak Visual" class="brand-logo" />
+          <p>Layanan Undangan Digital</p>
+        </div>
+        <button class="theme-toggle-btn" aria-label="Toggle Dark Mode" id="theme-toggle">
+          <i class="ph ph-moon"></i>
+        </button>
+      </header>
+
+      <!-- Banner Slider -->
+      <section class="banner-slider reveal-on-scroll" style="transition-delay: 100ms;">
+        <div class="banner-track" id="banner-track">
+          <!-- Slide 1 -->
+          <div class="promo-banner slide" style="background-image: url('/img/banner-bg.png')">
+            <div class="promo-content">
+              <h3>Solusi Undangan Digital</h3>
+              <p>Praktis, elegan, dan ramah lingkungan untuk momen spesialmu.</p>
+            </div>
+          </div>
+          <!-- Slide 2 -->
+          <div class="promo-banner slide" style="background-color: #2a2a2a">
+            <div class="promo-content">
+              <h3>Diskon Spesial 20%</h3>
+              <p>Gunakan kode promo SAJAK20 untuk semua template premium.</p>
+            </div>
+          </div>
+          <!-- Slide 3 -->
+          <div class="promo-banner slide" style="background-color: #1f1f1f">
+            <div class="promo-content">
+              <h3>Jasa Fotografi Sajak Visual</h3>
+              <p>Abadikan momen terindahmu bersama tim fotografer profesional kami.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Search & Filter -->
+      <section class="search-area reveal-on-scroll" style="transition-delay: 200ms;">
+        <div class="search-box">
+          <i class="ph ph-magnifying-glass search-icon"></i>
+          <input type="text" class="search-input" placeholder="Cari..." />
+        </div>
+        <div class="filter-container">
+          <button class="filter-btn" aria-label="Filter" id="filter-btn-toggle">
+            <i class="ph ph-funnel"></i>
+          </button>
+          <div class="filter-dropdown" id="filter-dropdown">
+            <a href="#" class="filter-dropdown-item">Terbaru</a>
+            <a href="#" class="filter-dropdown-item">Adat</a>
+            <a href="#" class="filter-dropdown-item">Modern</a>
+            <a href="#" class="filter-dropdown-item">Minimalis</a>
+            <a href="#" class="filter-dropdown-item">Klassik</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Featured Products Header -->
+      <section class="section-header reveal-on-scroll" style="transition-delay: 300ms;">
+        <h2>Pilihan Undangan</h2>
+        <a href="#" class="see-all">Lihat Semua</a>
+      </section>
+
+      <main class="product-grid reveal-on-scroll" id="product-grid" style="transition-delay: 400ms;">
+        <!-- Skeleton Loaders -->
+        <% for(let i=0; i<4; i++) { %>
+        <article class="product-card">
+          <div class="product-image skeleton"></div>
+          <div class="product-info">
+            <h3 class="skeleton skeleton-text"></h3>
+            <span class="category skeleton skeleton-text-short" style="margin-bottom: 12px;"></span>
+            <div class="price-row">
+              <span class="price skeleton skeleton-text-short"></span>
+            </div>
+            <div class="action-row">
+              <div class="skeleton skeleton-btn" style="width: 100%;"></div>
+            </div>
+          </div>
+        </article>
+        <% } %>
+      </main>
+
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="footer-content">
+          <div class="footer-top">
+            <img src="/img/logo_sajakvisual.png" alt="Sajak Visual" class="brand-logo footer-logo" />
+            <div class="footer-socials">
+              <a href="https://www.tiktok.com/@sajakvisual_present?is_from_webapp=1&sender_device=pc" aria-label="TikTok"><i class="ph ph-tiktok-logo"></i></a>
+              <a href="https://www.instagram.com/sajak_visual_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" aria-label="Instagram"><i class="ph ph-instagram-logo"></i></a>
+              <a href="#" aria-label="WhatsApp"><i class="ph ph-whatsapp-logo"></i></a>
+            </div>
+          </div>
+          <p class="footer-copyright">&copy; 2026 Sajak Visual. All rights reserved.</p>
+        </div>
+      </footer>
+    </div>
+
+
+
+    <!-- Bottom Sheet Detail Modal -->
+    <div class="bottom-sheet-overlay" id="detail-sheet-overlay"></div>
+    <div class="bottom-sheet" id="detail-sheet">
+      <div class="bottom-sheet-handle"></div>
+      <div class="bottom-sheet-content">
+        <div class="sheet-image" id="sheet-image"></div>
+        <div class="sheet-info">
+          <h3 id="sheet-title">Nama Undangan</h3>
+          <span class="category" id="sheet-category">Kategori</span>
+          <p class="sheet-desc" id="sheet-desc">Deskripsi undangan...</p>
+        </div>
+        <div class="sheet-actions">
+          <div class="sheet-price-container">
+            <span class="sheet-price-label">Harga</span>
+            <span class="sheet-price-value" id="sheet-price">Rp 0</span>
+          </div>
+          <div class="sheet-divider"></div>
+          <button class="btn-detail" id="sheet-btn-beli">Beli</button>
+          <button class="btn-outline" id="sheet-btn-demo">Demo</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav" id="bottom-nav">
+      <a href="/" class="nav-item active">
+        <i class="ph ph-house"></i>
+        <span>Utama</span>
+      </a>
+      <a href="/transaksi" class="nav-item">
+        <i class="ph ph-receipt"></i>
+        <span>Transaksi</span>
+      </a>
+      <a href="/bantuan" class="nav-item">
+        <i class="ph ph-info"></i>
+        <span>Bantuan</span>
+      </a>
+    </nav>
+
+    <script src="/javascript/main-website.js"></script>
+  </body>
+</html>

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cek Transaksi - Sajak Visual</title>
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/css/main-website.css" />
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Header -->
+      <header class="header reveal-on-scroll">
+        <div class="greeting">
+          <img src="/img/logo_sajakvisual.png" alt="Sajak Visual" class="brand-logo" />
+          <p>Layanan Undangan Digital</p>
+        </div>
+        <button class="theme-toggle-btn" aria-label="Toggle Dark Mode" id="theme-toggle">
+          <i class="ph ph-moon"></i>
+        </button>
+      </header>
+
+      <!-- Transaction Tracker Content -->
+      <main class="transaction-container reveal-on-scroll" style="transition-delay: 100ms;">
+        <div class="transaction-hero">
+          <div class="transaction-icon-wrapper">
+            <i class="ph ph-receipt"></i>
+          </div>
+          <h2>Cek Transaksi Anda</h2>
+          <p>Masukkan nomor invoice yang Anda dapatkan setelah melakukan pesanan.</p>
+        </div>
+
+        <form class="transaction-form" id="form-cek-transaksi">
+          <div class="input-group">
+            <label for="invoice-input">Nomor Invoice</label>
+            <div class="input-wrapper">
+              <i class="ph ph-magnifying-glass input-icon"></i>
+              <input 
+                type="text" 
+                id="invoice-input" 
+                class="form-input" 
+                placeholder="Contoh: INV-12345678" 
+                autocomplete="off"
+                required
+              />
+            </div>
+          </div>
+          <button type="submit" class="btn-detail btn-submit-transaksi">Cek Sekarang</button>
+        </form>
+      </main>
+
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav" id="bottom-nav">
+      <a href="/" class="nav-item">
+        <i class="ph ph-house"></i>
+        <span>Utama</span>
+      </a>
+      <a href="/transaksi" class="nav-item active">
+        <i class="ph ph-receipt"></i>
+        <span>Transaksi</span>
+      </a>
+      <a href="/bantuan" class="nav-item">
+        <i class="ph ph-info"></i>
+        <span>Bantuan</span>
+      </a>
+    </nav>
+
+    <script src="/javascript/main-website.js"></script>
+    <script>
+      // Simple logic to handle form submission gracefully without reloading
+      document.getElementById('form-cek-transaksi').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const invoiceInput = document.getElementById('invoice-input');
+        // Basic feedback since we are just doing UI for now
+        const btn = document.querySelector('.btn-submit-transaksi');
+        const originalText = btn.textContent;
+        btn.textContent = 'Mencari...';
+        btn.style.opacity = '0.7';
+        
+        setTimeout(() => {
+          btn.textContent = originalText;
+          btn.style.opacity = '1';
+          alert('Sistem sedang dalam pengembangan. Fitur pencarian invoice belum tersedia.');
+        }, 1000);
+      });
+    </script>
+  </body>
+</html>

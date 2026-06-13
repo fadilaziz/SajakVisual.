@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pusat Bantuan - Sajak Visual</title>
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/css/main-website.css" />
+  </head>
+  <body>
+    <div class="app-container">
+      <!-- Header -->
+      <header class="header reveal-on-scroll">
+        <div class="greeting">
+          <img src="/img/logo_sajakvisual.png" alt="Sajak Visual" class="brand-logo" />
+          <p>Layanan Undangan Digital</p>
+        </div>
+        <button class="theme-toggle-btn" aria-label="Toggle Dark Mode" id="theme-toggle">
+          <i class="ph ph-moon"></i>
+        </button>
+      </header>
+
+      <!-- Help Content -->
+      <main class="help-container reveal-on-scroll" style="transition-delay: 100ms;">
+        <div class="help-hero">
+          <h2>Pusat Bantuan</h2>
+          <p>Pertanyaan yang sering diajukan seputar layanan undangan digital kami.</p>
+        </div>
+
+        <div class="faq-list">
+          <!-- FAQ Item 1 -->
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Bagaimana cara membeli produk undangan digital?</span>
+              <i class="ph ph-caret-down faq-icon"></i>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                <p>Anda dapat menelusuri katalog undangan kami di Halaman Utama. Klik tombol <strong>Detail</strong> pada undangan yang Anda suka, lalu klik tombol <strong>Beli</strong> untuk diarahkan ke halaman pengisian data dan pembayaran.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 2 -->
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Bagaimana proses setelah saya melakukan pembayaran?</span>
+              <i class="ph ph-caret-down faq-icon"></i>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                <p>Setelah pembayaran Anda terkonfirmasi, sistem kami akan memproses pesanan. Admin kami akan memvalidasi data Anda dan mengaktifkan produk undangan digital tersebut. Tautan (link) undangan siap pakai akan langsung dikirimkan ke kontak Anda.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- FAQ Item 3 -->
+          <div class="faq-item">
+            <button class="faq-question">
+              <span>Apakah saya bisa mengubah data undangan setelah diaktifkan?</span>
+              <i class="ph ph-caret-down faq-icon"></i>
+            </button>
+            <div class="faq-answer">
+              <div class="faq-answer-inner">
+                <p>Mengingat produk yang kami jual adalah produk digital yang diaktifkan oleh admin, jika ada perubahan mendadak pada data acara (seperti lokasi atau waktu) setelah tautan aktif, Anda dapat langsung menghubungi layanan admin kami untuk mengajukan penyesuaian data.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="help-contact">
+          <p>Butuh bantuan lebih lanjut?</p>
+          <button class="btn-detail" id="btn-contact-admin">Hubungi Admin</button>
+        </div>
+      </main>
+
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav" id="bottom-nav">
+      <a href="/" class="nav-item">
+        <i class="ph ph-house"></i>
+        <span>Utama</span>
+      </a>
+      <a href="/transaksi" class="nav-item">
+        <i class="ph ph-receipt"></i>
+        <span>Transaksi</span>
+      </a>
+      <a href="/bantuan" class="nav-item active">
+        <i class="ph ph-info"></i>
+        <span>Bantuan</span>
+      </a>
+    </nav>
+
+    <script src="/javascript/main-website.js"></script>
+    <script>
+      // Simple logic to handle FAQ Accordion
+      document.querySelectorAll('.faq-question').forEach(button => {
+        button.addEventListener('click', () => {
+          const faqItem = button.parentElement;
+          const isActive = faqItem.classList.contains('active');
+          
+          // Close all other FAQs
+          document.querySelectorAll('.faq-item').forEach(item => {
+            item.classList.remove('active');
+          });
+
+          // Toggle current
+          if (!isActive) {
+            faqItem.classList.add('active');
+          }
+        });
+      });
+      
+      document.getElementById('btn-contact-admin').addEventListener('click', () => {
+        alert('Fitur chat/whatsapp admin akan segera tersedia!');
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,383 @@
+document.addEventListener('DOMContentLoaded', () => {
+  // Theme Toggle Interaction
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeIcon = themeToggle ? themeToggle.querySelector('i') : null;
+  const htmlEl = document.documentElement;
+
+  if (themeToggle && themeIcon) {
+    // Check local storage
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      htmlEl.classList.add('dark');
+      themeIcon.classList.replace('ph-moon', 'ph-sun');
+    }
+
+    themeToggle.addEventListener('click', () => {
+      // Add a small rotation animation
+      themeIcon.style.transform = 'rotate(180deg)';
+      themeIcon.style.transition = 'transform 0.3s ease';
+      setTimeout(() => {
+        themeIcon.style.transform = 'rotate(0deg)';
+      }, 300);
+
+      if (htmlEl.classList.contains('dark')) {
+        htmlEl.classList.remove('dark');
+        themeIcon.classList.replace('ph-sun', 'ph-moon');
+        localStorage.setItem('theme', 'light');
+      } else {
+        htmlEl.classList.add('dark');
+        themeIcon.classList.replace('ph-moon', 'ph-sun');
+        localStorage.setItem('theme', 'dark');
+      }
+    });
+  }
+
+
+
+  // Setup Filter Dropdown Interaction
+  const filterBtnToggle = document.getElementById('filter-btn-toggle');
+  const filterDropdown = document.getElementById('filter-dropdown');
+
+  if (filterBtnToggle && filterDropdown) {
+    filterBtnToggle.addEventListener('click', (e) => {
+      e.stopPropagation(); // Prevent closing immediately
+      filterBtnToggle.style.transform = 'scale(0.9)';
+      setTimeout(() => {
+        filterBtnToggle.style.transform = 'scale(1)';
+        filterDropdown.classList.toggle('active');
+      }, 150);
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!filterBtnToggle.contains(e.target) && !filterDropdown.contains(e.target)) {
+        filterDropdown.classList.remove('active');
+      }
+    });
+  }
+
+  // Add click ripple or tactile feedback to cards
+  const cards = document.querySelectorAll('.card');
+  cards.forEach((card) => {
+    card.addEventListener('mousedown', () => {
+      card.style.transform = 'translateY(0) scale(0.98)';
+    });
+
+    card.addEventListener('mouseup', () => {
+      card.style.transform = 'translateY(-4px) scale(1)';
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+    });
+  });
+
+  // Auto Slide Banner
+  const bannerTrack = document.getElementById('banner-track');
+
+  if (bannerTrack) {
+    const slides = bannerTrack.querySelectorAll('.slide');
+    let currentSlide = 0;
+    const slideCount = slides.length;
+    let slideInterval;
+
+    // Swipe Variables
+    let startX = 0;
+    let endX = 0;
+    let isDragging = false;
+
+    const updateSlider = (index) => {
+      bannerTrack.style.transform = `translateX(-${index * 100}%)`;
+    };
+
+    const nextSlide = () => {
+      currentSlide = (currentSlide + 1) % slideCount;
+      updateSlider(currentSlide);
+    };
+
+    const prevSlide = () => {
+      currentSlide = (currentSlide - 1 + slideCount) % slideCount;
+      updateSlider(currentSlide);
+    };
+
+    const startSlide = () => {
+      slideInterval = setInterval(nextSlide, 4000); // 4 seconds
+    };
+
+    const stopSlide = () => {
+      clearInterval(slideInterval);
+    };
+
+    // Touch events for swiping
+    bannerTrack.addEventListener(
+      'touchstart',
+      (e) => {
+        stopSlide();
+        startX = e.touches[0].clientX;
+        isDragging = true;
+      },
+      { passive: true }
+    );
+
+    bannerTrack.addEventListener(
+      'touchmove',
+      (e) => {
+        if (!isDragging) return;
+        endX = e.touches[0].clientX;
+      },
+      { passive: true }
+    );
+
+    bannerTrack.addEventListener('touchend', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      const swipeDistance = endX - startX;
+
+      // Threshold for swipe (e.g., 50px)
+      if (Math.abs(swipeDistance) > 50 && endX !== 0) {
+        if (swipeDistance > 0) {
+          // Swipe Right (Go to Previous Slide)
+          prevSlide();
+        } else {
+          // Swipe Left (Go to Next Slide)
+          nextSlide();
+        }
+      }
+
+      // Reset endX
+      endX = 0;
+      startSlide();
+    });
+
+    // Pause on hover (for desktop)
+    const bannerSlider = bannerTrack.parentElement;
+    bannerSlider.addEventListener('mouseenter', stopSlide);
+    bannerSlider.addEventListener('mouseleave', startSlide);
+
+    startSlide();
+  }
+
+  // Fetch and Render Product Cards
+  const productGrid = document.getElementById('product-grid');
+  if (productGrid) {
+    // Add a slight delay to demonstrate the skeleton loading visually
+    setTimeout(() => {
+      fetch('/data.json')
+        .then((response) => response.json())
+        .then((products) => {
+          // Clear skeleton loaders
+          productGrid.innerHTML = '';
+
+          if (products && products.length > 0) {
+            products.forEach((product, index) => {
+              const article = document.createElement('article');
+              article.className = 'product-card card-loaded';
+              article.style.animationDelay = `${index * 50}ms`;
+
+              article.innerHTML = `
+              <div
+                class="product-image"
+                style="
+                  background-image: url('/img/template/template-2.jpg');
+                  background-size: cover;
+                  background-position: top;
+                "
+              ></div>
+              <div class="product-info">
+                <h3>${product.nama}</h3>
+                <span class="category">${product.kategori}</span>
+                <div class="price-row">
+                  <span class="price">${product.harga_format}</span>
+                </div>
+                <div class="action-row">
+                  <button class="btn-detail">Detail</button>
+                </div>
+              </div>
+            `;
+
+              // Add click ripple/tactile feedback
+              article.addEventListener('mousedown', () => {
+                article.style.transform = 'translateY(0) scale(0.98)';
+              });
+              article.addEventListener('mouseup', () => {
+                article.style.transform = 'translateY(-4px) scale(1)';
+              });
+              article.addEventListener('mouseleave', () => {
+                article.style.transform = '';
+              });
+
+              // Detail Modal click listener
+              const btnDetail = article.querySelector('.btn-detail');
+              if (btnDetail) {
+                btnDetail.addEventListener('click', () => {
+                  openDetailModal(product);
+                });
+              }
+
+              productGrid.appendChild(article);
+            });
+          } else {
+            productGrid.innerHTML = `
+            <p style="grid-column: span 2; text-align: center; padding: 20px; color: var(--muted-foreground);">
+              Belum ada produk.
+            </p>
+          `;
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching products:', error);
+          productGrid.innerHTML = `
+          <p style="grid-column: span 2; text-align: center; padding: 20px; color: var(--destructive);">
+            Gagal memuat produk.
+          </p>
+        `;
+        });
+    }, 1500); // 1.5 second delay to show the skeleton loader
+  }
+
+  // Reveal on Scroll Animation
+  const revealElements = document.querySelectorAll('.reveal-on-scroll');
+  const revealObserver = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          // Remove the inline transition delay after the first animation so it doesn't delay on subsequent state changes
+          setTimeout(() => {
+            entry.target.style.transitionDelay = '0ms';
+          }, 1000);
+          entry.target.classList.add('is-revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      root: null,
+      threshold: 0.1,
+      rootMargin: '0px 0px -20px 0px',
+    }
+  );
+
+  revealElements.forEach((el) => revealObserver.observe(el));
+
+  // Sticky Header Scrolled State
+  const header = document.querySelector('.header');
+  if (header) {
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (window.scrollY > 10) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+      },
+      { passive: true }
+    );
+  }
+
+  // ==========================================
+  // Bottom Sheet Modal Logic
+  // ==========================================
+  const detailSheetOverlay = document.getElementById('detail-sheet-overlay');
+  const detailSheet = document.getElementById('detail-sheet');
+
+  window.openDetailModal = function (product) {
+    if (!detailSheet || !detailSheetOverlay) return;
+
+    // Populate Data
+    document.getElementById('sheet-title').textContent = product.nama;
+    document.getElementById('sheet-category').textContent = product.kategori;
+    document.getElementById('sheet-price').textContent = product.harga_format;
+    // Generate a simple description since it doesn't exist in data.json
+    document.getElementById('sheet-desc').textContent =
+      `Desain undangan digital elegan dengan nuansa ${product.kategori.toLowerCase()}. Cocok untuk membuat momen spesialmu lebih berkesan.`;
+
+    // In a real app we'd use product.image, but using the template fallback for now to match the card
+    const imageUrl = product.image ? product.image : '/img/template/template-2.jpg';
+    document.getElementById('sheet-image').style.backgroundImage = `url('${imageUrl}')`;
+
+    // Open Modal
+    detailSheetOverlay.classList.add('active');
+    detailSheet.classList.add('sheet-open');
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    
+    // Hide bottom nav
+    const bottomNav = document.getElementById('bottom-nav');
+    if (bottomNav) {
+      bottomNav.classList.add('nav-hidden');
+    }
+  };
+
+  const closeDetailModal = () => {
+    detailSheetOverlay.classList.remove('active');
+    detailSheet.classList.remove('sheet-open');
+    detailSheet.style.transform = ''; // Reset any swipe transform
+    document.body.style.overflow = '';
+    
+    // Show bottom nav
+    const bottomNav = document.getElementById('bottom-nav');
+    if (bottomNav) {
+      bottomNav.classList.remove('nav-hidden');
+    }
+  };
+
+  if (detailSheetOverlay) {
+    detailSheetOverlay.addEventListener('click', closeDetailModal);
+  }
+
+  // Swipe to close logic
+  let startY = 0;
+  let currentY = 0;
+  let isDragging = false;
+
+  if (detailSheet) {
+    detailSheet.addEventListener(
+      'touchstart',
+      (e) => {
+        // Don't drag if we are scrolling the content area, unless we are at the top
+        const content = document.querySelector('.bottom-sheet-content');
+        if (e.target.closest('.bottom-sheet-content') && content.scrollTop > 0) {
+          return;
+        }
+        startY = e.touches[0].clientY;
+        isDragging = true;
+        detailSheet.style.transition = 'none'; // Remove transition for smooth dragging
+      },
+      { passive: true }
+    );
+
+    detailSheet.addEventListener(
+      'touchmove',
+      (e) => {
+        if (!isDragging) return;
+        currentY = e.touches[0].clientY;
+        const deltaY = currentY - startY;
+
+        // Only allow dragging downwards
+        if (deltaY > 0) {
+          detailSheet.style.transform = `translateY(${deltaY}px)`;
+        }
+      },
+      { passive: false }
+    );
+
+    detailSheet.addEventListener('touchend', (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      detailSheet.style.transition = 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)';
+
+      const deltaY = currentY - startY;
+      // If swiped down more than 100px, close the sheet
+      if (deltaY > 100) {
+        closeDetailModal();
+      } else {
+        // Otherwise, snap back to top
+        detailSheet.style.transform = '';
+      }
+
+      // Reset values
+      startY = 0;
+      currentY = 0;
+    });
+  }
+});

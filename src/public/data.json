@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "nama": "Elegant Gold",
+    "kategori": "Adat",
+    "harga": 150000,
+    "harga_format": "Rp 150.000",
+    "simple_preview": "elegant_gold.png"
+  },
+  {
+    "id": 2,
+    "nama": "Sweet Seventeen",
+    "kategori": "Minimalis",
+    "harga": 99000,
+    "harga_format": "Rp 99.000",
+    "simple_preview": "sweet_seventeen.png"
+  },
+  {
+    "id": 3,
+    "nama": "Baby Blue",
+    "kategori": "Modern",
+    "harga": 120000,
+    "harga_format": "Rp 120.000",
+    "simple_preview": "baby_blue.png"
+  },
+  {
+    "id": 4,
+    "nama": "Rustic Floral",
+    "kategori": "Clasic",
+    "harga": 175000,
+    "harga_format": "Rp 175.000",
+    "simple_preview": "rustic_floral.png"
+  },
+  {
+    "id": 5,
+    "nama": "Emerald Green",
+    "kategori": "Adat",
+    "harga": 160000,
+    "harga_format": "Rp 160.000",
+    "simple_preview": "emerald_green.png"
+  },
+  {
+    "id": 6,
+    "nama": "Simple White",
+    "kategori": "Minimalis",
+    "harga": 85000,
+    "harga_format": "Rp 85.000",
+    "simple_preview": "simple_white.png"
+  },
+  {
+    "id": 7,
+    "nama": "Neon Vibes",
+    "kategori": "Modern",
+    "harga": 135000,
+    "harga_format": "Rp 135.000",
+    "simple_preview": "neon_vibes.png"
+  },
+  {
+    "id": 8,
+    "nama": "Vintage Romance",
+    "kategori": "Clasic",
+    "harga": 180000,
+    "harga_format": "Rp 180.000",
+    "simple_preview": "vintage_romance.png"
+  }
+]
