@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Checkout - Sajak Visual</title>
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/css/main-website.css" />
+    <link rel="stylesheet" href="/css/checkout.css" />
+  </head>
+  <body class="loading-state">
+    <div class="app-container">
+      <!-- Header -->
+      <header class="header reveal-on-scroll">
+        <div class="greeting checkout-header-greeting">
+          <div class="hide-on-load" style="display: contents">
+            <a href="/" class="checkout-back-btn">
+              <i class="ph ph-arrow-left"></i>
+            </a>
+            <h2 class="checkout-title">Checkout</h2>
+          </div>
+          <div
+            class="show-on-load"
+            style="width: 100%; display: flex; align-items: center; gap: 12px"
+          >
+            <div class="skeleton" style="width: 24px; height: 24px; border-radius: 4px"></div>
+            <div class="skeleton" style="width: 120px; height: 24px; border-radius: 4px"></div>
+          </div>
+        </div>
+        <div class="hide-on-load" style="display: contents">
+          <button class="theme-toggle-btn" aria-label="Toggle Dark Mode" id="theme-toggle">
+            <i class="ph ph-moon"></i>
+          </button>
+        </div>
+        <div class="show-on-load">
+          <div
+            class="skeleton"
+            style="width: 40px; height: 40px; border-radius: var(--radius-xl)"
+          ></div>
+        </div>
+      </header>
+
+      <!-- Checkout Content -->
+      <main
+        class="transaction-container reveal-on-scroll checkout-main-container"
+        style="transition-delay: 100ms"
+      >
+        <div class="hide-on-load" style="display: contents">
+          <!-- Product Summary -->
+          <div class="checkout-summary" id="checkout-summary">
+            <h3 class="product-title">Ringkasan Pesanan</h3>
+            <div class="checkout-product-row">
+              <p id="checkout-product-name" class="checkout-product-name"></p>
+              <p id="checkout-product-price" class="checkout-product-price"></p>
+            </div>
+          </div>
+
+          <form class="transaction-form" id="form-checkout">
+            <h3 class="product-title">Informasi Pembeli</h3>
+            <div class="input-group">
+              <label for="nama-input">Nama Lengkap</label>
+              <div class="input-wrapper">
+                <i class="ph ph-user input-icon"></i>
+                <input
+                  type="text"
+                  id="nama-input"
+                  class="form-input"
+                  placeholder="Masukkan nama lengkap"
+                  autocomplete="name"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="input-group">
+              <label for="email-input">Email Aktif</label>
+              <div class="input-wrapper">
+                <i class="ph ph-envelope input-icon"></i>
+                <input
+                  type="email"
+                  id="email-input"
+                  class="form-input"
+                  placeholder="contoh@email.com"
+                  autocomplete="email"
+                  required
+                />
+              </div>
+              <p class="form-helper-text">
+                Pastikan email kamu aktif ya, untuk mengirim invoice pembelian.
+              </p>
+            </div>
+
+            <div class="input-group">
+              <label for="wa-input">No WA Aktif</label>
+              <div class="input-wrapper">
+                <i class="ph ph-whatsapp-logo input-icon"></i>
+                <input
+                  type="tel"
+                  id="wa-input"
+                  class="form-input"
+                  placeholder="081234567890"
+                  autocomplete="tel"
+                  required
+                />
+              </div>
+              <p class="form-helper-text">
+                Nomor yang dapat dihubungi untuk konfirmasi data undangan.
+              </p>
+            </div>
+          </form>
+        </div>
+
+        <div class="show-on-load checkout-skeleton-wrapper">
+          <!-- Skeleton Summary -->
+          <div class="skeleton-summary-container">
+            <div class="skeleton checkout-skeleton-header"></div>
+            <div class="skeleton checkout-skeleton-title"></div>
+            <div class="skeleton checkout-skeleton-price"></div>
+          </div>
+          <!-- Skeleton Form -->
+          <div class="skeleton-form-container">
+            <div class="skeleton checkout-skeleton-label"></div>
+            <div class="skeleton checkout-skeleton-input mb-lg"></div>
+
+            <div class="skeleton checkout-skeleton-label"></div>
+            <div class="skeleton checkout-skeleton-input"></div>
+            <div class="skeleton checkout-skeleton-helper mb-lg"></div>
+
+            <div class="skeleton checkout-skeleton-label"></div>
+            <div class="skeleton checkout-skeleton-input"></div>
+            <div class="skeleton checkout-skeleton-helper"></div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Bottom Navigation specific for checkout (submit button) -->
+    <nav class="bottom-nav checkout-bottom-nav" id="bottom-nav">
+      <div class="hide-on-load" style="width: 100%">
+        <button type="submit" form="form-checkout" class="btn-detail checkout-submit-btn">
+          Lanjutkan <i class="ph ph-arrow-right"></i>
+        </button>
+      </div>
+
+      <div class="show-on-load-flex checkout-skeleton-bottom-nav">
+        <div class="skeleton checkout-skeleton-btn"></div>
+      </div>
+    </nav>
+
+    <script src="/javascript/main-website.js"></script>
+    <script>
+      // Populate checkout summary from URL query parameters
+      document.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const productName = urlParams.get('title');
+        const productPrice = urlParams.get('price');
+
+        if (productName && productPrice) {
+          document.getElementById('checkout-product-name').textContent = productName;
+          document.getElementById('checkout-product-price').textContent = productPrice;
+        } else {
+          document.getElementById('checkout-summary').style.display = 'none';
+        }
+
+        // Handle checkout submission
+        const checkoutForm = document.getElementById('form-checkout');
+        if (checkoutForm) {
+          checkoutForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const submitBtn =
+              checkoutForm.querySelector('button[type="submit"]') ||
+              document.querySelector('button[form="form-checkout"]');
+
+            if (submitBtn) {
+              const originalContent = submitBtn.innerHTML;
+              submitBtn.innerHTML = 'Memproses...';
+              submitBtn.style.opacity = '0.7';
+
+              // Get form values
+              const nama = document.getElementById('nama-input').value;
+              const email = document.getElementById('email-input').value;
+              const wa = document.getElementById('wa-input').value;
+
+              // Simulate API request
+              setTimeout(() => {
+                submitBtn.innerHTML = originalContent;
+                submitBtn.style.opacity = '1';
+                
+                // Redirect to payment page with all data
+                const queryParams = new URLSearchParams({
+                  title: productName || '',
+                  price: productPrice || '',
+                  name: nama,
+                  email: email,
+                  wa: wa
+                }).toString();
+                
+                window.location.href = '/payment?' + queryParams;
+              }, 1500);
+            }
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

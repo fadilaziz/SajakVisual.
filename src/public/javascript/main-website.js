@@ -32,8 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-
-
   // Setup Filter Dropdown Interaction
   const filterBtnToggle = document.getElementById('filter-btn-toggle');
   const filterDropdown = document.getElementById('filter-dropdown');
@@ -157,12 +155,12 @@ document.addEventListener('DOMContentLoaded', () => {
     startSlide();
   }
 
+  document.body.classList.remove('loading-state');
+
   // Fetch and Render Product Cards
   const productGrid = document.getElementById('product-grid');
   if (productGrid) {
-    // Add a slight delay to demonstrate the skeleton loading visually
-    setTimeout(() => {
-      fetch('/data.json')
+    fetch('/data.json')
         .then((response) => response.json())
         .then((products) => {
           // Clear skeleton loaders
@@ -178,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <div
                 class="product-image"
                 style="
-                  background-image: url('/img/template/template-2.jpg');
+                  background-image: url('/img/template/template-2.webp');
                   background-size: cover;
                   background-position: top;
                 "
@@ -232,7 +230,6 @@ document.addEventListener('DOMContentLoaded', () => {
           </p>
         `;
         });
-    }, 1500); // 1.5 second delay to show the skeleton loader
   }
 
   // Reveal on Scroll Animation
@@ -293,14 +290,22 @@ document.addEventListener('DOMContentLoaded', () => {
       `Desain undangan digital elegan dengan nuansa ${product.kategori.toLowerCase()}. Cocok untuk membuat momen spesialmu lebih berkesan.`;
 
     // In a real app we'd use product.image, but using the template fallback for now to match the card
-    const imageUrl = product.image ? product.image : '/img/template/template-2.jpg';
+    const imageUrl = product.image ? product.image : '/img/template/template-2.webp';
     document.getElementById('sheet-image').style.backgroundImage = `url('${imageUrl}')`;
+
+    // Handle Beli button
+    const btnBeli = document.getElementById('sheet-btn-beli');
+    if (btnBeli) {
+      btnBeli.onclick = () => {
+        window.location.href = `/checkout?title=${encodeURIComponent(product.nama)}&price=${encodeURIComponent(product.harga_format)}`;
+      };
+    }
 
     // Open Modal
     detailSheetOverlay.classList.add('active');
     detailSheet.classList.add('sheet-open');
     document.body.style.overflow = 'hidden'; // Prevent background scrolling
-    
+
     // Hide bottom nav
     const bottomNav = document.getElementById('bottom-nav');
     if (bottomNav) {
@@ -313,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
     detailSheet.classList.remove('sheet-open');
     detailSheet.style.transform = ''; // Reset any swipe transform
     document.body.style.overflow = '';
-    
+
     // Show bottom nav
     const bottomNav = document.getElementById('bottom-nav');
     if (bottomNav) {

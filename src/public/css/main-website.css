@@ -210,8 +210,6 @@ COMPONENTS
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
-
-
 .greeting {
   flex: 1;
   min-width: 0;
@@ -701,7 +699,8 @@ BOTTOM NAVIGATION
   transition: color var(--transition-fast);
 }
 
-.nav-item:hover, .nav-item.active {
+.nav-item:hover,
+.nav-item.active {
   color: var(--foreground);
 }
 
@@ -764,6 +763,27 @@ SKELETON LOADING
   border-radius: var(--radius-xl);
 }
 
+/* Loading State Helpers */
+body.loading-state .hide-on-load {
+  display: none !important;
+}
+
+.show-on-load {
+  display: none !important;
+}
+
+body.loading-state .show-on-load {
+  display: block !important;
+}
+
+.show-on-load-flex {
+  display: none !important;
+}
+
+body.loading-state .show-on-load-flex {
+  display: flex !important;
+}
+
 /* ==========================================================
 SCROLL REVEAL ANIMATION
 ========================================================== */
@@ -812,7 +832,9 @@ BOTTOM SHEET MODAL
   z-index: 300;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
 }
 
 .bottom-sheet-overlay.active {
@@ -825,7 +847,8 @@ BOTTOM SHEET MODAL
   bottom: 0;
   left: 0;
   right: 0;
-  height: 70vh; /* Sepertiga lebih dari layar, dibuat lebih tinggi */
+  height: auto; /* Berubah menjadi auto agar fit dengan konten */
+  max-height: 95vh; /* Mencegah overflow layar */
   background-color: var(--card);
   border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   z-index: 301;
@@ -871,12 +894,12 @@ BOTTOM SHEET MODAL
 
 .sheet-image {
   width: 100%;
-  height: 140px;
+  height: 200px;
   background-color: var(--secondary);
   border-radius: var(--radius-md);
   margin-bottom: 16px;
   background-size: cover;
-  background-position: center;
+  background-position: top;
   flex-shrink: 0;
 }
 
@@ -948,7 +971,7 @@ TRANSACTION TRACKER
 .transaction-container {
   display: flex;
   flex-direction: column;
-  padding: 24px;
+  padding: 5px 24px;
   gap: 24px;
   min-height: calc(100vh - 150px);
 }
@@ -992,7 +1015,6 @@ TRANSACTION TRACKER
   display: flex;
   flex-direction: column;
   gap: 24px;
-  margin-top: 24px;
   background-color: var(--card);
   padding: 24px;
   border-radius: var(--radius-xl);
@@ -1033,7 +1055,9 @@ TRANSACTION TRACKER
   color: var(--foreground);
   font-family: var(--font-sans);
   font-size: 0.95rem;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
 .form-input:focus {

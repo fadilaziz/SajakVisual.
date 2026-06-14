@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Pembayaran - Sajak Visual</title>
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/css/main-website.css" />
+    <link rel="stylesheet" href="/css/payment.css" />
+  </head>
+  <body class="loading-state">
+    <div id="copy-toast" class="copy-toast">Nomor disalin!</div>
+    <div class="app-container">
+      <!-- Header -->
+      <header class="header reveal-on-scroll">
+        <div class="greeting" style="align-items: center; display: flex;">
+          <div class="hide-on-load" style="display: contents">
+            <h2 style="margin: 0; font-size: 1.25rem; font-weight: 600;">Pembayaran</h2>
+          </div>
+          <div class="show-on-load" style="width: 100%; display: flex; align-items: center;">
+            <div class="skeleton" style="width: 140px; height: 24px; border-radius: 4px"></div>
+          </div>
+        </div>
+        <div class="hide-on-load" style="display: contents">
+          <button class="theme-toggle-btn" aria-label="Toggle Dark Mode" id="theme-toggle">
+            <i class="ph ph-moon"></i>
+          </button>
+        </div>
+        <div class="show-on-load">
+          <div
+            class="skeleton"
+            style="width: 40px; height: 40px; border-radius: var(--radius-xl)"
+          ></div>
+        </div>
+      </header>
+
+      <!-- Payment Content -->
+      <main
+        class="transaction-container reveal-on-scroll payment-main-container"
+        style="transition-delay: 100ms; padding: 5px 24px;"
+      >
+        <div class="hide-on-load" style="display: contents">
+          
+          <!-- Block 1: Total & Account Info -->
+          <div class="payment-total-box">
+            <p class="payment-total-label">Total Pembayaran</p>
+            <h1 class="payment-total-amount" id="pay-amount">-</h1>
+            
+            <div class="payment-account-divider"></div>
+            
+            <p class="payment-total-label" style="text-align: left; margin-bottom: 4px;">Transfer ke Dana:</p>
+            <div class="payment-account-info">
+              <span class="payment-account-number" id="dana-number">081234567890</span>
+              <button class="payment-copy-btn" id="btn-copy" aria-label="Copy Number">
+                <i class="ph ph-copy"></i>
+              </button>
+            </div>
+            <p class="payment-account-name" style="text-align: left;">a.n Sajak Visual</p>
+          </div>
+
+          <!-- Block 2: Order Details -->
+          <div class="payment-details-box">
+            <h3 class="payment-details-title">Rincian Pesanan</h3>
+            
+            <div class="payment-detail-row">
+              <span class="payment-detail-label">No Invoice</span>
+              <div style="display: flex; align-items: center; justify-content: flex-end; gap: 6px; max-width: 65%;">
+                <span class="payment-detail-value" id="pay-invoice" style="max-width: none;">-</span>
+                <button class="payment-copy-btn" id="btn-copy-invoice" aria-label="Copy Invoice" style="padding: 0; font-size: 1.1rem; flex-shrink: 0; margin-top: -2px;">
+                  <i class="ph ph-copy"></i>
+                </button>
+              </div>
+            </div>
+            
+            <div class="payment-detail-row">
+              <span class="payment-detail-label">Tanggal Pembelian</span>
+              <span class="payment-detail-value" id="pay-date">-</span>
+            </div>
+            
+            <div class="payment-detail-row">
+              <span class="payment-detail-label">Nama Lengkap</span>
+              <span class="payment-detail-value" id="pay-name">-</span>
+            </div>
+            
+            <div class="payment-detail-row">
+              <span class="payment-detail-label">Email</span>
+              <span class="payment-detail-value" id="pay-email" style="word-break: break-all;">-</span>
+            </div>
+            
+            <div class="payment-detail-row">
+              <span class="payment-detail-label">No WhatsApp</span>
+              <span class="payment-detail-value" id="pay-wa">-</span>
+            </div>
+            
+            <div class="payment-detail-row">
+              <span class="payment-detail-label">Produk</span>
+              <span class="payment-detail-value" id="pay-product">-</span>
+            </div>
+            
+            <div class="payment-detail-row">
+              <span class="payment-detail-label">Total Pembelian</span>
+              <span class="payment-detail-value" id="pay-total-bottom">-</span>
+            </div>
+          </div>
+
+          <!-- Block 3: Instruction -->
+          <div class="payment-instruction-box">
+            <i class="ph ph-info payment-instruction-icon"></i>
+            <p class="payment-instruction-text">
+              Silahkan bayar sesuai nominal yang ditampilkan, lalu kirim bukti pengiriman via whatsapp dengan menekan tombol di bawah.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="show-on-load payment-skeleton-wrapper" style="padding: 0;">
+          <!-- Skeleton Block 1 -->
+          <div class="payment-skeleton-box payment-skeleton-center">
+            <div class="skeleton" style="width: 120px; height: 16px; border-radius: 4px; margin-bottom: 16px"></div>
+            <div class="skeleton" style="width: 200px; height: 36px; border-radius: 8px; margin-bottom: 24px"></div>
+            <div class="skeleton" style="width: 100%; height: 1px; margin-bottom: 16px"></div>
+            <div class="skeleton" style="width: 100px; height: 14px; border-radius: 4px; margin-bottom: 8px; align-self: flex-start"></div>
+            <div class="skeleton" style="width: 100%; height: 48px; border-radius: var(--radius-md); margin-bottom: 8px"></div>
+            <div class="skeleton" style="width: 120px; height: 14px; border-radius: 4px; align-self: flex-start"></div>
+          </div>
+          
+          <!-- Skeleton Block 2 -->
+          <div class="payment-skeleton-box">
+            <div class="skeleton" style="width: 140px; height: 20px; border-radius: 4px; margin-bottom: 24px"></div>
+            <div class="payment-skeleton-row">
+              <div class="skeleton" style="width: 80px; height: 16px; border-radius: 4px;"></div>
+              <div class="skeleton" style="width: 120px; height: 16px; border-radius: 4px;"></div>
+            </div>
+            <div class="payment-skeleton-row">
+              <div class="skeleton" style="width: 100px; height: 16px; border-radius: 4px;"></div>
+              <div class="skeleton" style="width: 150px; height: 16px; border-radius: 4px;"></div>
+            </div>
+            <div class="payment-skeleton-row">
+              <div class="skeleton" style="width: 60px; height: 16px; border-radius: 4px;"></div>
+              <div class="skeleton" style="width: 140px; height: 16px; border-radius: 4px;"></div>
+            </div>
+            <div class="payment-skeleton-row" style="border-top: 1px dashed var(--border); padding-top: 16px; margin-bottom: 0;">
+              <div class="skeleton" style="width: 100px; height: 18px; border-radius: 4px;"></div>
+              <div class="skeleton" style="width: 100px; height: 18px; border-radius: 4px;"></div>
+            </div>
+          </div>
+          
+          <!-- Skeleton Block 3 -->
+          <div class="payment-skeleton-box" style="padding: 16px; flex-direction: row; gap: 12px; align-items: flex-start;">
+            <div class="skeleton" style="width: 24px; height: 24px; border-radius: 4px; flex-shrink: 0;"></div>
+            <div style="flex: 1;">
+              <div class="skeleton" style="width: 100%; height: 14px; border-radius: 4px; margin-bottom: 8px;"></div>
+              <div class="skeleton" style="width: 80%; height: 14px; border-radius: 4px;"></div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Bottom Navigation specific for payment (WhatsApp button) -->
+    <nav class="bottom-nav" id="bottom-nav" style="padding: 16px; display: flex; justify-content: center;">
+      <div class="hide-on-load" style="width: 100%">
+        <a href="#" id="btn-wa" class="btn-detail" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none;">
+          Kirim Bukti Pembayaran <i class="ph ph-whatsapp-logo" style="font-size: 1.2em;"></i>
+        </a>
+      </div>
+
+      <div class="show-on-load-flex" style="width: 100%">
+        <div
+          class="skeleton"
+          style="width: 100%; height: 44px; border-radius: var(--radius-md)"
+        ></div>
+      </div>
+    </nav>
+
+    <script src="/javascript/main-website.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        // Parse URL Parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const productName = urlParams.get('title') || 'Produk Tidak Diketahui';
+        const productPrice = urlParams.get('price') || 'Rp 0';
+        const userName = urlParams.get('name') || '-';
+        const userEmail = urlParams.get('email') || '-';
+        const userWa = urlParams.get('wa') || '-';
+        
+        // Generate Invoice ID & Date
+        const date = new Date();
+        const dateStr = `${String(date.getDate()).padStart(2, '0')}${String(date.getMonth() + 1).padStart(2, '0')}${String(date.getFullYear()).slice(2)}`;
+        const randomStr = Math.random().toString(36).substring(2, 6).toUpperCase();
+        const invoiceId = `INV-${dateStr}-${randomStr}`;
+
+        const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        const formattedDate = `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}`;
+
+        // Populate DOM
+        document.getElementById('pay-amount').textContent = productPrice;
+        document.getElementById('pay-invoice').textContent = invoiceId;
+        document.getElementById('pay-date').textContent = formattedDate;
+        document.getElementById('pay-name').textContent = userName;
+        document.getElementById('pay-email').textContent = userEmail;
+        document.getElementById('pay-wa').textContent = userWa;
+        document.getElementById('pay-product').textContent = productName;
+        document.getElementById('pay-total-bottom').textContent = productPrice;
+
+        // Setup WhatsApp Link
+        const adminNumber = '6281234567890'; // Placeholder Admin WA
+        const waMessage = `Halo Admin Sajak Visual,%0A%0ASaya ingin mengirimkan bukti pembayaran untuk pesanan berikut:%0A%0A*No Invoice:* ${invoiceId}%0A*Tanggal:* ${formattedDate}%0A*Nama:* ${userName}%0A*Email:* ${userEmail}%0A*No WA:* ${userWa}%0A*Produk:* ${productName}%0A*Total Pembelian:* ${productPrice}%0A%0ABerikut adalah bukti transfernya:`;
+        const waUrl = `https://wa.me/${adminNumber}?text=${waMessage}`;
+        
+        document.getElementById('btn-wa').href = waUrl;
+
+        // Copy Feature for Dana
+        const btnCopyDana = document.getElementById('btn-copy');
+        const danaNumber = document.getElementById('dana-number').textContent;
+        const copyToast = document.getElementById('copy-toast');
+        
+        if (btnCopyDana) {
+          btnCopyDana.addEventListener('click', () => {
+            navigator.clipboard.writeText(danaNumber).then(() => {
+              copyToast.classList.add('show');
+              setTimeout(() => {
+                copyToast.classList.remove('show');
+              }, 2000);
+            }).catch(err => console.error('Failed to copy: ', err));
+          });
+        }
+
+        // Copy Feature for Invoice
+        const btnCopyInvoice = document.getElementById('btn-copy-invoice');
+        if (btnCopyInvoice) {
+          btnCopyInvoice.addEventListener('click', () => {
+            const invoiceText = document.getElementById('pay-invoice').textContent;
+            navigator.clipboard.writeText(invoiceText).then(() => {
+              copyToast.classList.add('show');
+              setTimeout(() => {
+                copyToast.classList.remove('show');
+              }, 2000);
+            }).catch(err => console.error('Failed to copy: ', err));
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
