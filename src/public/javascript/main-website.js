@@ -160,19 +160,19 @@ document.addEventListener('DOMContentLoaded', () => {
   // Fetch and Render Product Cards
   const productGrid = document.getElementById('product-grid');
   if (productGrid) {
-    fetch('/data.json')
-        .then((response) => response.json())
-        .then((products) => {
-          // Clear skeleton loaders
-          productGrid.innerHTML = '';
+    fetch('/api/templates')
+      .then((response) => response.json())
+      .then((products) => {
+        // Clear skeleton loaders
+        productGrid.innerHTML = '';
 
-          if (products && products.length > 0) {
-            products.forEach((product, index) => {
-              const article = document.createElement('article');
-              article.className = 'product-card card-loaded';
-              article.style.animationDelay = `${index * 50}ms`;
+        if (products.data && products.data.length > 0) {
+          products.data.forEach((product, index) => {
+            const article = document.createElement('article');
+            article.className = 'product-card card-loaded';
+            article.style.animationDelay = `${index * 50}ms`;
 
-              article.innerHTML = `
+            article.innerHTML = `
               <div
                 class="product-image"
                 style="
@@ -182,10 +182,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 "
               ></div>
               <div class="product-info">
-                <h3>${product.nama}</h3>
+                <h3>${product.nama_template}</h3>
                 <span class="category">${product.kategori}</span>
                 <div class="price-row">
-                  <span class="price">${product.harga_format}</span>
+                  <span class="price">Rp.${product.harga}</span>
                 </div>
                 <div class="action-row">
                   <button class="btn-detail">Detail</button>
@@ -193,43 +193,43 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
             `;
 
-              // Add click ripple/tactile feedback
-              article.addEventListener('mousedown', () => {
-                article.style.transform = 'translateY(0) scale(0.98)';
-              });
-              article.addEventListener('mouseup', () => {
-                article.style.transform = 'translateY(-4px) scale(1)';
-              });
-              article.addEventListener('mouseleave', () => {
-                article.style.transform = '';
-              });
-
-              // Detail Modal click listener
-              const btnDetail = article.querySelector('.btn-detail');
-              if (btnDetail) {
-                btnDetail.addEventListener('click', () => {
-                  openDetailModal(product);
-                });
-              }
-
-              productGrid.appendChild(article);
+            // Add click ripple/tactile feedback
+            article.addEventListener('mousedown', () => {
+              article.style.transform = 'translateY(0) scale(0.98)';
             });
-          } else {
-            productGrid.innerHTML = `
+            article.addEventListener('mouseup', () => {
+              article.style.transform = 'translateY(-4px) scale(1)';
+            });
+            article.addEventListener('mouseleave', () => {
+              article.style.transform = '';
+            });
+
+            // Detail Modal click listener
+            const btnDetail = article.querySelector('.btn-detail');
+            if (btnDetail) {
+              btnDetail.addEventListener('click', () => {
+                openDetailModal(product);
+              });
+            }
+
+            productGrid.appendChild(article);
+          });
+        } else {
+          productGrid.innerHTML = `
             <p style="grid-column: span 2; text-align: center; padding: 20px; color: var(--muted-foreground);">
               Belum ada produk.
             </p>
           `;
-          }
-        })
-        .catch((error) => {
-          console.error('Error fetching products:', error);
-          productGrid.innerHTML = `
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching products:', error);
+        productGrid.innerHTML = `
           <p style="grid-column: span 2; text-align: center; padding: 20px; color: var(--destructive);">
             Gagal memuat produk.
           </p>
         `;
-        });
+      });
   }
 
   // Reveal on Scroll Animation
@@ -282,9 +282,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!detailSheet || !detailSheetOverlay) return;
 
     // Populate Data
-    document.getElementById('sheet-title').textContent = product.nama;
+    document.getElementById('sheet-title').textContent = product.nama_template;
     document.getElementById('sheet-category').textContent = product.kategori;
-    document.getElementById('sheet-price').textContent = product.harga_format;
+    document.getElementById('sheet-price').textContent = product.harga;
     // Generate a simple description since it doesn't exist in data.json
     document.getElementById('sheet-desc').textContent =
       `Desain undangan digital elegan dengan nuansa ${product.kategori.toLowerCase()}. Cocok untuk membuat momen spesialmu lebih berkesan.`;
@@ -297,7 +297,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnBeli = document.getElementById('sheet-btn-beli');
     if (btnBeli) {
       btnBeli.onclick = () => {
-        window.location.href = `/checkout?title=${encodeURIComponent(product.nama)}&price=${encodeURIComponent(product.harga_format)}`;
+        window.location.href = `/checkout?title=${encodeURIComponent(product.nama_template)}&price=${encodeURIComponent(product.harga)}`;
+      };
+    }
+
+    //Handeke Demo button
+    const btnDemo = document.getElementById('sheet-btn-demo');
+    if (btnDemo) {
+      btnDemo.onclick = () => {
+        window.location.href = `/undangan/template?slug=${encodeURIComponent(product.slug)}`;
       };
     }
 

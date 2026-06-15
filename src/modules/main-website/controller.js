@@ -1,4 +1,25 @@
-//Main Website Controller
+import service from './service.js';
+
+//Get data Templates
+export const renderDataTemplates = async (req, res) => {
+  try {
+    const template = await service.getAllTemplates();
+    return res.json({
+      status: 200,
+      success: true,
+      message: 'Berhasil Mengambil Data',
+      data: template,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 500,
+      success: false,
+      message: error.message || 'Gagal Mengambil Data',
+    });
+  }
+};
+
+//Render Main Page
 export const renderMainPage = async (req, res) => {
   try {
     res.render('main-website/views/index.ejs');
@@ -12,7 +33,8 @@ export const renderMainPage = async (req, res) => {
   }
 };
 
-export const renderTransaksiPage = async (req, res) => {
+//Render Transaction Page
+export const renderTransactionPage = async (req, res) => {
   try {
     res.render('main-website/views/transaksi.ejs');
   } catch (error) {
@@ -25,7 +47,8 @@ export const renderTransaksiPage = async (req, res) => {
   }
 };
 
-export const renderBantuanPage = async (req, res) => {
+//Render Help Page
+export const renderHelpPage = async (req, res) => {
   try {
     res.render('main-website/views/bantuan.ejs');
   } catch (error) {
@@ -38,6 +61,7 @@ export const renderBantuanPage = async (req, res) => {
   }
 };
 
+//Render Checkout Page
 export const renderCheckoutPage = async (req, res) => {
   try {
     res.render('main-website/views/checkout.ejs');
@@ -50,6 +74,8 @@ export const renderCheckoutPage = async (req, res) => {
     });
   }
 };
+
+//Render Payment Page
 export const renderPaymentPage = async (req, res) => {
   try {
     res.render('main-website/views/payment.ejs');
