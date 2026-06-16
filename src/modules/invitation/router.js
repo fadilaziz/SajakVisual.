@@ -1,7 +1,11 @@
 import express from 'express';
 const router = express.Router();
-import { renderModernInvitation } from './controller.js';
+import { renderTemplate, getDataInvitation } from './controller.js';
 
-router.get('/:slug', renderModernInvitation);
+//get data invitation
+router.get('/data-invitation', getDataInvitation);
+
+//render template
+router.get('/:slug', renderTemplate);
 
 export default router;

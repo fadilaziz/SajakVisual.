@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>Undangan Pernikahan</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Great+Vibes&family=Montserrat:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/tradisional-royale.css" />
+  </head>
+  <body>
+    <!-- Audio Element -->
+    <audio id="bg-audio" loop preload="auto"></audio>
+
+    <!-- Music Control -->
+    <button id="music-control" class="paused" aria-label="Toggle Music">
+      <i class="ph ph-play"></i>
+    </button>
+
+    <!-- Cover Overlay (Open Invitation) -->
+    <div id="cover-overlay">
+      <div class="cover-content">
+        <p class="pre-title">A LOVE LETTER FROM</p>
+        <div class="cover-names" id="cover-names">... & ...</div>
+        <button id="btn-open-invitation" class="btn-open">Buka Undangan</button>
+      </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="inv-container" id="main-content" style="display: none; opacity: 0">
+      <!-- Hero Section -->
+      <section class="hero section-reveal">
+        <!-- Envelope decorative -->
+        <div class="envelope-container">
+          <div class="envelope">
+            <img id="hero-img" src="" alt="Cover Photo" class="envelope-photo" />
+            <div class="envelope-wax">
+              <i class="ph-fill ph-seal-check"></i>
+            </div>
+          </div>
+        </div>
+
+        <h2 class="sub-heading">WE'RE GETTING MARRIED!</h2>
+        <h1 class="main-heading" id="hero-location">Yogyakarta</h1>
+
+        <p class="intro-text">
+          WITH JOYFUL HEARTS, WE INVITE YOU<br />
+          TO CELEBRATE OUR WEDDING
+        </p>
+
+        <div class="parents-text" id="parents-text">
+          Son of ... & ...<br />
+          and<br />
+          Daughter of ... & ...
+        </div>
+      </section>
+
+      <!-- Details Section -->
+      <section class="details-section section-reveal">
+        <div class="details-box">
+          <div class="detail-item">
+            <i class="ph ph-calendar"></i>
+            <h3>DATE</h3>
+            <p id="detail-date">...</p>
+          </div>
+
+          <div class="detail-item">
+            <i class="ph ph-clock"></i>
+            <h3>TIME</h3>
+            <p id="detail-time">...</p>
+          </div>
+
+          <div class="detail-item">
+            <i class="ph ph-map-pin"></i>
+            <h3>LOCATION</h3>
+            <p id="detail-location">...</p>
+            <p id="detail-address" class="address-text">...</p>
+          </div>
+
+          <div class="detail-item">
+            <i class="ph ph-coat-hanger"></i>
+            <h3>DRESS CODE</h3>
+            <p>Formal / Tradisional</p>
+          </div>
+        </div>
+
+        <div class="maps-action">
+          <a href="#" id="btn-maps" target="_blank" class="btn-gold-outline">View on Maps</a>
+        </div>
+      </section>
+
+      <!-- Countdown Section -->
+      <section class="countdown-section section-reveal">
+        <h2 class="sub-heading">COUNTING DOWN TO OUR DAY</h2>
+
+        <div class="countdown-timer">
+          <div class="cd-item">
+            <span id="cd-days">00</span>
+            <label>DAYS</label>
+          </div>
+          <div class="cd-separator">:</div>
+          <div class="cd-item">
+            <span id="cd-hours">00</span>
+            <label>HOURS</label>
+          </div>
+          <div class="cd-separator">:</div>
+          <div class="cd-item">
+            <span id="cd-minutes">00</span>
+            <label>MINUTES</label>
+          </div>
+          <div class="cd-separator">:</div>
+          <div class="cd-item">
+            <span id="cd-seconds">00</span>
+            <label>SECONDS</label>
+          </div>
+        </div>
+
+        <a href="#" class="btn-gold-solid">RSVP Here</a>
+      </section>
+
+      <section class="gallery-section section-reveal">
+        <h2 class="sub-heading">MEMORIES</h2>
+        <div class="gallery-grid" id="gallery-grid">
+          <!-- Images will be injected here -->
+        </div>
+      </section>
+
+      <!-- Footer Section -->
+      <section class="footer-section section-reveal">
+        <p class="closing-text">
+          YOUR PRESENCE IS THE GREATEST GIFT WE COULD ASK FOR.<br />
+          <span>We can't wait to celebrate with you!</span>
+        </p>
+
+        <div class="sign-off">
+          <p>With Love</p>
+          <div class="monogram" id="monogram">M & N</div>
+        </div>
+
+        <p class="contact-info">
+          FOR ANY QUESTIONS, PLEASE REACH OUT<br />
+          TO OUR BRIDE AND GROOM VIA EMAIL:<br />
+          INFO@SAJAKVISUAL.COM
+        </p>
+      </section>
+
+      <!-- Decorative Bottom Landscape -->
+      <div class="bottom-landscape"></div>
+    </div>
+
+    <!-- JS -->
+    <script src="/javascript/traditional-royale.js"></script>
+  </body>
+</html>

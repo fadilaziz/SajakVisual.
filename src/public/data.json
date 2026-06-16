@@ -1,44 +1,42 @@
-[
-  {
-    "slug": "rustic-elegant",
-    "bg_music": "/audio/shape-of-my-heart-backstreet-boys.mp3",
-    "foto_cover": "https://images.unsplash.com/photo-1522050212171-61b01dd24579?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
-    "mempelai_pria": {
-      "nama_lengkap": "Ndaru Ndoro Putro, S.T.",
-      "nama_panggilan": "Ndaru",
-      "ayah": "Bpk. Raden Mas Hardjono",
-      "ibu": "Ibu Siti Aminah",
-      "foto": "https://images.unsplash.com/photo-1507676184212-d0330a15673c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+{
+  "slug": "",
+  "bg_music": "/audio/shape-of-my-heart-backstreet-boys.mp3",
+  "foto_cover": "https://images.unsplash.com/photo-1522050212171-61b01dd24579?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80",
+  "mempelai_pria": {
+    "nama_lengkap": "Ndaru Ndoro Putro, S.T.",
+    "nama_panggilan": "Ndaru",
+    "ayah": "Bpk. Raden Mas Hardjono",
+    "ibu": "Ibu Siti Aminah",
+    "foto": "https://images.unsplash.com/photo-1507676184212-d0330a15673c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+  },
+  "mempelai_wanita": {
+    "nama_lengkap": "Laras Ati Kusumo, S.E.",
+    "nama_panggilan": "Laras",
+    "ayah": "Bpk. Ki Demang Suryo",
+    "ibu": "Ibu Nawang Wulan",
+    "foto": "https://images.unsplash.com/photo-1543884149-fb34ec3324d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+  },
+  "acara": {
+    "akad": {
+      "tanggal": "Minggu, 12 Juli 2026",
+      "waktu": "08:00 - 10:00 WIB",
+      "lokasi_nama": "Yogyakarta Marriott Hotel (Kraton Ballroom)",
+      "lokasi_alamat": "Jl. Ring Road Utara, Condongcatur, Sleman, Yogyakarta",
+      "maps_url": "https://maps.google.com"
     },
-    "mempelai_wanita": {
-      "nama_lengkap": "Laras Ati Kusumo, S.E.",
-      "nama_panggilan": "Laras",
-      "ayah": "Bpk. Ki Demang Suryo",
-      "ibu": "Ibu Nawang Wulan",
-      "foto": "https://images.unsplash.com/photo-1543884149-fb34ec3324d5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+    "resepsi": {
+      "tanggal": "Minggu, 12 Juli 2026",
+      "waktu": "11:00 - 14:00 WIB",
+      "lokasi_nama": "Yogyakarta Marriott Hotel (Kraton Ballroom)",
+      "lokasi_alamat": "Jl. Ring Road Utara, Condongcatur, Sleman, Yogyakarta",
+      "maps_url": "https://maps.google.com"
     },
-    "acara": {
-      "akad": {
-        "tanggal": "Minggu, 12 Juli 2026",
-        "waktu": "08:00 - 10:00 WIB",
-        "lokasi_nama": "Yogyakarta Marriott Hotel (Kraton Ballroom)",
-        "lokasi_alamat": "Jl. Ring Road Utara, Condongcatur, Sleman, Yogyakarta",
-        "maps_url": "https://maps.google.com"
-      },
-      "resepsi": {
-        "tanggal": "Minggu, 12 Juli 2026",
-        "waktu": "11:00 - 14:00 WIB",
-        "lokasi_nama": "Yogyakarta Marriott Hotel (Kraton Ballroom)",
-        "lokasi_alamat": "Jl. Ring Road Utara, Condongcatur, Sleman, Yogyakarta",
-        "maps_url": "https://maps.google.com"
-      },
-      "countdown_target": "2026-07-12T08:00:00"
-    },
-    "galeri_foto": [
-      "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1520854221256-17451cc331bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-    ]
-  }
-]
+    "countdown_target": "2026-07-12T08:00:00"
+  },
+  "galeri_foto": [
+    "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1520854221256-17451cc331bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+  ]
+}
