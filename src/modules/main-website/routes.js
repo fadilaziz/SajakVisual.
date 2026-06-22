@@ -8,6 +8,7 @@ import {
   renderPaymentPage,
   renderDataTemplates,
   handleCheckout,
+  handlePayment,
 } from './controller.js';
 
 //Router render page
@@ -20,5 +21,6 @@ router.get('/payment', renderPaymentPage);
 //Route Data
 router.get('/templates', renderDataTemplates);
 router.post('/checkout', handleCheckout);
+router.get('/handle-payment', handlePayment);
 
 export default router;

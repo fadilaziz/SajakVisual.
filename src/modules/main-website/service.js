@@ -1,4 +1,5 @@
 import supabase from '../../../database/supabase.js';
+import crypto from 'crypto';
 
 //Ambil data template dari Supabase
 const getAllTemplates = async () => {
@@ -15,7 +16,7 @@ const getAllTemplates = async () => {
 };
 
 //Capture data
-const createCheckout = async (data) => {
+const captureData = async (data) => {
   const { title, price, name, email, no_wa } = data;
 
   return data;
@@ -24,8 +25,6 @@ const createCheckout = async (data) => {
 //Validation data
 const validateData = async (data) => {
   const errors = [];
-
-  console.log(data.no_wa);
 
   //1. Validationn Full Name
   const namaRegex = /^[a-zA-Z\s.,']+$/;
@@ -64,9 +63,85 @@ const getPrice = async (data) => {
   return data;
 };
 
+//Create checkout
+const createCheckout = async (data) => {
+  try {
+    //1.Ganerate Invoice number
+    const prefix = 'SJV';
+
+    // Generate uniq code
+    const uniqueCode = crypto.randomBytes(3).toString('hex').toUpperCase().substring(0, 5);
+
+    // Generate date (Format: YYYYMMDD)
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    const dateString = `${year}${month}${day}`;
+    const invoiceNumber = `${prefix}-${uniqueCode}-${dateString}`;
+    data.invoice_number = invoiceNumber;
+
+    //2.Hit Api KlikQris
+    const url = `${process.env.KLIKQRIS_BASE_URL}/qris/create`;
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': process.env.KLIKQRIS_API_KEY,
+        id_merchant: process.env.KLIKQRIS_ID_MERCHANT,
+      },
+      body: JSON.stringify({
+        order_id: data.invoice_number,
+        id_merchant: process.env.KLIKQRIS_ID_MERCHANT,
+        amount: data.price,
+        keterangan: `Pembayaran Invoice ${data.invoice_number}`,
+      }),
+    };
+    const response = await fetch(url, options);
+    const result = await response.json();
+
+    //Create expiretime
+    const currenttime = new Date();
+    const expired = parseInt(result.data.expired_menit);
+    const expiredtime = new Date(currenttime.getTime() + expired * 60000);
+
+    //Capture order data for save to supabase
+    const dataOrder = {
+      no_invoice: data.invoice_number,
+      nama: data.name,
+      email: data.email,
+      no_wa: data.no_wa,
+      template_id: data.product_id,
+      status: result.data.status,
+      jumlah_total: data.price,
+      signature: result.data.signature,
+      qris_url: result.data.qris_url,
+      qris_image: result.data.qris_image,
+      created_at: result.data.created_at,
+      expired_at: expiredtime,
+      tanggal: result.data.tanggal,
+    };
+
+    // 3.Save data to supabase
+    const { data: savedOrder, error: saveError } = await supabase
+      .from('orders')
+      .insert([dataOrder]);
+
+    if (saveError) {
+      throw saveError;
+    }
+
+    return dataOrder.no_invoice;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
 export default {
   getAllTemplates,
-  createCheckout,
+  captureData,
   validateData,
   getPrice,
+  createCheckout,
 };

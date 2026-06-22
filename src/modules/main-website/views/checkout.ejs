@@ -215,16 +215,6 @@
                 submitBtn.innerHTML = originalContent;
                 submitBtn.style.opacity = '1';
 
-                // Redirect to payment page with all data
-                const queryParams = new URLSearchParams({
-                  id: productId,
-                  title: productName,
-                  price: productPrice,
-                  name: nama,
-                  email: email,
-                  wa: wa,
-                }).toString();
-
                 // Send data to API`
                 const formData = {
                   product_id: Number(productId),
@@ -246,12 +236,13 @@
                   .then((response) => response.json())
                   .then((data) => {
                     console.log('Success:', data);
+                    if (data.status === 200) {
+                      window.location.href = '/payment?invoice=' + data.data;
+                    }
                   })
                   .catch((error) => {
                     console.error('Error:', error);
                   });
-
-                // window.location.href = '/payment?' + queryParams;
               }, 1500);
             }
           });
