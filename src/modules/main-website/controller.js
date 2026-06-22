@@ -122,6 +122,7 @@ export const handlePayment = async (req, res) => {
     //Mengangbil data dari search url
     const { invoice } = req.query;
     console.log(invoice);
+    let data = await service.getDataPayment(invoice);
     res.json({
       status: 200,
       success: true,

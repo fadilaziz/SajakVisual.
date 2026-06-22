@@ -25,6 +25,34 @@
     <!-- Custom Styles -->
     <link rel="stylesheet" href="/css/main-website.css" />
     <link rel="stylesheet" href="/css/payment.css" />
+    <style>
+      /* Success Status Animation */
+      @keyframes popIn {
+        0% { transform: scale(0.5); opacity: 0; }
+        70% { transform: scale(1.1); opacity: 1; }
+        100% { transform: scale(1); opacity: 1; }
+      }
+      @keyframes slideUpFade {
+        0% { transform: translateY(20px); opacity: 0; }
+        100% { transform: translateY(0); opacity: 1; }
+      }
+      @keyframes checkPulse {
+        0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+        70% { box-shadow: 0 0 0 20px rgba(16, 185, 129, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+      }
+      .success-animate-icon {
+        animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, checkPulse 2s infinite 1s ease-in-out;
+      }
+      .success-animate-text {
+        opacity: 0;
+        animation: slideUpFade 0.6s ease forwards 0.3s;
+      }
+      .success-animate-subtext {
+        opacity: 0;
+        animation: slideUpFade 0.6s ease forwards 0.5s;
+      }
+    </style>
   </head>
   <body class="loading-state">
     <div id="copy-toast" class="copy-toast">Nomor disalin!</div>
@@ -60,21 +88,34 @@
         <div class="hide-on-load" style="display: contents">
           <!-- Block 1: Total & Account Info -->
           <div class="payment-total-box">
-            <p class="payment-total-label">Total Pembayaran</p>
-            <h1 class="payment-total-amount" id="pay-amount">-</h1>
-
-            <div class="payment-account-divider"></div>
-
-            <p class="payment-total-label" style="text-align: left; margin-bottom: 4px">
-              Transfer ke Dana:
-            </p>
-            <div class="payment-account-info">
-              <span class="payment-account-number" id="dana-number">081234567890</span>
-              <button class="payment-copy-btn" id="btn-copy" aria-label="Copy Number">
-                <i class="ph ph-copy"></i>
-              </button>
+            <div id="total-pembayaran-container">
+              <p class="payment-total-label">Total Pembayaran</p>
+              <h1 class="payment-total-amount" id="pay-amount">-</h1>
+              <div class="payment-account-divider"></div>
             </div>
-            <p class="payment-account-name" style="text-align: left">a.n Sajak Visual</p>
+
+            <div id="qris-container">
+              <p class="payment-total-label" id="qris-label" style="text-align: center; margin-bottom: 12px">
+                Scan QRIS untuk Membayar:
+              </p>
+              <div style="display: flex; justify-content: center; margin-bottom: 16px;">
+                <img id="qris-img" src="" alt="QRIS Payment" style="max-width: 220px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: none;">
+              </div>
+              <div style="display: flex; justify-content: center;">
+                <button class="payment-copy-btn" id="btn-download-qris" aria-label="Download QRIS" style="width: auto; padding: 10px 20px; border-radius: 8px; font-size: 0.9rem; display: none; gap: 8px; justify-content: center; align-items: center; background-color: var(--surface); border: 1px solid var(--border);">
+                  <i class="ph ph-download-simple" style="font-size: 1.1rem"></i> Download QRIS
+                </button>
+              </div>
+            </div>
+            <div id="success-message" style="display: none; text-align: center; padding: 24px 0;">
+              <div style="display: flex; justify-content: center; margin-bottom: 20px;">
+                <div class="success-animate-icon" style="width: 80px; height: 80px; background-color: rgba(16, 185, 129, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #10b981;">
+                  <i class="ph ph-check-circle" style="font-size: 4rem;"></i>
+                </div>
+              </div>
+              <h2 class="success-animate-text" style="font-size: 1.5rem; font-weight: 700; margin: 0 0 8px; color: #10b981;">Pembayaran Berhasil!</h2>
+              <p class="success-animate-subtext" style="color: var(--text-secondary); font-size: 0.95rem; margin: 0; line-height: 1.5;">Terima kasih, pembayaran Anda telah kami terima.<br>Pesanan Anda sedang diproses oleh tim kami.</p>
+            </div>
           </div>
 
           <!-- Block 2: Order Details -->
@@ -147,15 +188,21 @@
                 color: #3b82f6;
                 font-weight: 700;
                 font-size: 0.95rem;
+                margin-bottom: 4px;
               "
             >
               <i class="ph ph-info payment-instruction-icon" style="font-size: 1.2rem"></i>
-              <span>Penting</span>
+              <span>Cara Pembayaran</span>
             </div>
-            <p class="payment-instruction-text">
-              Silahkan bayar sesuai nominal yang ditampilkan, lalu kirim bukti pengiriman via
-              whatsapp dengan menekan tombol di bawah.
-            </p>
+            <div class="payment-instruction-text" style="text-align: left; line-height: 1.6; font-size: 0.9rem;">
+              <ol style="margin: 0; padding-left: 16px; display: flex; flex-direction: column; gap: 4px;">
+                <li>Buka aplikasi M-Banking atau E-Wallet Anda (Gopay, OVO, Dana, ShopeePay, dll).</li>
+                <li>Pilih menu <strong>Scan QR</strong>.</li>
+                <li>Scan gambar QRIS di atas atau upload gambar QRIS yang telah di-download.</li>
+                <li>Pastikan nominal pembayaran sesuai lalu selesaikan pembayaran.</li>
+                <li>Setelah berhasil, kirim bukti pembayaran via WhatsApp dengan menekan tombol di bawah.</li>
+              </ol>
+            </div>
           </div>
         </div>
 
@@ -273,20 +320,11 @@
 
     <script src="/javascript/main-website.js"></script>
     <script>
-      document.addEventListener('DOMContentLoaded', () => {
+      document.addEventListener('DOMContentLoaded', async () => {
         // Parse URL Parameters
         const urlParams = new URLSearchParams(window.location.search);
-        
         const invoiceParam = urlParams.get('invoice');
-        if (invoiceParam) {
-          fetch(`/api/handle-payment?invoice=${invoiceParam}`)
-            .then(response => response.json())
-            .then(data => console.log('Payment data:', data))
-            .catch(error => console.error('Error fetching payment data:', error));
-        }
-
-        const productName = urlParams.get('title') || 'Produk Tidak Diketahui';
-        const rawPrice = urlParams.get('price') || '0';
+        let paymentData = null;
 
         const formatRupiah = (number) => {
           return new Intl.NumberFormat('id-ID', {
@@ -296,36 +334,50 @@
             maximumFractionDigits: 0,
           }).format(number);
         };
+
+        if (invoiceParam) {
+          try {
+            const response = await fetch(`/api/handle-payment?invoice=${invoiceParam}`);
+            const result = await response.json();
+            if (result.success && result.data) {
+              paymentData = result.data;
+            }
+          } catch (error) {
+            console.error('Error fetching payment data:', error);
+          }
+        }
+
+        // Extract Data
+        const productName = urlParams.get('title') || (paymentData ? `Template #${paymentData.template_id}` : 'Produk Tidak Diketahui');
+        const rawPrice = paymentData ? paymentData.jumlah_total : (urlParams.get('price') || '0');
         const productPrice = formatRupiah(rawPrice);
 
-        const userName = urlParams.get('name') || '-';
-        const userEmail = urlParams.get('email') || '-';
-        const userWa = urlParams.get('wa') || '-';
+        const userName = paymentData ? paymentData.nama : (urlParams.get('name') || '-');
+        const userEmail = paymentData ? paymentData.email : (urlParams.get('email') || '-');
+        const userWa = paymentData ? paymentData.no_wa : (urlParams.get('wa') || '-');
+        const invoiceId = paymentData ? paymentData.no_invoice : (invoiceParam || '-');
 
-        // Generate Invoice ID & Date
-        const date = new Date();
-        const dateStr = `${String(date.getDate()).padStart(2, '0')}${String(date.getMonth() + 1).padStart(2, '0')}${String(date.getFullYear()).slice(2)}`;
-        const randomStr = Math.random().toString(36).substring(2, 6).toUpperCase();
-        const invoiceId = `INV-${dateStr}-${randomStr}`;
-
-        const monthNames = [
-          'Januari',
-          'Februari',
-          'Maret',
-          'April',
-          'Mei',
-          'Juni',
-          'Juli',
-          'Agustus',
-          'September',
-          'Oktober',
-          'November',
-          'Desember',
-        ];
-        const formattedDate = `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}`;
+        // Generate Date Format
+        let formattedDate = '-';
+        if (paymentData && paymentData.tanggal) {
+           const date = new Date(paymentData.tanggal);
+           const monthNames = [
+             'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+             'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
+           ];
+           formattedDate = `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}`;
+        } else {
+           const date = new Date();
+           const monthNames = [
+             'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+             'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
+           ];
+           formattedDate = `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}`;
+        }
 
         // Populate DOM
-        document.getElementById('pay-amount').textContent = productPrice;
+        const payAmountElem = document.getElementById('pay-amount');
+        if (payAmountElem) payAmountElem.textContent = productPrice;
         document.getElementById('pay-invoice').textContent = invoiceId;
         document.getElementById('pay-date').textContent = formattedDate;
         document.getElementById('pay-name').textContent = userName;
@@ -334,6 +386,52 @@
         document.getElementById('pay-product').textContent = productName;
         document.getElementById('pay-total-bottom').textContent = productPrice;
 
+        // QRIS & Status Display
+        const totalPembayaranContainer = document.getElementById('total-pembayaran-container');
+        const qrisContainer = document.getElementById('qris-container');
+        const qrisImg = document.getElementById('qris-img');
+        const btnDownload = document.getElementById('btn-download-qris');
+        const successMessage = document.getElementById('success-message');
+
+        const updateStatusUI = (data) => {
+          if (data && data.status === 'SUCCESS') {
+             if (totalPembayaranContainer) totalPembayaranContainer.style.display = 'none';
+             if (qrisContainer) qrisContainer.style.display = 'none';
+             if (successMessage) successMessage.style.display = 'block';
+             return true;
+          } else {
+             if (totalPembayaranContainer) totalPembayaranContainer.style.display = 'block';
+             if (data && data.qris_image) {
+                if (qrisImg) {
+                   qrisImg.src = data.qris_image;
+                   qrisImg.style.display = 'block';
+                }
+                if (btnDownload) btnDownload.style.display = 'flex';
+             }
+             return false;
+          }
+        };
+
+        if (paymentData) {
+           const isSuccess = updateStatusUI(paymentData);
+           
+           // Auto-polling for status SUCCESS if not already success
+           if (!isSuccess && invoiceParam) {
+              const pollingInterval = setInterval(async () => {
+                 try {
+                    const response = await fetch(`/api/handle-payment?invoice=${invoiceParam}`);
+                    const result = await response.json();
+                    if (result.success && result.data && result.data.status === 'SUCCESS') {
+                       updateStatusUI(result.data);
+                       clearInterval(pollingInterval);
+                    }
+                 } catch (err) {
+                    console.error('Error checking payment status:', err);
+                 }
+              }, 5000); // Check every 5 seconds
+           }
+        }
+
         // Setup WhatsApp Link
         const adminNumber = '6281917536832'; // Placeholder Admin WA
         const waMessage = `Halo Admin *Sajak Visual*,%0A%0ASaya ingin mengonfirmasi pembayaran untuk pesanan undangan digital saya. Berikut adalah rincian pesanannya:%0A%0A==========================%0A*INFORMASI PESANAN*%0A==========================%0A*No. Invoice*  : ${invoiceId}%0A*Tanggal*      : ${formattedDate}%0A%0A--------------------------%0A*DATA PEMESAN*%0A--------------------------%0A*Nama*         : ${userName}%0A*Email*        : ${userEmail}%0A*No. WA*       : ${userWa}%0A%0A--------------------------%0A*DETAIL TAGIHAN*%0A--------------------------%0A*Produk*       : ${productName}%0A*Total Tagihan* : ${productPrice}%0A==========================%0A%0ABersama pesan ini, saya lampirkan bukti transfer pembayaran.%0A%0ATerima kasih banyak.`;
@@ -341,27 +439,10 @@
 
         document.getElementById('btn-wa').href = waUrl;
 
-        // Copy Feature for Dana
-        const btnCopyDana = document.getElementById('btn-copy');
-        const danaNumber = document.getElementById('dana-number').textContent;
-        const copyToast = document.getElementById('copy-toast');
-
-        if (btnCopyDana) {
-          btnCopyDana.addEventListener('click', () => {
-            navigator.clipboard
-              .writeText(danaNumber)
-              .then(() => {
-                copyToast.classList.add('show');
-                setTimeout(() => {
-                  copyToast.classList.remove('show');
-                }, 2000);
-              })
-              .catch((err) => console.error('Failed to copy: ', err));
-          });
-        }
-
         // Copy Feature for Invoice
         const btnCopyInvoice = document.getElementById('btn-copy-invoice');
+        const copyToast = document.getElementById('copy-toast');
+        
         if (btnCopyInvoice) {
           btnCopyInvoice.addEventListener('click', () => {
             const invoiceText = document.getElementById('pay-invoice').textContent;
@@ -374,6 +455,22 @@
                 }, 2000);
               })
               .catch((err) => console.error('Failed to copy: ', err));
+          });
+        }
+
+        // Download QRIS Feature
+        const btnDownloadQris = document.getElementById('btn-download-qris');
+        if (btnDownloadQris) {
+          btnDownloadQris.addEventListener('click', () => {
+            const qrisImg = document.getElementById('qris-img');
+            if (qrisImg && qrisImg.src) {
+              const a = document.createElement('a');
+              a.href = qrisImg.src;
+              a.download = `QRIS-${invoiceId}.png`;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+            }
           });
         }
       });
