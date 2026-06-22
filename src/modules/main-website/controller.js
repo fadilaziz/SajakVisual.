@@ -107,7 +107,7 @@ export const handleCheckout = async (req, res) => {
       status: 200,
       success: true,
       message: 'Checkout berhasil',
-      data: data,
+      data: data.no_invoice,
     });
   } catch (error) {
     return res.json({

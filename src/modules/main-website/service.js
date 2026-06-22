@@ -1,6 +1,7 @@
 import supabase from '../../../database/supabase.js';
 import crypto from 'crypto';
-
+import { send_email } from '../email/send_email.js';
+import path from 'path';
 //Ambil data template dari Supabase
 const getAllTemplates = async () => {
   const { data: template, error } = await supabase
@@ -131,39 +132,29 @@ const createCheckout = async (data) => {
       throw saveError;
     }
 
-    return dataOrder.no_invoice;
+    return dataOrder;
   } catch (error) {
     console.log(error);
     throw error;
   }
 };
 
+//Get payment data from orders database
+const getDataPayment = async (invoice) => {
+  const { data: orders, error } = await supabase
+    .from('orders')
+    .select('*')
+    .eq('no_invoice', invoice)
+    .single();
+  if (error) {
+    throw Error('Gagal mengambil data pembayaran');
+  }
+  return orders;
+};
+
 //Send invoice to user email
-export const checkout_send_queue = async (payload) => {
-  console.log('ini queue', payload);
-  //Ambil data products
-  const product_data = await sql`
-    SELECT product_name
-    FROM products
-    WHERE id = ${payload.product_id}`;
-  payload.product_name = product_data[0].product_name;
-
-  //Mengambil data user
-  const user_data = await sql`
-    SELECT full_name, email
-    FROM users
-    WHERE id = ${payload.user_id}`;
-  payload.full_name = user_data[0].full_name;
-  payload.email = user_data[0].email;
-
-  //Mengambil id order
-  const order_id = await sql`
-    SELECT id
-    FROM orders
-    WHERE order_id = ${payload.no_invoice}`;
-  payload.order_id = order_id[0].id;
-
-  console.log('ini order id', payload.order_id);
+export const sendEmail = async (data) => {
+  console.log(data.email);
 
   const formatRupiah = (number) => {
     return new Intl.NumberFormat('id-ID', {
@@ -174,7 +165,7 @@ export const checkout_send_queue = async (payload) => {
     }).format(number);
   };
 
-  //Send Email
+  // Send Email
   const email_message = `
         <!DOCTYPE html>
         <html>
@@ -183,20 +174,15 @@ export const checkout_send_queue = async (payload) => {
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <style>
                 * { margin: 0; padding: 0; box-sizing: border-box; }
-                body { font-family: 'Nunito', ui-sans-serif, sans-serif; line-height: 1.6; color: #1a1a1a; background: #f5f5f5; }
-                .wrapper { padding: 24px 16px; }
-                .container { max-width: 600px; margin: 0 auto; background: #ffffff; border: 1px solid #e5e5e5; border-radius: 10px; overflow: hidden; }
+                body { font-family: 'Nunito', ui-sans-serif, sans-serif; line-height: 1.6; color: #1a1a1a; background: #f5f5f5; -webkit-font-smoothing: antialiased; margin: 0; padding: 0; }
+                .wrapper { width: 100%; background: #f5f5f5; padding: 0; }
+                .container { width: 100%; max-width: 600px; margin: 0 auto; background: #ffffff; border-left: 1px solid #e5e5e5; border-right: 1px solid #e5e5e5; overflow: hidden; }
 
                 /* Header */
-                .header { background: #ffffff; border-bottom: 1px solid #e5e5e5; text-align: center; }
-                .logo-text {
-                    font-size: 22px;
-                    font-weight: 800;
-                    color: #1b1b1b;
-                    letter-spacing: -0.5px;
-                }
+                .header { background: #ffffff; border-bottom: 1px solid #e5e5e5; text-align: center; padding: 20px 16px; }
+                .logo-img { height: 32px; width: auto; max-width: 100%; display: block; margin: 0 auto; outline: none; text-decoration: none; }
 
-                .content { padding: 32px 30px; }
+                .content { padding: 24px 16px; }
 
                 /* Status badge */
                 .status-badge {
@@ -214,15 +200,15 @@ export const checkout_send_queue = async (payload) => {
                 }
 
                 .greeting { font-size: 16px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px; }
-                .subtext { font-size: 14px; color: #737373; margin-bottom: 28px; }
+                .subtext { font-size: 14px; color: #737373; margin-bottom: 24px; }
 
                 /* Invoice info box */
-                .invoice-box { background: #f5f5f5; border: 1px solid #e5e5e5; border-radius: 10px; padding: 0 20px; margin-bottom: 28px; }
-                .info-row { padding: 14px 0; border-bottom: 1px solid #e5e5e5; font-size: 14px; }
+                .invoice-box { background: #f5f5f5; border: 1px solid #e5e5e5; border-radius: 8px; padding: 0 16px; margin-bottom: 24px; width: 100%; box-sizing: border-box; }
+                .info-row { padding: 12px 0; border-bottom: 1px solid #e5e5e5; font-size: 14px; }
                 .info-row:last-child { border-bottom: none; }
-                .info-label { color: #737373; margin-bottom: 4px; font-size: 12px; }
-                .info-value { font-weight: 700; color: #1a1a1a; }
-                .info-value-danger { font-weight: 700; color: #1a1a1a; }
+                .info-label { color: #737373; margin-bottom: 4px; font-size: 12px; display: block; }
+                .info-value { font-weight: 700; color: #1a1a1a; display: block; word-break: break-word; }
+                .info-value-danger { font-weight: 700; color: #1a1a1a; display: block; }
 
                 /* Product table */
                 .product-table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
@@ -231,12 +217,12 @@ export const checkout_send_queue = async (payload) => {
                 .product-table-cell { padding: 16px 0; border-bottom: 1px solid #f5f5f5; vertical-align: top; }
                 .product-name { font-weight: 700; font-size: 15px; color: #1a1a1a; margin-bottom: 4px; }
                 .product-sub { font-size: 13px; color: #737373; }
-                .product-price { font-weight: 700; font-size: 15px; color: #1a1a1a; text-align: right; white-space: nowrap; padding: 16px 0; vertical-align: top; }
+                .product-price { font-weight: 700; font-size: 15px; color: #1a1a1a; text-align: right; white-space: nowrap; padding: 16px 0 16px 12px; vertical-align: top; }
 
                 /* Total */
-                .total-section { background: #1b1b1b; color: #fafafa; padding: 20px 24px; border-radius: 10px; margin-bottom: 28px; }
-                .total-label { font-size: 14px; color: rgba(250,250,250,0.7); }
-                .total-amount { font-size: 22px; font-weight: 800; color: #fafafa; text-align: right; }
+                .total-section { background: #1b1b1b; color: #fafafa; border-radius: 8px; margin-bottom: 24px; width: 100%; border-collapse: collapse; overflow: hidden; }
+                .total-label { font-size: 14px; color: rgba(250,250,250,0.7); padding: 16px; }
+                .total-amount { font-size: 20px; font-weight: 800; color: #fafafa; text-align: right; padding: 16px; }
 
                 /* Button */
                 .btn-primary {
@@ -247,114 +233,124 @@ export const checkout_send_queue = async (payload) => {
                     color: #fafafa;
                     text-decoration: none;
                     padding: 14px 0;
-                    border-radius: 10px;
+                    border-radius: 8px;
                     font-weight: 700;
                     font-size: 14px;
                     margin-bottom: 20px;
+                    box-sizing: border-box;
                 }
 
                 .note { font-size: 12px; color: #737373; text-align: center; font-style: italic; }
 
                 /* Footer */
-                .footer { text-align: center; padding: 24px 30px; font-size: 13px; color: #737373; background: #fafafa; border-top: 1px solid #e5e5e5; line-height: 1.8; }
+                .footer { text-align: center; padding: 24px 16px; font-size: 12px; color: #737373; background: #fafafa; border-top: 1px solid #e5e5e5; line-height: 1.8; }
                 .footer a { color: #1a1a1a; text-decoration: none; font-weight: 600; }
+
+                /* Mobile Responsiveness */
+                @media only screen and (max-width: 600px) {
+                    .container { border-left: none; border-right: none; }
+                }
             </style>
         </head>
-        <body>
-            <div class="wrapper">
-            <div class="container">
+        <body style="background-color: #f5f5f5; margin: 0; padding: 0;">
+            <table class="wrapper" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f5f5f5; margin: 0; padding: 0;">
+            <tr><td align="center">
+            <table class="container" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px; margin: 0 auto; background: #ffffff; border-left: 1px solid #e5e5e5; border-right: 1px solid #e5e5e5;">
 
                 <!-- Header / Logo -->
-                <table class="header" width="100%" cellpadding="0" cellspacing="0" border="0">
-                    <tr>
-                        <td style="padding: 20px 30px;">
-                            <span class="logo-text">Sajak<span style="color: #737373;">Visual</span></span>
-                        </td>
-                    </tr>
-                </table>
+                <tr>
+                    <td class="header" style="padding: 20px 16px; text-align: center; border-bottom: 1px solid #e5e5e5;">
+                        <img src="cid:logo_sajakvisual" alt="SajakVisual" class="logo-img">
+                    </td>
+                </tr>
 
                 <!-- Content -->
-                <div class="content">
-                    <div style="text-align: center;">
-                        <span class="status-badge">Menunggu Pembayaran</span>
-                    </div>
-
-                    <p class="greeting">Halo, \${payload.full_name}</p>
-                    <p class="subtext">Pesanan Anda telah kami terima. Silakan selesaikan pembayaran untuk mengaktifkan layanan Anda.</p>
-
-                    <!-- Invoice Info -->
-                    <div class="invoice-box">
-                        <div class="info-row">
-                            <div class="info-label">Nomor Invoice</div>
-                            <div class="info-value">\${payload.no_invoice}</div>
+                <tr>
+                    <td class="content" style="padding: 24px 16px;">
+                        <div style="text-align: center;">
+                            <span class="status-badge">Menunggu Pembayaran</span>
                         </div>
-                        <div class="info-row">
-                            <div class="info-label">Metode Pembayaran</div>
-                            <div class="info-value">QRIS / Transfer Bank</div>
-                        </div>
-                        <div class="info-row">
-                            <div class="info-label">Batas Waktu Pembayaran</div>
-                            <div class="info-value-danger">\${payload.expired_at}</div>
-                        </div>
-                    </div>
 
-                    <!-- Product -->
-                    <table class="product-table" cellpadding="0" cellspacing="0" border="0">
-                        <thead>
+                        <p class="greeting">Halo, ${data.nama}</p>
+                        <p class="subtext">Pesanan Anda telah kami terima. Silakan selesaikan pembayaran untuk mengaktifkan layanan Anda.</p>
+
+                        <!-- Invoice Info -->
+                        <div class="invoice-box">
+                            <div class="info-row">
+                                <div class="info-label">Nomor Invoice</div>
+                                <div class="info-value">${data.no_invoice}</div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Metode Pembayaran</div>
+                                <div class="info-value">QRIS / Transfer Bank</div>
+                            </div>
+                            <div class="info-row">
+                                <div class="info-label">Batas Waktu Pembayaran</div>
+                                <div class="info-value-danger">${new Date(data.expired_at).toLocaleString('id-ID')}</div>
+                            </div>
+                        </div>
+
+                        <!-- Product -->
+                        <table class="product-table" width="100%" cellpadding="0" cellspacing="0" border="0">
+                            <thead>
+                                <tr>
+                                    <th class="product-table-header-left">Detail Pesanan</th>
+                                    <th class="product-table-header-right">Harga</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="product-table-cell">
+                                        <div class="product-name">Template #${data.template_id}</div>
+                                        <div class="product-sub">Layanan Undangan Digital</div>
+                                    </td>
+                                    <td class="product-price">${formatRupiah(data.jumlah_total)}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Total -->
+                        <table class="total-section" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #1b1b1b; border-radius: 8px;">
                             <tr>
-                                <th class="product-table-header-left">Detail Pesanan</th>
-                                <th class="product-table-header-right">Harga</th>
+                                <td class="total-label" style="padding: 16px;">Total Pembayaran</td>
+                                <td class="total-amount" style="padding: 16px; text-align: right;">${formatRupiah(data.jumlah_total)}</td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="product-table-cell">
-                                    <div class="product-name">\${payload.product_name}</div>
-                                    <div class="product-sub">Layanan Undangan Digital</div>
-                                </td>
-                                <td class="product-price">\${formatRupiah(payload.price)}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                        </table>
 
-                    <!-- Total -->
-                    <table class="total-section" width="100%" cellpadding="0" cellspacing="0" border="0">
-                        <tr>
-                            <td class="total-label">Total Pembayaran</td>
-                            <td class="total-amount">\${formatRupiah(payload.total_amount)}</td>
-                        </tr>
-                    </table>
-                    
-                    <a href="\${process.env.BASE_URL}/payment?invoice=\${payload.no_invoice}" class="btn-primary">Bayar Sekarang</a>
+                        <a href="http://localhost:3000/payment?invoice=${data.no_invoice}" class="btn-primary">Bayar Sekarang</a>
 
-                    <p class="note">Pesanan Anda akan diproses otomatis setelah pembayaran berhasil dikonfirmasi.</p>
-                </div>
+                        <p class="note">Pesanan Anda akan diproses otomatis setelah pembayaran berhasil dikonfirmasi.</p>
+                    </td>
+                </tr>
 
                 <!-- Footer -->
-                <div class="footer">
-                    &copy; 2026 <strong>SajakVisual</strong> &mdash; SaaS Digital Invitation.<br>
-                    Butuh bantuan? Hubungi kami di <a href="mailto:support@sajakvisual.com">support@sajakvisual.com</a>
-                </div>
+                <tr>
+                    <td class="footer" style="padding: 24px 16px; text-align: center; background: #fafafa; border-top: 1px solid #e5e5e5;">
+                        &copy; 2026 <strong>SajakVisual</strong> &mdash; SaaS Digital Invitation.<br>
+                        Butuh bantuan? Hubungi kami di <a href="mailto:support@sajakvisual.com" style="color: #1a1a1a; font-weight: 600;">support@sajakvisual.com</a>
+                    </td>
+                </tr>
 
-            </div>
-            </div>
+            </table>
+            </td></tr>
+            </table>
         </body>
         </html>`;
 
-  return payload;
-};
-
-//Get payment data from orders database
-const getDataPayment = async (invoice) => {
-  const { data: orders, error } = await supabase
-    .from('orders')
-    .select('*')
-    .eq('no_invoice', invoice)
-    .single();
-  if (error) {
-    throw Error('Gagal mengambil data pembayaran');
-  }
-  return orders;
+  const data_email = {
+    subject: 'Detail Pesanan Undangan Digital - ' + data.no_invoice,
+    message: email_message,
+    destination: data.email,
+    attachments: [
+      {
+        filename: 'logo_sajakvisual.webp',
+        path: path.join(process.cwd(), 'src', 'public', 'img', 'logo_sajakvisual.webp'),
+        cid: 'logo_sajakvisual'
+      }
+    ]
+  };
+  send_email(data_email);
+  return data;
 };
 
 export default {
@@ -364,4 +360,5 @@ export default {
   getPrice,
   createCheckout,
   getDataPayment,
+  sendEmail,
 };

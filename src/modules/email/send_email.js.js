@@ -17,6 +17,7 @@ export const send_email = async (data) => {
       to: data.destination,
       subject: data.subject,
       html: data.message,
+      attachments: data.attachments || [],
     });
 
     data.code = 200;
