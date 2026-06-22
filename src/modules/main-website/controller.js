@@ -101,6 +101,8 @@ export const handleCheckout = async (req, res) => {
     data = await service.getPrice(data);
     //create invoice number
     data = await service.createCheckout(data);
+    //send invoice to email
+    data = await service.sendEmail(data);
     res.json({
       status: 200,
       success: true,
