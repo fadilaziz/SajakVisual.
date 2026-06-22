@@ -84,8 +84,23 @@
 .form-helper-text {
   font-size: 0.8rem;
   color: var(--muted-foreground);
-  margin-top: 6px;
   margin-bottom: 0;
+  
+  /* Hidden state by default */
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+  overflow: hidden;
+  transform: translateY(-5px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input-group:focus-within .form-helper-text {
+  /* Visible state on focus */
+  max-height: 100px;
+  opacity: 1;
+  margin-top: 6px;
+  transform: translateY(0);
 }
 
 /* Bottom Nav specifically for checkout */

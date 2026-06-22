@@ -8,6 +8,9 @@
     />
     <title>Pembayaran - Sajak Visual</title>
 
+    <!-- Favicon-->
+    <link rel="icon" type="image/webp" href="/img/favicon.webp" />
+
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
@@ -274,7 +277,18 @@
         // Parse URL Parameters
         const urlParams = new URLSearchParams(window.location.search);
         const productName = urlParams.get('title') || 'Produk Tidak Diketahui';
-        const productPrice = urlParams.get('price') || 'Rp 0';
+        const rawPrice = urlParams.get('price') || '0';
+
+        const formatRupiah = (number) => {
+          return new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          }).format(number);
+        };
+        const productPrice = formatRupiah(rawPrice);
+
         const userName = urlParams.get('name') || '-';
         const userEmail = urlParams.get('email') || '-';
         const userWa = urlParams.get('wa') || '-';
@@ -354,6 +368,16 @@
           });
         }
       });
+      console.log(`
+╭──────────────────────────────────────────────────╮
+│                                                  │
+│   SajakVisual - SaaS Digital Invitation          │
+│   Developed by: Muhamad Faidil Aziz              │
+│   © 2026 SajakVisual. All rights reserved.       │
+│   System is running smoothly...                  │
+│                                                  │
+╰──────────────────────────────────────────────────╯
+`);
     </script>
   </body>
 </html>

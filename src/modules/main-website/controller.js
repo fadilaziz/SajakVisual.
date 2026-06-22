@@ -88,3 +88,27 @@ export const renderPaymentPage = async (req, res) => {
     });
   }
 };
+
+//Handle Post Data Checkout
+export const handleCheckout = async (req, res) => {
+  try {
+    const { title, price, name, email, wa } = req.body;
+    //Capture data
+    let data = await service.createCheckout(req.body);
+    //Validation data
+    data = await service.validateData(data);
+    //get price from database
+    data = await service.getPrice(data);
+    res.json({
+      status: 200,
+      success: true,
+      message: 'Checkout berhasil',
+    });
+  } catch (error) {
+    return res.json({
+      status: 500,
+      success: false,
+      message: error.message || 'Internal server error',
+    });
+  }
+};

@@ -8,6 +8,9 @@
     />
     <title>Checkout - Sajak Visual</title>
 
+    <!-- Favicon-->
+    <link rel="icon" type="image/webp" href="/img/favicon.webp" />
+
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
@@ -101,7 +104,7 @@
                 />
               </div>
               <p class="form-helper-text">
-                Pastikan email kamu aktif ya, untuk mengirim invoice pembelian.
+                Pastikan email kamu aktif ya, untuk memudahkan kami mengirim invoice pembelian kamu.
               </p>
             </div>
 
@@ -119,7 +122,7 @@
                 />
               </div>
               <p class="form-helper-text">
-                Nomor yang dapat dihubungi untuk konfirmasi data undangan.
+                Pastikan no wa kamu aktif ya, untuk memudahkan tim sajak visual menghubungi kamu.
               </p>
             </div>
           </form>
@@ -167,12 +170,23 @@
       // Populate checkout summary from URL query parameters
       document.addEventListener('DOMContentLoaded', () => {
         const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
         const productName = urlParams.get('title');
         const productPrice = urlParams.get('price');
 
+        const formatRupiah = (number) => {
+          return new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          }).format(number);
+        };
+
         if (productName && productPrice) {
           document.getElementById('checkout-product-name').textContent = productName;
-          document.getElementById('checkout-product-price').textContent = productPrice;
+          document.getElementById('checkout-product-price').textContent =
+            formatRupiah(productPrice);
         } else {
           document.getElementById('checkout-summary').style.display = 'none';
         }
@@ -200,17 +214,44 @@
               setTimeout(() => {
                 submitBtn.innerHTML = originalContent;
                 submitBtn.style.opacity = '1';
-                
+
                 // Redirect to payment page with all data
                 const queryParams = new URLSearchParams({
-                  title: productName || '',
-                  price: productPrice || '',
+                  id: productId,
+                  title: productName,
+                  price: productPrice,
                   name: nama,
                   email: email,
-                  wa: wa
+                  wa: wa,
                 }).toString();
-                
-                window.location.href = '/payment?' + queryParams;
+
+                // Send data to API`
+                const formData = {
+                  product_id: Number(productId),
+                  title: productName,
+                  name: nama,
+                  email: email,
+                  no_wa: Number(wa),
+                };
+
+                console.log('ini data checkout', formData);
+
+                fetch('/api/checkout', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(formData),
+                })
+                  .then((response) => response.json())
+                  .then((data) => {
+                    console.log('Success:', data);
+                  })
+                  .catch((error) => {
+                    console.error('Error:', error);
+                  });
+
+                // window.location.href = '/payment?' + queryParams;
               }, 1500);
             }
           });

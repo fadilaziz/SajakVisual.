@@ -1,4 +1,25 @@
+console.log(`
+╭──────────────────────────────────────────────────╮
+│                                                  │
+│   SajakVisual - SaaS Digital Invitation          │
+│   Developed by: Muhamad Faidil Aziz              │
+│   © 2026 SajakVisual. All rights reserved.       │
+│   System is running smoothly...                  │
+│                                                  │
+╰──────────────────────────────────────────────────╯
+`);
+
 document.addEventListener('DOMContentLoaded', () => {
+  // Helper to format currency
+  const formatRupiah = (number) => {
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(number);
+  };
+
   // Theme Toggle Interaction
   const themeToggle = document.getElementById('theme-toggle');
   const themeIcon = themeToggle ? themeToggle.querySelector('i') : null;
@@ -185,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h3>${product.nama_template}</h3>
                 <span class="category">${product.kategori}</span>
                 <div class="price-row">
-                  <span class="price">Rp.${product.harga}</span>
+                  <span class="price">${formatRupiah(product.harga)}</span>
                 </div>
                 <div class="action-row">
                   <button class="btn-detail">Detail</button>
@@ -284,7 +305,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Populate Data
     document.getElementById('sheet-title').textContent = product.nama_template;
     document.getElementById('sheet-category').textContent = product.kategori;
-    document.getElementById('sheet-price').textContent = product.harga;
+    document.getElementById('sheet-price').textContent = formatRupiah(product.harga);
     // Generate a simple description since it doesn't exist in data.json
     document.getElementById('sheet-desc').textContent =
       `Desain undangan digital elegan dengan nuansa ${product.kategori.toLowerCase()}. Cocok untuk membuat momen spesialmu lebih berkesan.`;
@@ -297,7 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnBeli = document.getElementById('sheet-btn-beli');
     if (btnBeli) {
       btnBeli.onclick = () => {
-        window.location.href = `/checkout?title=${encodeURIComponent(product.nama_template)}&price=${encodeURIComponent(product.harga)}`;
+        window.location.href = `/checkout?id=${encodeURIComponent(product.id)}&title=${encodeURIComponent(product.nama_template)}&price=${encodeURIComponent(product.harga)}`;
       };
     }
 
