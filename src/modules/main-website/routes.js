@@ -4,10 +4,8 @@ import {
   renderMainPage,
   renderTransactionPage,
   renderHelpPage,
-  renderCheckoutPage,
   renderPaymentPage,
   renderDataTemplates,
-  handleCheckout,
   handlePayment,
 } from './controller.js';
 
@@ -15,12 +13,9 @@ import {
 router.get('/', renderMainPage);
 router.get('/transaksi', renderTransactionPage);
 router.get('/bantuan', renderHelpPage);
-router.get('/checkout', renderCheckoutPage);
 router.get('/payment', renderPaymentPage);
-
 //Route Data
 router.get('/templates', renderDataTemplates);
-router.post('/checkout', handleCheckout);
 router.get('/handle-payment', handlePayment);
 
 export default router;

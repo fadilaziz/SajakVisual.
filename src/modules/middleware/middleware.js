@@ -1,6 +1,6 @@
 // File: middleware/authGuard.js
 
-export const requireAdmin = (req, res, next) => {
+export const authGuard = (req, res, next) => {
   const token = req.cookies.admin_token;
 
   if (!token) {
