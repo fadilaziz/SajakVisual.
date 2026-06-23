@@ -62,9 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
       submitBtn.innerHTML = 'Memproses...';
       submitBtn.disabled = true;
 
-      alert(email, password);
-      return;
-
       try {
         // Fetch to backend for admin login
         const response = await fetch('/api/admin/login', {
@@ -82,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
           submitBtn.innerHTML = 'Berhasil!';
           // Redirect ke dashboard admin
           setTimeout(() => {
-            window.location.href = '/admin/dashboard';
+            window.location.href = data.redirect;
           }, 1000);
         } else {
           // Gagal login

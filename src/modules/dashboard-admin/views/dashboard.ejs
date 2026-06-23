@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard Admin SajakVisual.</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/webp" href="/img/favicon.webp" />
+    <!-- Import Font Nunito -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Import CSS -->
+    <link rel="stylesheet" href="/css/dashboard.css" />
+  </head>
+  <body>
+    <div class="dashboard-layout">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+          <img src="/img/logo_sajakvisual.webp" alt="SajakVisual" class="sidebar-logo-img" />
+          <span class="sidebar-title">SajakVisual.</span>
+        </div>
+        <nav class="sidebar-nav">
+          <a href="#" class="nav-item active">
+            <i class="ph ph-squares-four"></i>
+            <span class="nav-text">Dashboard</span>
+          </a>
+          <a href="#" class="nav-item">
+            <i class="ph ph-shopping-cart"></i>
+            <span class="nav-text">Pesanan</span>
+          </a>
+          <a href="#" class="nav-item">
+            <i class="ph ph-users"></i>
+            <span class="nav-text">Pelanggan</span>
+          </a>
+          <a href="#" class="nav-item">
+            <i class="ph ph-gear"></i>
+            <span class="nav-text">Pengaturan</span>
+          </a>
+        </nav>
+        <div class="sidebar-footer">
+          <a href="/admin/login" class="nav-item logout">
+            <i class="ph ph-sign-out"></i>
+            <span class="nav-text">Keluar</span>
+          </a>
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main class="main-wrapper">
+        <!-- Navbar -->
+        <header class="navbar">
+          <div class="navbar-left">
+            <h2>Admin Panel</h2>
+          </div>
+          <div class="navbar-right">
+            <!-- Theme Toggle Button -->
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme">
+              <i class="ph ph-moon"></i>
+            </button>
+            <div class="admin-profile">
+              <div class="avatar">
+                <i class="ph ph-user"></i>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="content">
+          <div class="content-header">
+            <h1>Ringkasan Bisnis</h1>
+            <p>Pantau performa dan transaksi terbaru SajakVisual.</p>
+          </div>
+
+          <!-- Stats Cards -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon revenue">
+                <i class="ph ph-wallet"></i>
+              </div>
+              <div class="stat-info">
+                <h3>Pendapatan</h3>
+                <h2 id="total-revenue">Rp 0</h2>
+              </div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon buyers">
+                <i class="ph ph-users-three"></i>
+              </div>
+              <div class="stat-info">
+                <h3>Jumlah Pembeli</h3>
+                <h2 id="total-buyers">0</h2>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon success">
+                <i class="ph ph-check-circle"></i>
+              </div>
+              <div class="stat-info">
+                <h3>Transaksi Berhasil</h3>
+                <h2 id="total-success">0</h2>
+              </div>
+            </div>
+          </div>
+
+          <!-- History Table -->
+          <div class="table-container">
+            <div class="table-header">
+              <h2>History Pembelian</h2>
+              <button class="btn-outline">Lihat Semua</button>
+            </div>
+            <div class="table-wrapper">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Invoice ID</th>
+                    <th>Nama Pelanggan</th>
+                    <th>Tanggal</th>
+                    <th>Status</th>
+                    <th>Total Pembayaran</th>
+                  </tr>
+                </thead>
+                <tbody id="history-table-body">
+                  <!-- Data will be populated here via JS -->
+                  <tr>
+                    <td colspan="5" class="empty-state">Memuat data...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Import Javascript -->
+    <script src="/javascript/dashboard.js"></script>
+  </body>
+</html>
