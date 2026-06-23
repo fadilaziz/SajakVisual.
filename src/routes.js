@@ -14,12 +14,14 @@ routes.use('/', mainRoutes);
 //Data Routes
 routes.use('/api', apiRoutes);
 
+//auth router
+routes.use('/auth', adminRoutes);
+routes.use('/api/auth', adminApiRoutes);
+
+//Admin page router
+routes.use('/admin', adminRoutesDashboard);
+
 //Invitation Routes
 routes.use('/undangan', invitationRoutes);
-
-//Admin Page Routes
-routes.use('/admin', adminRoutes);
-routes.use('/api/admin', adminApiRoutes);
-routes.use('/admin', adminRoutesDashboard);
 
 export default routes;
