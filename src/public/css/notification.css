@@ -1,0 +1,91 @@
+/* notification.css */
+.notification-container {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.toast-notification {
+  width: max-content;
+  max-width: 400px;
+  padding: 10px 16px;
+  border-radius: 999px; /* Desain rounded / pill shape yang simpel */
+  background-color: var(--foreground, #1e293b); 
+  color: var(--background, #ffffff); 
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  pointer-events: auto;
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: slideDownFadeIn 0.3s ease forwards;
+}
+
+body.dark .toast-notification {
+  background-color: #ffffff; /* White background in dark mode */
+  color: #1e293b; /* Dark text in dark mode */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.toast-icon {
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toast-notification.success .toast-icon {
+  color: #34d399; /* Hijau cerah untuk icon success */
+}
+
+.toast-notification.error .toast-icon {
+  color: #f87171; /* Merah untuk icon error */
+}
+
+.toast-notification.info .toast-icon {
+  color: #60a5fa; /* Biru untuk icon info */
+}
+
+.toast-content {
+  flex: 1;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.toast-notification.hide {
+  animation: slideUpFadeOut 0.3s ease forwards;
+}
+
+@keyframes slideDownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUpFadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}

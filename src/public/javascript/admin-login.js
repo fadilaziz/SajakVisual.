@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const password = document.getElementById('password').value.trim();
 
       if (!email || !password) {
-        alert('Email dan password harus diisi.');
+        window.notify.show('Email dan password harus diisi.', 'error');
         return;
       }
 
@@ -63,8 +63,8 @@ document.addEventListener('DOMContentLoaded', () => {
       submitBtn.disabled = true;
 
       try {
-        // Fetch to backend for admin login
-        const response = await fetch('/api/auth/login', {
+        // Fetch to backend for admin login using global notify helper
+        const data = await window.notify.fetchWithNotify('/api/auth/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -72,27 +72,31 @@ document.addEventListener('DOMContentLoaded', () => {
           body: JSON.stringify({ email, password }),
         });
 
-        const data = await response.json();
-
-        if (response.ok && data.success) {
-          // Berhasil login
-          submitBtn.innerHTML = 'Berhasil!';
-          // Redirect ke dashboard admin
-          setTimeout(() => {
-            window.location.href = data.redirect;
-          }, 1000);
-        } else {
-          // Gagal login
-          alert(data.message || 'Login gagal. Periksa kembali email dan password Anda.');
-          submitBtn.innerHTML = originalText;
-          submitBtn.disabled = false;
-        }
+        // Berhasil login
+        submitBtn.innerHTML = 'Berhasil!';
+        // Redirect ke dashboard admin
+        setTimeout(() => {
+          window.location.href = data.redirect || '/admin/dashboard';
+        }, 1000);
       } catch (error) {
         console.error('Error during login:', error);
-        alert('Terjadi kesalahan pada server. Silakan coba lagi nanti.');
+        // Alert is handled inside notify.fetchWithNotify
         submitBtn.innerHTML = originalText;
         submitBtn.disabled = false;
       }
     });
+  }
+
+  const currentPath = window.location.pathname;
+  if (currentPath === '/auth/login') {
+    fetch('/api/auth/session-check')
+      .then((res) => {
+        if (res.ok) {
+          window.location.href = '/admin/dashboard';
+        }
+      })
+      .catch((error) => {
+        console.error('Error during check session:', error);
+      });
   }
 });

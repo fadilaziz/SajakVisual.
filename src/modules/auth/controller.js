@@ -57,3 +57,57 @@ export const loginAdmin = async (req, res) => {
     });
   }
 };
+
+//Logout Admin
+export const logoutAdmin = async (req, res) => {
+  //clearing cookie
+  try {
+    res.clearCookie('admin_token');
+    return res.status(200).json({
+      status: 200,
+      success: true,
+      message: 'Logout berhasil',
+      redirect: '/auth/login',
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 500,
+      success: false,
+      message: error.message || 'Internal server error',
+    });
+  }
+};
+
+//Check session
+export const checkSession = async (req, res) => {
+  try {
+    const token = req.cookies.admin_token;
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: 'Token tidak ditemukan',
+      });
+    }
+
+    const { data, error } = await supabase.auth.getUser(token);
+    if (error) {
+      return res.status(401).json({
+        success: false,
+        message: 'Token tidak valid',
+      });
+    }
+
+    return res.status(200).json({
+      status: 200,
+      success: true,
+      message: 'Session valid',
+      data: data,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 500,
+      success: false,
+      message: error.message || 'Internal server error',
+    });
+  }
+};

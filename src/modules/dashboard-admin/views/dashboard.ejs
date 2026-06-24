@@ -7,18 +7,22 @@
     <!-- Favicon-->
     <link rel="icon" type="image/webp" href="/img/favicon.webp" />
     <!-- Import Font Nunito -->
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <!-- Import CSS -->
     <link rel="stylesheet" href="/css/dashboard.css" />
+    <link rel="stylesheet" href="/css/notification.css" />
   </head>
   <body>
     <div class="dashboard-layout">
       <!-- Sidebar -->
       <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-          <img src="/img/logo_sajakvisual.webp" alt="SajakVisual" class="sidebar-logo-img" />
+          <img src="/img/Just Logo White.webp" alt="SajakVisual" class="sidebar-logo-img" />
           <span class="sidebar-title">SajakVisual.</span>
         </div>
         <nav class="sidebar-nav">
@@ -40,7 +44,7 @@
           </a>
         </nav>
         <div class="sidebar-footer">
-          <a href="/admin/login" class="nav-item logout">
+          <a class="nav-item logout" id="logout">
             <i class="ph ph-sign-out"></i>
             <span class="nav-text">Keluar</span>
           </a>
@@ -70,8 +74,11 @@
         <!-- Dashboard Content -->
         <div class="content">
           <div class="content-header">
-            <h1>Ringkasan Bisnis</h1>
-            <p>Pantau performa dan transaksi terbaru SajakVisual.</p>
+            <h1>Halo, Arif Suryana! 👋</h1>
+            <p>
+              Selamat datang kembali. Berikut adalah ringkasan bisnis dan performa terbaru
+              SajakVisual hari ini.
+            </p>
           </div>
 
           <!-- Stats Cards -->
@@ -85,7 +92,7 @@
                 <h2 id="total-revenue">Rp 0</h2>
               </div>
             </div>
-            
+
             <div class="stat-card">
               <div class="stat-icon buyers">
                 <i class="ph ph-users-three"></i>
@@ -138,6 +145,7 @@
     </div>
 
     <!-- Import Javascript -->
+    <script src="/javascript/notification.js"></script>
     <script src="/javascript/dashboard.js"></script>
   </body>
 </html>

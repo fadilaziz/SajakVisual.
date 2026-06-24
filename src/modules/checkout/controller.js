@@ -1,3 +1,5 @@
+import service from './service.js';
+
 //Render Checkout Page
 export const renderCheckoutPage = async (req, res) => {
   try {
