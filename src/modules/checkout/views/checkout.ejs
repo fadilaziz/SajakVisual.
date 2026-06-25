@@ -23,6 +23,13 @@
     />
 
     <!-- Custom Styles -->
+    <style>
+      @keyframes spin {
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
     <link rel="stylesheet" href="/css/main-website.css" />
     <link rel="stylesheet" href="/css/checkout.css" />
   </head>
@@ -201,49 +208,55 @@
               document.querySelector('button[form="form-checkout"]');
 
             if (submitBtn) {
+              // Save original content before changing it
               const originalContent = submitBtn.innerHTML;
-              submitBtn.innerHTML = 'Memproses...';
-              submitBtn.style.opacity = '0.7';
 
               // Get form values
               const nama = document.getElementById('nama-input').value;
               const email = document.getElementById('email-input').value;
               const wa = document.getElementById('wa-input').value;
 
-              // Simulate API request
-              setTimeout(() => {
-                submitBtn.innerHTML = originalContent;
-                submitBtn.style.opacity = '1';
+              // Set loading state
+              submitBtn.innerHTML =
+                '<i class="ph ph-circle-notch" style="animation: spin 1s linear infinite;"></i> Memproses...';
+              submitBtn.style.opacity = '0.7';
+              submitBtn.style.pointerEvents = 'none';
 
-                // Send data to API`
-                const formData = {
-                  product_id: Number(productId),
-                  title: productName,
-                  name: nama,
-                  email: email,
-                  no_wa: Number(wa),
-                };
+              // Send data to API
+              const formData = {
+                product_id: Number(productId),
+                title: productName,
+                name: nama,
+                email: email,
+                no_wa: Number(wa),
+              };
 
-                console.log('ini data checkout', formData);
+              console.log('ini data checkout', formData);
 
-                fetch('/api/checkout', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify(formData),
+              fetch('/api/checkout', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+              })
+                .then((response) => response.json())
+                .then((data) => {
+                  console.log('Success:', data);
+                  if (data.status === 200) {
+                    window.location.href = '/payment?invoice=' + data.data;
+                  } else {
+                    submitBtn.innerHTML = originalContent;
+                    submitBtn.style.opacity = '1';
+                    submitBtn.style.pointerEvents = 'auto';
+                  }
                 })
-                  .then((response) => response.json())
-                  .then((data) => {
-                    console.log('Success:', data);
-                    if (data.status === 200) {
-                      window.location.href = '/payment?invoice=' + data.data;
-                    }
-                  })
-                  .catch((error) => {
-                    console.error('Error:', error);
-                  });
-              }, 1500);
+                .catch((error) => {
+                  submitBtn.innerHTML = originalContent;
+                  submitBtn.style.opacity = '1';
+                  submitBtn.style.pointerEvents = 'auto';
+                  console.error('Error:', error);
+                });
             }
           });
         }

@@ -1,5 +1,31 @@
 import supabase from '../../../database/supabase.js';
 
+export const apiCheckSession = async (req, res, next) => {
+  const token = req.cookies.admin_token;
+
+  if (!token) {
+    return res.status(401).json({ success: false, message: 'Akses ditolak: Tidak ada sesi.' });
+  }
+
+  try {
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser(token);
+
+    if (error || !user) {
+      res.clearCookie('admin_token');
+      return res.status(401).json({ success: false, message: 'Akses ditolak: Token tidak valid.' });
+    }
+
+    req.user = user;
+    next();
+  } catch (err) {
+    res.clearCookie('admin_token');
+    return res.status(500).json({ success: false, message: 'Error server saat memvalidasi sesi.' });
+  }
+};
+
 export const requireAdmin = (req, res, next) => {
   const token = req.cookies.admin_token;
 

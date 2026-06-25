@@ -24,73 +24,87 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Fetch Dashboard Data (Mock implementation for now)
+  // Fetch Dashboard Data
   const fetchDashboardData = async () => {
     try {
-      // In a real scenario, you'd fetch from '/api/admin/dashboard-stats'
-      // Example: const res = await fetch('/api/admin/dashboard-stats');
-      // const data = await res.json();
+      const res = await fetch('http://localhost:3000/api/orders');
+      if (!res.ok) {
+        throw new Error('Gagal memuat data');
+      }
 
-      // Mock data for visual purpose
-      const mockData = {
-        totalRevenue: 25000000,
-        totalBuyers: 145,
-        totalSuccess: 142,
-        history: [
-          {
-            invoice: 'INV-001',
-            name: 'Alif Ramadhan',
-            date: '2026-06-23',
-            status: 'Success',
-            total: 150000,
-          },
-          {
-            invoice: 'INV-002',
-            name: 'Siti Nurhaliza',
-            date: '2026-06-22',
-            status: 'Success',
-            total: 300000,
-          },
-          {
-            invoice: 'INV-003',
-            name: 'Budi Santoso',
-            date: '2026-06-21',
-            status: 'Success',
-            total: 150000,
-          },
-          {
-            invoice: 'INV-004',
-            name: 'Anya Geraldine',
-            date: '2026-06-20',
-            status: 'Success',
-            total: 450000,
-          },
-        ],
-      };
+      const contentType = res.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('Sesi tidak valid, harap login kembali.');
+      }
+
+      const json = await res.json();
+      if (!json.success) {
+        throw new Error(json.message || 'Gagal memuat data dari API');
+      }
+
+      const orders = json.data || [];
+
+      let totalRevenue = 0;
+      let totalBuyers = orders.length;
+      let totalSuccess = 0;
+
+      orders.forEach((item) => {
+        if (item.status === 'SUCCESS') {
+          totalRevenue += item.jumlah_total;
+          totalSuccess++;
+        }
+      });
 
       // Animate Numbers
-      animateValue('total-revenue', 0, mockData.totalRevenue, 1500, true);
-      animateValue('total-buyers', 0, mockData.totalBuyers, 1500);
-      animateValue('total-success', 0, mockData.totalSuccess, 1500);
+      animateValue('total-revenue', 0, totalRevenue, 1500, true);
+      animateValue('total-buyers', 0, totalBuyers, 1500);
+      animateValue('total-success', 0, totalSuccess, 1500);
 
       // Populate Table
       const tbody = document.getElementById('history-table-body');
       tbody.innerHTML = ''; // clear loading state
 
-      mockData.history.forEach((item) => {
+      const sortedOrders = [...orders].sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      );
+
+      if (sortedOrders.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="empty-state">Belum ada transaksi</td></tr>';
+        return;
+      }
+
+      sortedOrders.forEach((item) => {
         const tr = document.createElement('tr');
+
+        let statusHtml = '';
+        if (item.status === 'SUCCESS') {
+          statusHtml = '<span class="status-badge success">Berhasil</span>';
+        } else if (item.status === 'PENDING') {
+          statusHtml = '<span class="status-badge warning">Tertunda</span>';
+        } else {
+          statusHtml = '<span class="status-badge error">Batal</span>';
+        }
+
+        const dateObj = new Date(item.created_at);
+        const dateString = dateObj.toLocaleDateString('id-ID', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        });
+
         tr.innerHTML = `
-          <td><strong>${item.invoice}</strong></td>
-          <td>${item.name}</td>
-          <td>${item.date}</td>
-          <td><span class="status-badge success">Berhasil</span></td>
-          <td>Rp ${item.total.toLocaleString('id-ID')}</td>
+          <td><strong>${item.no_invoice}</strong></td>
+          <td>${item.nama}</td>
+          <td>${dateString}</td>
+          <td>${statusHtml}</td>
+          <td>Rp ${item.jumlah_total.toLocaleString('id-ID')}</td>
         `;
         tbody.appendChild(tr);
       });
     } catch (error) {
       console.error('Failed to load dashboard data:', error);
-      if (window.notify) window.notify.show('Gagal memuat data dashboard', 'error');
+      if (window.notify)
+        window.notify.show(error.message || 'Gagal memuat data dashboard', 'error');
       document.getElementById('history-table-body').innerHTML = `
         <tr><td colspan="5" class="empty-state">Gagal memuat data</td></tr>
       `;

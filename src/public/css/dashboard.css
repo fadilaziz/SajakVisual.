@@ -443,6 +443,26 @@ body.dark .status-badge.success {
   color: #4ade80;
 }
 
+.status-badge.warning {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+body.dark .status-badge.warning {
+  background-color: rgba(217, 119, 6, 0.2);
+  color: #fbbf24;
+}
+
+.status-badge.error {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+body.dark .status-badge.error {
+  background-color: rgba(220, 38, 38, 0.2);
+  color: #f87171;
+}
+
 .empty-state {
   text-align: center;
   color: var(--muted-foreground) !important;

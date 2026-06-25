@@ -3,18 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard Admin SajakVisual.</title>
-    <!-- Favicon-->
+    <title>Daftar Pesanan - SajakVisual.</title>
     <link rel="icon" type="image/webp" href="/img/favicon.webp" />
-    <!-- Import Font Nunito -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap"
-      rel="stylesheet"
-    />
-    <!-- Phosphor Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <!-- Import CSS -->
     <link rel="stylesheet" href="/css/dashboard.css" />
+    <link rel="stylesheet" href="/css/pesanan.css" />
     <link rel="stylesheet" href="/css/notification.css" />
   </head>
   <body>
@@ -26,15 +20,15 @@
           <span class="sidebar-title">SajakVisual.</span>
         </div>
         <nav class="sidebar-nav">
-          <a href="/admin/dashboard" class="nav-item active">
+          <a href="/admin/dashboard" class="nav-item">
             <i class="ph ph-squares-four"></i>
             <span class="nav-text">Dashboard</span>
           </a>
-          <a href="/admin/pesanan" class="nav-item">
+          <a href="/admin/pesanan" class="nav-item active">
             <i class="ph ph-shopping-cart"></i>
             <span class="nav-text">Pesanan</span>
-          </a>
-          <!-- <a href="#" class="nav-item">
+          <!-- </a>
+          <a href="#" class="nav-item">
             <i class="ph ph-users"></i>
             <span class="nav-text">Pelanggan</span>
           </a>
@@ -56,10 +50,9 @@
         <!-- Navbar -->
         <header class="navbar">
           <div class="navbar-left">
-            <h2>Admin Panel</h2>
+            <h2>Daftar Pesanan</h2>
           </div>
           <div class="navbar-right">
-            <!-- Theme Toggle Button -->
             <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme">
               <i class="ph ph-moon"></i>
             </button>
@@ -71,72 +64,47 @@
           </div>
         </header>
 
-        <!-- Dashboard Content -->
+        <!-- Pesanan Content -->
         <div class="content">
           <div class="content-header">
-            <h1>Halo, Arif Suryana! 👋</h1>
+            <h1>Kelola Pesanan Pelanggan</h1>
             <p>
-              Selamat datang kembali. Berikut adalah ringkasan bisnis dan performa terbaru
-              SajakVisual hari ini.
+              Pantau dan kelola seluruh transaksi dan pesanan yang masuk ke sistem SajakVisual secara real-time.
             </p>
           </div>
 
-          <!-- Stats Cards -->
-          <div class="stats-grid">
-            <div class="stat-card">
-              <div class="stat-icon revenue">
-                <i class="ph ph-wallet"></i>
-              </div>
-              <div class="stat-info">
-                <h3>Pendapatan</h3>
-                <h2 id="total-revenue">Rp 0</h2>
-              </div>
-            </div>
-
-            <div class="stat-card">
-              <div class="stat-icon buyers">
-                <i class="ph ph-users-three"></i>
-              </div>
-              <div class="stat-info">
-                <h3>Jumlah Pembeli</h3>
-                <h2 id="total-buyers">0</h2>
-              </div>
-            </div>
-
-            <div class="stat-card">
-              <div class="stat-icon success">
-                <i class="ph ph-check-circle"></i>
-              </div>
-              <div class="stat-info">
-                <h3>Transaksi Berhasil</h3>
-                <h2 id="total-success">0</h2>
-              </div>
-            </div>
-          </div>
-
           <!-- History Table -->
-          <div class="table-container">
+          <div class="table-container fade-in-up">
             <div class="table-header">
-              <h2>History Pembelian</h2>
-              <a style="text-decoration: none" href="/admin/pesanan" class="btn-outline"
-                >Lihat Semua</a
-              >
+              <div class="table-actions">
+                <div class="search-box">
+                  <i class="ph ph-magnifying-glass"></i>
+                  <input type="text" id="search-input" placeholder="Cari invoice atau nama..." />
+                </div>
+                <select id="status-filter" class="filter-select">
+                  <option value="ALL">Semua Status</option>
+                  <option value="SUCCESS">Berhasil</option>
+                  <option value="PENDING">Pending</option>
+                  <option value="FAILED">Gagal</option>
+                </select>
+              </div>
             </div>
             <div class="table-wrapper">
-              <table class="data-table">
+              <table class="data-table" id="orders-table">
                 <thead>
                   <tr>
                     <th>Invoice ID</th>
                     <th>Nama Pelanggan</th>
                     <th>Tanggal</th>
                     <th>Status</th>
-                    <th>Total Pembayaran</th>
+                    <th>Total</th>
+                    <th class="action-th">Aksi</th>
                   </tr>
                 </thead>
-                <tbody id="history-table-body">
+                <tbody id="orders-table-body">
                   <!-- Data will be populated here via JS -->
                   <tr>
-                    <td colspan="5" class="empty-state">Memuat data...</td>
+                    <td colspan="6" class="empty-state">Memuat data pesanan...</td>
                   </tr>
                 </tbody>
               </table>
@@ -146,8 +114,21 @@
       </main>
     </div>
 
+    <!-- Modal Detail Pesanan -->
+    <div id="detail-modal" class="modal-overlay">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Detail Pesanan</h3>
+          <button class="close-modal" id="close-modal"><i class="ph ph-x"></i></button>
+        </div>
+        <div class="modal-body" id="modal-body-content">
+          <!-- Content populated via JS -->
+        </div>
+      </div>
+    </div>
+
     <!-- Import Javascript -->
     <script src="/javascript/notification.js"></script>
-    <script src="/javascript/dashboard.js"></script>
+    <script src="/javascript/pesanan.js"></script>
   </body>
 </html>
