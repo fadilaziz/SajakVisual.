@@ -15,9 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   if (invoiceParam) {
     try {
-      const response = await fetch(
-        `${BASE_URL_SAJAKVISUAL}/api/handle-payment?invoice=${invoiceParam}`
-      );
+      const response = await fetch(`/api/handle-payment?invoice=${invoiceParam}`);
       const result = await response.json();
       if (result.success && result.data) {
         paymentData = result.data;
@@ -100,7 +98,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (totalPembayaranContainer) totalPembayaranContainer.style.display = 'none';
       if (qrisContainer) qrisContainer.style.display = 'none';
       if (successMessage) successMessage.style.display = 'block';
-      
+
       // Change button to "Cek Transaksi"
       const btnWa = document.getElementById('btn-wa');
       if (btnWa) {
@@ -108,25 +106,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         btnWa.removeAttribute('target');
         btnWa.onclick = (e) => {
           e.preventDefault();
-          navigator.clipboard.writeText(invoiceId).then(() => {
-            const copyToast = document.getElementById('copy-toast');
-            if (copyToast) {
-              copyToast.textContent = 'No. Invoice disalin!';
-              copyToast.classList.add('show');
-              setTimeout(() => {
-                copyToast.classList.remove('show');
+          navigator.clipboard
+            .writeText(invoiceId)
+            .then(() => {
+              const copyToast = document.getElementById('copy-toast');
+              if (copyToast) {
+                copyToast.textContent = 'No. Invoice disalin!';
+                copyToast.classList.add('show');
+                setTimeout(() => {
+                  copyToast.classList.remove('show');
+                  window.location.href = '/transaksi';
+                }, 1500);
+              } else {
                 window.location.href = '/transaksi';
-              }, 1500);
-            } else {
+              }
+            })
+            .catch((err) => {
+              console.error('Failed to copy: ', err);
               window.location.href = '/transaksi';
-            }
-          }).catch((err) => {
-            console.error('Failed to copy: ', err);
-            window.location.href = '/transaksi';
-          });
+            });
         };
       }
-      
+
       return true;
     } else {
       if (totalPembayaranContainer) totalPembayaranContainer.style.display = 'block';
@@ -148,7 +149,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!isSuccess && invoiceParam) {
       const pollingInterval = setInterval(async () => {
         try {
-          const response = await fetch(`${BASE_URL_SAJAKVISUAL}/api/handle-payment?invoice=${invoiceParam}`);
+          const response = await fetch(
+            `${BASE_URL_SAJAKVISUAL}/api/handle-payment?invoice=${invoiceParam}`
+          );
           const result = await response.json();
           if (result.success && result.data && result.data.status === 'SUCCESS') {
             updateStatusUI(result.data);
