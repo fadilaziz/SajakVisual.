@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (invoiceParam) {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/handle-payment?invoice=${invoiceParam}`
+        `${BASE_URL_SAJAKVISUAL}/api/handle-payment?invoice=${invoiceParam}`
       );
       const result = await response.json();
       if (result.success && result.data) {
@@ -148,7 +148,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!isSuccess && invoiceParam) {
       const pollingInterval = setInterval(async () => {
         try {
-          const response = await fetch(`/api/handle-payment?invoice=${invoiceParam}`);
+          const response = await fetch(`${BASE_URL_SAJAKVISUAL}/api/handle-payment?invoice=${invoiceParam}`);
           const result = await response.json();
           if (result.success && result.data && result.data.status === 'SUCCESS') {
             updateStatusUI(result.data);

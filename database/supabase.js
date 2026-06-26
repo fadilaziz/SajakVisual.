@@ -7,9 +7,6 @@ if (!supabaseURL || !supabaseKEY) {
   console.error('Missing Supabase configuration. Please check your .env file.');
 }
 
-console.log(supabaseURL);
-console.log(supabaseKEY);
-
 // Inisialisasi Client Supabase
 const supabase = createClient(supabaseURL, supabaseKEY);
 

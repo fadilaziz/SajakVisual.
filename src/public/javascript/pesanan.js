@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (logoutBtn) {
     logoutBtn.addEventListener('click', async () => {
       try {
-        const res = await fetch('/api/auth/logout', { method: 'POST' });
+        const res = await fetch(`${BASE_URL_SAJAKVISUAL}/api/auth/logout`, { method: 'POST' });
         const data = await res.json();
         if (data.success) {
           if (window.notify) window.notify.show(data.message, 'success');
@@ -218,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const fetchOrdersData = async () => {
     try {
       // Changed to relative URL for stability across environments
-      const res = await fetch('/api/orders');
+      const res = await fetch(`${BASE_URL_SAJAKVISUAL}/api/orders`);
       if (!res.ok) {
         throw new Error('Gagal memuat data pesanan');
       }
@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Ping to renew session admin every 15 minutes
   const keepSessionAlive = () => {
-    fetch('/api/auth/ping')
+    fetch(`${BASE_URL_SAJAKVISUAL}/api/auth/ping`)
       .then((res) => {
         if (!res.ok) {
           if (window.notify) window.notify.show('Sesi Anda telah berakhir, silakan login kembali.', 'error');

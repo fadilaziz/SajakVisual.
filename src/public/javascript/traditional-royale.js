@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   try {
     // Fetch data from API
-    const response = await fetch(`http://localhost:3000/undangan/data-invitation?slug=${slug}`);
+    const response = await fetch(`${BASE_URL_SAJAKVISUAL}/undangan/data-invitation?slug=${slug}`);
     const result = await response.json();
     console.log(result);
 

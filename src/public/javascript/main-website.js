@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Fetch and Render Product Cards
   const productGrid = document.getElementById('product-grid');
   if (productGrid) {
-    fetch('/api/templates')
+    fetch(`${BASE_URL_SAJAKVISUAL}/api/templates`)
       .then((response) => response.json())
       .then((products) => {
         // Clear skeleton loaders

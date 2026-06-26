@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       try {
         // Fetch to backend for admin login using global notify helper
-        const data = await window.notify.fetchWithNotify('/api/auth/login', {
+        const data = await window.notify.fetchWithNotify(`${BASE_URL_SAJAKVISUAL}/api/auth/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const currentPath = window.location.pathname;
   if (currentPath === '/auth/login') {
-    fetch('/api/auth/session-check')
+    fetch(`${BASE_URL_SAJAKVISUAL}/api/auth/session-check`)
       .then((res) => {
         if (res.ok) {
           window.location.href = '/admin/dashboard';
