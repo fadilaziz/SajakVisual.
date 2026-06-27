@@ -184,14 +184,78 @@ document.addEventListener('DOMContentLoaded', () => {
   const productGrid = document.getElementById('product-grid');
   // State to hold all fetched products
   let allProducts = [];
+  let currentPage = 1;
+  const itemsPerPage = 6;
+
+  const renderPagination = (totalItems, filteredProducts) => {
+    const paginationContainer = document.getElementById('pagination-container');
+    if (!paginationContainer) return;
+
+    paginationContainer.innerHTML = '';
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+    if (totalPages <= 1) return; // Hide pagination if only 1 page
+
+    // Prev Button
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'page-btn';
+    prevBtn.innerHTML = '<i class="ph ph-caret-left"></i>';
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderProducts(filteredProducts, false);
+        const header = document.querySelector('.section-header');
+        if (header) header.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+    paginationContainer.appendChild(prevBtn);
+
+    // Page numbers
+    for (let i = 1; i <= totalPages; i++) {
+      const pageBtn = document.createElement('button');
+      pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+      pageBtn.textContent = i;
+      pageBtn.addEventListener('click', () => {
+        currentPage = i;
+        renderProducts(filteredProducts, false);
+        const header = document.querySelector('.section-header');
+        if (header) header.scrollIntoView({ behavior: 'smooth' });
+      });
+      paginationContainer.appendChild(pageBtn);
+    }
+
+    // Next Button
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'page-btn';
+    nextBtn.innerHTML = '<i class="ph ph-caret-right"></i>';
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.addEventListener('click', () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderProducts(filteredProducts, false);
+        const header = document.querySelector('.section-header');
+        if (header) header.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+    paginationContainer.appendChild(nextBtn);
+  };
 
   // Function to render products based on data array
-  const renderProducts = (productsToRender) => {
+  const renderProducts = (productsToRender, resetPage = true) => {
+    if (resetPage) currentPage = 1;
+
     if (!productGrid) return;
     productGrid.innerHTML = '';
+    const paginationContainer = document.getElementById('pagination-container');
+    if (paginationContainer) paginationContainer.innerHTML = '';
 
     if (productsToRender && productsToRender.length > 0) {
-      productsToRender.forEach((product, index) => {
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      const currentItems = productsToRender.slice(startIndex, endIndex);
+
+      currentItems.forEach((product, index) => {
         const article = document.createElement('article');
         article.className = 'product-card card-loaded';
         article.style.animationDelay = `${index * 50}ms`;
@@ -241,6 +305,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         productGrid.appendChild(article);
       });
+      renderPagination(productsToRender.length, productsToRender);
     } else {
       productGrid.innerHTML = `
         <p style="grid-column: span 2; text-align: center; padding: 20px; color: var(--muted-foreground);">

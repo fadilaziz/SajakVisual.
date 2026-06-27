@@ -128,8 +128,6 @@ const createCheckout = async (data) => {
 
 //Send invoice to user email
 export const sendEmail = async (data) => {
-  console.log(data.email);
-
   const formatRupiah = (number) => {
     return new Intl.NumberFormat('id-ID', {
       style: 'currency',
@@ -308,8 +306,8 @@ export const handlePaymentCallback = async (data) => {
   }
 };
 
-//Send SUCCESS paymenr message, product link and instruction to user
-const sendEmailSuccess = async (data) => {
+//Send SUCCESS and EXPIRED status messages
+const sendEmailStatus = async (data) => {
   try {
     const { data: orders, error } = await supabase
       .from('orders')
@@ -322,7 +320,6 @@ const sendEmailSuccess = async (data) => {
     }
 
     const orderInfo = orders[0];
-    console.log(orderInfo);
 
     const formatRupiah = (number) => {
       return new Intl.NumberFormat('id-ID', {
@@ -332,6 +329,36 @@ const sendEmailSuccess = async (data) => {
         maximumFractionDigits: 0,
       }).format(number);
     };
+
+    let badgeBg = '#dcfce7';
+    let badgeColor = '#166534';
+    let titleText = `Terima Kasih, ${orderInfo.nama}!`;
+    let descText = `Pembayaran untuk pesanan Anda telah berhasil dikonfirmasi. Layanan undangan digital Anda kini sedang kami persiapkan.`;
+    let instructionHtml = `
+                    <div class="instruction-box">
+                        <h3 class="instruction-title">Langkah Selanjutnya:</h3>
+                        <ul class="instruction-list">
+                            <li>Hubungi tim admin melalui WhatsApp untuk mengisi detail mempelai dan acara.</li>
+                            <li>Siapkan foto-foto galeri yang ingin ditampilkan pada undangan.</li>
+                            <li>Proses pengerjaan akan memakan waktu 1-2 hari kerja.</li>
+                        </ul>
+                    </div>
+                    <a href="https://wa.me/6281917536832?text=Halo%20Admin%2C%20saya%20sudah%20membayar%20invoice%20${orderInfo.no_invoice}.%20Mohon%20info%20langkah%20selanjutnya." class="btn">Konfirmasi via WhatsApp</a>`;
+    let emailSubject = 'Pembayaran Berhasil - ' + orderInfo.no_invoice;
+
+    if (orderInfo.status === 'EXPIRED') {
+      badgeBg = '#fee2e2';
+      badgeColor = '#991b1b';
+      titleText = `Pembayaran Kedaluwarsa`;
+      descText = `Mohon maaf ${orderInfo.nama}, waktu pembayaran untuk pesanan Anda telah habis dan pesanan telah dibatalkan secara otomatis.`;
+      instructionHtml = `
+                    <div class="instruction-box" style="background-color: #fff1f2; border-color: #fecdd3;">
+                        <h3 class="instruction-title" style="color: #9f1239;">Apa yang harus dilakukan?</h3>
+                        <p style="margin: 0; color: #4c0519; font-size: 14px; line-height: 1.6;">Jika Anda masih ingin melanjutkan pemesanan, silakan buat pesanan baru melalui website kami.</p>
+                    </div>
+                    <a href="${process.env.BASE_URL_SAJAKVISUAL || 'https://sajak-visual.vercel.app'}" class="btn" style="background-color: #e11d48;">Buat Pesanan Baru</a>`;
+      emailSubject = 'Pembayaran Kedaluwarsa - ' + orderInfo.no_invoice;
+    }
 
     const email_message = `
     <!DOCTYPE html>
@@ -346,7 +373,7 @@ const sendEmailSuccess = async (data) => {
             .header { text-align: center; padding: 32px 24px; background-color: #ffffff; border-bottom: 1px solid #e4e4e7; }
             .logo { max-height: 20px; }
             .content { padding: 32px 24px; color: #3f3f46; }
-            .badge { display: inline-block; padding: 6px 12px; background-color: #dcfce7; color: #166534; border-radius: 9999px; font-size: 12px; font-weight: 600; margin-bottom: 24px; letter-spacing: 0.5px; }
+            .badge { display: inline-block; padding: 6px 12px; background-color: ${badgeBg}; color: ${badgeColor}; border-radius: 9999px; font-size: 12px; font-weight: 600; margin-bottom: 24px; letter-spacing: 0.5px; }
             .title { font-size: 24px; font-weight: 700; color: #18181b; margin: 0 0 8px 0; }
             .text { font-size: 15px; line-height: 1.6; margin: 0 0 24px 0; }
             .invoice-card { background-color: #fafafa; border: 1px solid #e4e4e7; border-radius: 8px; padding: 20px; margin-bottom: 24px; }
@@ -377,9 +404,9 @@ const sendEmailSuccess = async (data) => {
                 </div>
                 <div class="content">
                     <div style="text-align: center;">
-                        <span class="badge">PEMBAYARAN BERHASIL</span>
-                        <h1 class="title">Terima Kasih, ${orderInfo.nama}!</h1>
-                        <p class="text">Pembayaran untuk pesanan Anda telah berhasil dikonfirmasi. Layanan undangan digital Anda kini sedang kami persiapkan.</p>
+                        <span class="badge">${orderInfo.status}</span>
+                        <h1 class="title">${titleText}</h1>
+                        <p class="text">${descText}</p>
                     </div>
 
                     <div class="invoice-card">
@@ -388,25 +415,16 @@ const sendEmailSuccess = async (data) => {
                             <div class="col-right">${orderInfo.no_invoice}</div>
                         </div>
                         <div class="row">
-                            <div class="col-left">Tanggal Pembayaran</div>
-                            <div class="col-right">${new Date().toLocaleString('id-ID')}</div>
+                            <div class="col-left">Tanggal Invoice</div>
+                            <div class="col-right">${new Date(orderInfo.created_at || Date.now()).toLocaleString('id-ID')}</div>
                         </div>
                         <div class="row">
-                            <div class="col-left">Jumlah Dibayar</div>
+                            <div class="col-left">Jumlah Tagihan</div>
                             <div class="col-right" style="color: #16a34a; font-size: 16px;">${formatRupiah(orderInfo.jumlah_total)}</div>
                         </div>
                     </div>
 
-                    <div class="instruction-box">
-                        <h3 class="instruction-title">Langkah Selanjutnya:</h3>
-                        <ul class="instruction-list">
-                            <li>Hubungi tim admin melalui WhatsApp untuk mengisi detail mempelai dan acara.</li>
-                            <li>Siapkan foto-foto galeri yang ingin ditampilkan pada undangan.</li>
-                            <li>Proses pengerjaan akan memakan waktu 1-2 hari kerja.</li>
-                        </ul>
-                    </div>
-
-                    <a href="https://wa.me/6281917536832?text=Halo%20Admin%2C%20saya%20sudah%20membayar%20invoice%20${orderInfo.no_invoice}.%20Mohon%20info%20langkah%20selanjutnya." class="btn">Konfirmasi via WhatsApp</a>
+                    ${instructionHtml}
 
                     <a href="${process.env.BASE_URL_SAJAKVISUAL || 'https://sajak-visual.vercel.app'}/transaksi" class="btn-outline">Cek Status Pesanan</a>
 
@@ -421,7 +439,7 @@ const sendEmailSuccess = async (data) => {
     </html>`;
 
     const data_email = {
-      subject: 'Pembayaran Berhasil - ' + orderInfo.no_invoice,
+      subject: emailSubject,
       message: email_message,
       destination: orderInfo.email,
       attachments: [
@@ -446,5 +464,5 @@ export default {
   createCheckout,
   sendEmail,
   handlePaymentCallback,
-  sendEmailSuccess,
+  sendEmailStatus,
 };

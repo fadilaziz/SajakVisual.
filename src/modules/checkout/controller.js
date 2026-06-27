@@ -49,7 +49,7 @@ export const handlePaymentCallback = async (req, res) => {
     //handle payment callback
     let data = await service.handlePaymentCallback(req.body);
     //Send Email Success to user
-    await service.sendEmailSuccess(data);
+    await service.sendEmailStatus(data);
     res.json({
       status: 200,
       success: true,

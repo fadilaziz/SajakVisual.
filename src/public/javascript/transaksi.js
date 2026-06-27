@@ -20,13 +20,13 @@ document.addEventListener('DOMContentLoaded', () => {
     return date.toLocaleDateString('id-ID', {
       day: '2-digit',
       month: 'long',
-      year: 'numeric'
+      year: 'numeric',
     });
   };
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
+
     const invoice = invoiceInput.value.trim();
     if (!invoice) return;
 
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnSubmit.textContent = 'Mencari...';
     btnSubmit.disabled = true;
     if (loadingOverlay) loadingOverlay.classList.add('active');
-    
+
     // Hide previous result if any
     resultContainer.classList.remove('show');
     resultContainer.classList.remove('active');
@@ -44,20 +44,21 @@ document.addEventListener('DOMContentLoaded', () => {
       const response = await fetch('/api/transection/check', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ no_invoice: invoice })
+        body: JSON.stringify({ no_invoice: invoice }),
       });
 
       const result = await response.json();
 
       if (result.success && result.data) {
         const data = result.data;
-        
+
         // Populate UI
-        document.getElementById('res-template-name').textContent = data.templates?.nama_template || 'Produk Custom';
+        document.getElementById('res-template-name').textContent =
+          data.templates?.nama_template || 'Produk Custom';
         document.getElementById('res-category').textContent = data.templates?.kategori || '-';
-        
+
         const templateImg = document.getElementById('res-template-image');
         if (data.templates?.sample_preview) {
           templateImg.src = `/img/template/${data.templates.sample_preview}.webp`;
@@ -65,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           templateImg.style.display = 'none';
         }
-        
+
         // Status Badge
         const badgeEl = document.getElementById('res-status');
         badgeEl.textContent = data.status;
@@ -97,7 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
           infoText.style.textAlign = 'center';
           infoText.style.fontSize = '0.9rem';
           infoText.style.color = 'var(--text-secondary)';
-          infoText.innerHTML = 'Pembayaran berhasil. Silakan cek email Anda atau hubungi admin via WhatsApp.';
+          infoText.innerHTML =
+            'Pembayaran berhasil. Silakan cek email Kamu. Link Undangan akan dikirimkan melalui email.';
           actionsContainer.appendChild(infoText);
         } else if (data.status === 'EXPIRED') {
           const btnNew = document.createElement('a');
