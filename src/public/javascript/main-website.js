@@ -176,7 +176,9 @@ document.addEventListener('DOMContentLoaded', () => {
     startSlide();
   }
 
-  document.body.classList.remove('loading-state');
+  if (!document.body.classList.contains('manual-loading')) {
+    document.body.classList.remove('loading-state');
+  }
 
   // Fetch and Render Product Cards
   const productGrid = document.getElementById('product-grid');

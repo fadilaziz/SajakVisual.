@@ -87,6 +87,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById('pay-product').textContent = productName;
   document.getElementById('pay-total-bottom').textContent = productPrice;
 
+  // Remove loading state after data is populated
+  document.body.classList.remove('loading-state', 'manual-loading');
+
   // QRIS & Status Display
   const totalPembayaranContainer = document.getElementById('total-pembayaran-container');
   const qrisContainer = document.getElementById('qris-container');
