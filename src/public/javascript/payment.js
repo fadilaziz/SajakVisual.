@@ -203,9 +203,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
           const response = await fetch(`/api/handle-payment?invoice=${invoiceParam}`);
           const result = await response.json();
-          if (result.success && result.data && result.data.status === 'SUCCESS') {
-            updateStatusUI(result.data);
-            clearInterval(pollingInterval);
+          if (result.success && result.data) {
+            if (result.data.status === 'SUCCESS' || result.data.status === 'EXPIRED') {
+              updateStatusUI(result.data);
+              clearInterval(pollingInterval);
+            }
           }
         } catch (err) {
           console.error('Error checking payment status:', err);
