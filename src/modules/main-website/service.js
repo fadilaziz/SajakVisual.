@@ -17,6 +17,47 @@ const getAllTemplates = async () => {
   return template;
 };
 
+//Get data transaction check from supabase
+const transectionCheck = async (no_invoice) => {
+  const { data, error } = await supabase
+    .from('orders')
+    .select(
+      `
+      id,
+      no_invoice,
+      nama,
+      email,
+      no_wa,
+      template_id,
+      status,
+      jumlah_total,
+      qris_url,
+      qris_image,
+      created_at,
+      expired_at,
+      tanggal,
+      templates (
+        id,
+        nama_template,
+        kategori,
+        harga,
+        slug,
+        sample_preview
+      )
+      `
+    )
+    .eq('no_invoice', no_invoice)
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+};
+
 export default {
   getAllTemplates,
+  transectionCheck,
+  transectionCheck,
 };

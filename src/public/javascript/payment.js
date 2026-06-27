@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const result = await response.json();
       if (result.success && result.data) {
         paymentData = result.data;
+        console.log(result.data);
       }
     } catch (error) {
       console.error('Error fetching payment data:', error);
@@ -92,11 +93,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   const qrisImg = document.getElementById('qris-img');
   const btnDownload = document.getElementById('btn-download-qris');
   const successMessage = document.getElementById('success-message');
+  const expiredMessage = document.getElementById('expired-message');
 
   const updateStatusUI = (data) => {
     if (data && data.status === 'SUCCESS') {
       if (totalPembayaranContainer) totalPembayaranContainer.style.display = 'none';
       if (qrisContainer) qrisContainer.style.display = 'none';
+      if (expiredMessage) expiredMessage.style.display = 'none';
       if (successMessage) successMessage.style.display = 'block';
 
       // Change button to "Cek Transaksi"
@@ -128,7 +131,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
       }
 
-      return true;
+      return 'SUCCESS';
+    } else if (data && data.status === 'EXPIRED') {
+      if (totalPembayaranContainer) totalPembayaranContainer.style.display = 'none';
+      if (qrisContainer) qrisContainer.style.display = 'none';
+      if (successMessage) successMessage.style.display = 'none';
+      if (expiredMessage) expiredMessage.style.display = 'block';
+
+      // Hide WhatsApp button
+      const btnWa = document.getElementById('btn-wa');
+      if (btnWa) btnWa.style.display = 'none';
+      
+      const instructionBox = document.querySelector('.payment-instruction-box');
+      if (instructionBox) instructionBox.style.display = 'none';
+
+      return 'EXPIRED';
     } else {
       if (totalPembayaranContainer) totalPembayaranContainer.style.display = 'block';
       if (data && data.qris_image) {
@@ -142,16 +159,46 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   };
 
+  const startCountdown = (createdAt) => {
+    const timerEl = document.getElementById('countdown-timer');
+    const qrisLabel = document.getElementById('qris-label');
+    const qrisImg = document.getElementById('qris-img');
+    const btnDownload = document.getElementById('btn-download-qris');
+
+    if (!timerEl || !createdAt) return;
+
+    const createdTime = new Date(createdAt).getTime();
+    const expireTime = createdTime + 15 * 60 * 1000;
+
+    timerEl.style.display = 'block';
+
+    const countdownInterval = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = expireTime - now;
+
+      if (distance < 0) {
+        clearInterval(countdownInterval);
+        updateStatusUI({ status: 'EXPIRED' });
+      } else {
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        timerEl.textContent = `Sisa Waktu: ${minutes}m ${seconds}s`;
+      }
+    }, 1000);
+  };
+
   if (paymentData) {
-    const isSuccess = updateStatusUI(paymentData);
+    const statusResult = updateStatusUI(paymentData);
+    
+    if (statusResult !== 'SUCCESS' && statusResult !== 'EXPIRED' && paymentData.created_at) {
+      startCountdown(paymentData.created_at);
+    }
 
     // Auto-polling for status SUCCESS if not already success
-    if (!isSuccess && invoiceParam) {
+    if (statusResult !== 'SUCCESS' && statusResult !== 'EXPIRED' && invoiceParam) {
       const pollingInterval = setInterval(async () => {
         try {
-          const response = await fetch(
-            `${BASE_URL_SAJAKVISUAL}/api/handle-payment?invoice=${invoiceParam}`
-          );
+          const response = await fetch(`/api/handle-payment?invoice=${invoiceParam}`);
           const result = await response.json();
           if (result.success && result.data && result.data.status === 'SUCCESS') {
             updateStatusUI(result.data);

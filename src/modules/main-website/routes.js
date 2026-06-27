@@ -5,6 +5,7 @@ import {
   renderTransactionPage,
   renderHelpPage,
   renderDataTemplates,
+  transectionCheck,
 } from './controller.js';
 
 //Router render page
@@ -13,5 +14,8 @@ router.get('/transaksi', renderTransactionPage);
 router.get('/bantuan', renderHelpPage);
 //Route Data
 router.get('/templates', renderDataTemplates);
+
+//Route Transection Check
+router.post('/check', transectionCheck);
 
 export default router;

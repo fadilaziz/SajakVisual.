@@ -42,3 +42,24 @@ export const handleCheckout = async (req, res) => {
     });
   }
 };
+
+//Handle Payment Call Back
+export const handlePaymentCallback = async (req, res) => {
+  try {
+    //handle payment callback
+    let data = await service.handlePaymentCallback(req.body);
+    //Send Email Success to user
+    await service.sendEmailSuccess(data);
+    res.json({
+      status: 200,
+      success: true,
+      message: 'Payment callback berhasil',
+    });
+  } catch (error) {
+    return res.json({
+      status: 500,
+      success: false,
+      message: error.message || 'Internal server error',
+    });
+  }
+};

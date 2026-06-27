@@ -60,3 +60,24 @@ export const renderHelpPage = async (req, res) => {
     });
   }
 };
+
+//Get data transection
+export const transectionCheck = async (req, res) => {
+  try {
+    const no_invoice = req.body.no_invoice;
+    console.log('TESTING', no_invoice);
+    const template = await service.transectionCheck(no_invoice);
+    return res.json({
+      status: 200,
+      success: true,
+      message: 'Berhasil Mengambil Data',
+      data: template,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 500,
+      success: false,
+      message: error.message || 'Gagal Mengambil Data',
+    });
+  }
+};

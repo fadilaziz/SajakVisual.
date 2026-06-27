@@ -180,67 +180,84 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Fetch and Render Product Cards
   const productGrid = document.getElementById('product-grid');
+  // State to hold all fetched products
+  let allProducts = [];
+
+  // Function to render products based on data array
+  const renderProducts = (productsToRender) => {
+    if (!productGrid) return;
+    productGrid.innerHTML = '';
+
+    if (productsToRender && productsToRender.length > 0) {
+      productsToRender.forEach((product, index) => {
+        const article = document.createElement('article');
+        article.className = 'product-card card-loaded';
+        article.style.animationDelay = `${index * 50}ms`;
+
+        // Use actual preview image if available, else fallback (using template-2 as default since others aren't uploaded yet)
+        const imageUrl = '/img/template/template-2.webp';
+
+        article.innerHTML = `
+          <div
+            class="product-image"
+            style="
+              background-image: url('${imageUrl}');
+              background-size: cover;
+              background-position: top;
+            "
+          ></div>
+          <div class="product-info">
+            <h3>${product.nama_template}</h3>
+            <span class="category">${product.kategori}</span>
+            <div class="price-row">
+              <span class="price">${formatRupiah(product.harga)}</span>
+            </div>
+            <div class="action-row">
+              <button class="btn-detail">Detail</button>
+            </div>
+          </div>
+        `;
+
+        // Add click ripple/tactile feedback
+        article.addEventListener('mousedown', () => {
+          article.style.transform = 'translateY(0) scale(0.98)';
+        });
+        article.addEventListener('mouseup', () => {
+          article.style.transform = 'translateY(-4px) scale(1)';
+        });
+        article.addEventListener('mouseleave', () => {
+          article.style.transform = '';
+        });
+
+        // Detail Modal click listener
+        const btnDetail = article.querySelector('.btn-detail');
+        if (btnDetail) {
+          btnDetail.addEventListener('click', () => {
+            openDetailModal(product);
+          });
+        }
+
+        productGrid.appendChild(article);
+      });
+    } else {
+      productGrid.innerHTML = `
+        <p style="grid-column: span 2; text-align: center; padding: 20px; color: var(--muted-foreground);">
+          Belum ada produk yang cocok.
+        </p>
+      `;
+    }
+  };
+
+  // Fetch Products
   if (productGrid) {
     fetch(`/api/templates`)
       .then((response) => response.json())
       .then((products) => {
-        // Clear skeleton loaders
-        productGrid.innerHTML = '';
-
-        if (products.data && products.data.length > 0) {
-          products.data.forEach((product, index) => {
-            const article = document.createElement('article');
-            article.className = 'product-card card-loaded';
-            article.style.animationDelay = `${index * 50}ms`;
-
-            article.innerHTML = `
-              <div
-                class="product-image"
-                style="
-                  background-image: url('/img/template/template-2.webp');
-                  background-size: cover;
-                  background-position: top;
-                "
-              ></div>
-              <div class="product-info">
-                <h3>${product.nama_template}</h3>
-                <span class="category">${product.kategori}</span>
-                <div class="price-row">
-                  <span class="price">${formatRupiah(product.harga)}</span>
-                </div>
-                <div class="action-row">
-                  <button class="btn-detail">Detail</button>
-                </div>
-              </div>
-            `;
-
-            // Add click ripple/tactile feedback
-            article.addEventListener('mousedown', () => {
-              article.style.transform = 'translateY(0) scale(0.98)';
-            });
-            article.addEventListener('mouseup', () => {
-              article.style.transform = 'translateY(-4px) scale(1)';
-            });
-            article.addEventListener('mouseleave', () => {
-              article.style.transform = '';
-            });
-
-            // Detail Modal click listener
-            const btnDetail = article.querySelector('.btn-detail');
-            if (btnDetail) {
-              btnDetail.addEventListener('click', () => {
-                openDetailModal(product);
-              });
-            }
-
-            productGrid.appendChild(article);
-          });
+        if (products.data) {
+          allProducts = products.data;
+          renderProducts(allProducts);
         } else {
-          productGrid.innerHTML = `
-            <p style="grid-column: span 2; text-align: center; padding: 20px; color: var(--muted-foreground);">
-              Belum ada produk.
-            </p>
-          `;
+          renderProducts([]);
         }
       })
       .catch((error) => {
@@ -251,6 +268,45 @@ document.addEventListener('DOMContentLoaded', () => {
           </p>
         `;
       });
+  }
+
+  // Search Functionality
+  const searchInput = document.querySelector('.search-input');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      const searchTerm = e.target.value.toLowerCase().trim();
+      const filtered = allProducts.filter((p) => {
+        return (
+          p.nama_template.toLowerCase().includes(searchTerm) ||
+          p.kategori.toLowerCase().includes(searchTerm)
+        );
+      });
+      renderProducts(filtered);
+    });
+  }
+
+  // Filter Categories Functionality
+  if (filterDropdown) {
+    const filterItems = filterDropdown.querySelectorAll('.filter-dropdown-item');
+    filterItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        const category = item.textContent.trim();
+        // Remove active state from others
+        filterItems.forEach(i => i.style.color = 'var(--text-secondary)');
+        item.style.color = 'var(--primary)';
+
+        if (category === 'Terbaru' || category === 'Semua') {
+          renderProducts(allProducts); // or sort by latest if date exists
+        } else {
+          const filtered = allProducts.filter((p) => p.kategori.toLowerCase() === category.toLowerCase());
+          renderProducts(filtered);
+        }
+        
+        // Hide dropdown
+        filterDropdown.classList.remove('active');
+      });
+    });
   }
 
   // Reveal on Scroll Animation
