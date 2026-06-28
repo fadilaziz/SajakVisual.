@@ -96,6 +96,21 @@ const createCheckout = async (data) => {
     const response = await fetch(url, options);
     const result = await response.json();
 
+    //3. Error hendling, if API return error
+    if (!response.ok) {
+      throw new Error(
+        'Layanan pembayaran sedang dalam pemeliharaan sistem. silahkan coba beberapa saat lagi'
+      );
+    }
+
+    //4.chekc if the Klikqris response really JSON
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/json')) {
+      throw new Error(
+        'Layanan pembayaran sedang dalam pemeliharaan sistem. silahkan coba beberapa saat lagi'
+      );
+    }
+
     //Create expiretime
     const currenttime = new Date();
     const expired = parseInt(result.data.expired_menit);
