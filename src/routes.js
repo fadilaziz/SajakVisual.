@@ -10,6 +10,7 @@ import adminApiRoutes from './modules/auth/routes.js';
 import checkoutRoutes from './modules/checkout/routes.js';
 import paymentRoutes from './modules/payment/routes.js';
 import transectionCheckRoutes from './modules/main-website/routes.js';
+import formRoutes from './modules/form/routes.js';
 
 //Main Page Routes
 routes.use('/', mainRoutes);
@@ -38,5 +39,9 @@ routes.use('/undangan', invitationRoutes);
 
 //Transection Check
 routes.use('/api/transection', transectionCheckRoutes);
+
+//Form edit invitation
+routes.use('/', formRoutes);
+routes.use('/api/form', formRoutes);
 
 export default routes;

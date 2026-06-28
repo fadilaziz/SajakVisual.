@@ -34,11 +34,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     themeToggle.addEventListener('click', () => {
+      // Add global transition class for smooth color changes
+      document.body.classList.add('theme-switching');
+
       // Add a small rotation animation
       themeIcon.style.transform = 'rotate(180deg)';
       themeIcon.style.transition = 'transform 0.3s ease';
+      
       setTimeout(() => {
         themeIcon.style.transform = 'rotate(0deg)';
+        document.body.classList.remove('theme-switching');
       }, 300);
 
       if (htmlEl.classList.contains('dark')) {
