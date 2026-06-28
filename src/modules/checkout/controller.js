@@ -28,14 +28,14 @@ export const handleCheckout = async (req, res) => {
     data = await service.createCheckout(data);
     //send invoice to email
     data = await service.sendEmail(data);
-    res.json({
+    res.status(200).json({
       status: 200,
       success: true,
       message: 'Checkout berhasil',
       data: data.no_invoice,
     });
   } catch (error) {
-    return res.json({
+    return res.status(500).json({
       status: 500,
       success: false,
       message: error.message || 'Internal server error',
