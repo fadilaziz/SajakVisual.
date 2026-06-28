@@ -35,6 +35,7 @@ export const handleCheckout = async (req, res) => {
       data: data.no_invoice,
     });
   } catch (error) {
+    console.error(error);
     return res.status(500).json({
       status: 500,
       success: false,
