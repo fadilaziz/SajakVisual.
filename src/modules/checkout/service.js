@@ -28,11 +28,19 @@ const validateData = async (data) => {
     throw new Error('Format email tidak valid.');
   }
 
-  // 3. Validation WhatsApp Number
-  const waRegex = /^(\+62|62|0)[8][0-9]{8,11}$/;
-  if (!data.no_wa || !waRegex.test(data.no_wa)) {
-    throw new Error('Nomor WhatsApp tidak valid. Gunakan format 08... atau 628...');
+  //3. Validation WA
+  const cleanWa = data.no_wa.replace(/[^0-9+]/g, '');
+  const waRegex = /^(\+62|62|0)?8[0-9]{8,11}$/;
+
+  if (!waRegex.test(cleanWa)) {
+    throw new Error('Nomor WhatsApp tidak valid. Gunakan format 08..., 628..., atau 8...');
   }
+
+  let waFinal = cleanWa;
+  if (waFinal.startsWith('+62')) waFinal = waFinal.replace('+62', '62');
+  if (waFinal.startsWith('08')) waFinal = waFinal.replace('08', '628');
+  if (waFinal.startsWith('8')) waFinal = '62' + waFinal;
+  data.no_wa = waFinal;
 
   return data;
 };

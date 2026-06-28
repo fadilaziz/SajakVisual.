@@ -1,5 +1,4 @@
 .transaction-result-container {
-  margin-top: 32px;
   background-color: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
@@ -110,7 +109,7 @@
   gap: 8px;
   width: 100%;
   padding: 14px;
-  background-color: var(--primary);
+  background: linear-gradient(to bottom, #3c3c3c, #1e1e1e);
   color: var(--primary-foreground);
   border: none;
   border-radius: var(--radius-md);

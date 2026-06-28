@@ -32,7 +32,6 @@
     </style>
     <link rel="stylesheet" href="/css/main-website.css" />
     <link rel="stylesheet" href="/css/checkout.css" />
-    <link rel="stylesheet" href="/css/notification.css" />
   </head>
   <body class="loading-state">
     <div class="app-container">
@@ -93,7 +92,6 @@
                   class="form-input"
                   placeholder="Masukkan nama lengkap"
                   autocomplete="name"
-                  required
                 />
               </div>
             </div>
@@ -108,7 +106,6 @@
                   class="form-input"
                   placeholder="contoh@email.com"
                   autocomplete="email"
-                  required
                 />
               </div>
               <p class="form-helper-text">
@@ -126,7 +123,6 @@
                   class="form-input"
                   placeholder="081234567890"
                   autocomplete="tel"
-                  required
                 />
               </div>
               <p class="form-helper-text">
@@ -173,11 +169,25 @@
       </div>
     </nav>
 
-    <script src="/javascript/notification.js"></script>
     <script src="/javascript/main-website.js"></script>
     <script>
       // Populate checkout summary from URL query parameters
       document.addEventListener('DOMContentLoaded', () => {
+        const showToast = (message) => {
+          let toast = document.getElementById('checkout-error-toast');
+          if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'checkout-error-toast';
+            toast.className = 'checkout-toast';
+            document.body.appendChild(toast);
+          }
+          toast.textContent = message;
+          toast.classList.add('show');
+          setTimeout(() => {
+            toast.classList.remove('show');
+          }, 3000);
+        };
+
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get('id');
         const productName = urlParams.get('title');
@@ -218,6 +228,26 @@
               const email = document.getElementById('email-input').value;
               const wa = document.getElementById('wa-input').value;
 
+              //Validation data
+              if (!nama || !email || !wa) {
+                showToast('Harap lengkapi semua data');
+                return;
+              }
+
+              //Validation email
+              const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+              if (!emailRegex.test(email)) {
+                showToast('Email tidak valid');
+                return;
+              }
+
+              //Validation no wa
+              const waRegex = /^(\+62|62|0)?8[0-9]{8,11}$/;
+              if (!waRegex.test(wa)) {
+                showToast('Nomor WhatsApp tidak valid');
+                return;
+              }
+
               // Set loading state
               submitBtn.innerHTML =
                 '<i class="ph ph-circle-notch" style="animation: spin 1s linear infinite;"></i> Memproses...';
@@ -230,7 +260,7 @@
                 title: productName,
                 name: nama,
                 email: email,
-                no_wa: Number(wa),
+                no_wa: wa,
               };
 
               fetch(`/api/checkout`, {
@@ -252,11 +282,7 @@
                   }
                 })
                 .catch((error) => {
-                  if (window.notify) {
-                    window.notify.show(error.message || 'Terjadi kesalahan sistem', 'error');
-                  } else {
-                    alert(error.message);
-                  }
+                  showToast(error.message || 'Terjadi kesalahan sistem');
                   submitBtn.innerHTML = originalContent;
                   submitBtn.style.opacity = '1';
                   submitBtn.style.pointerEvents = 'auto';

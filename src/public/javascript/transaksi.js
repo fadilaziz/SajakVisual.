@@ -81,6 +81,12 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('res-name').textContent = data.nama;
         document.getElementById('res-email').textContent = data.email;
         document.getElementById('res-wa').textContent = data.no_wa;
+
+        const productNameElem = document.getElementById('res-product');
+        if (productNameElem) {
+          productNameElem.textContent = data.templates?.nama_template || 'Produk Custom';
+        }
+
         document.getElementById('res-amount').textContent = formatRupiah(data.jumlah_total);
 
         // Actions
@@ -91,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const btnPay = document.createElement('a');
           btnPay.href = `/payment?invoice=${data.no_invoice}`;
           btnPay.className = 'btn-primary-action';
-          btnPay.innerHTML = '<i class="ph ph-wallet"></i> Lanjutkan Pembayaran';
+          btnPay.innerHTML = 'Lanjutkan Pembayaran';
           actionsContainer.appendChild(btnPay);
         } else if (data.status === 'SUCCESS') {
           const infoText = document.createElement('p');
@@ -106,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
           btnNew.href = '/';
           btnNew.className = 'btn-primary-action';
           btnNew.style.backgroundColor = '#ef4444';
-          btnNew.innerHTML = '<i class="ph ph-shopping-cart"></i> Buat Pesanan Baru';
+          btnNew.innerHTML = 'Buat Pesanan Baru';
           actionsContainer.appendChild(btnNew);
         }
 

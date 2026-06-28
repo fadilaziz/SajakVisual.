@@ -57,7 +57,10 @@
       </header>
 
       <!-- Transaction Tracker Content -->
-      <main class="transaction-container reveal-on-scroll" style="transition-delay: 100ms; padding-bottom: 120px;">
+      <main
+        class="transaction-container reveal-on-scroll"
+        style="transition-delay: 100ms; padding-bottom: 120px"
+      >
         <div class="hide-on-load" style="display: contents">
           <div class="transaction-hero">
             <h2>Cek Transaksi Kamu</h2>
@@ -79,17 +82,36 @@
                 />
               </div>
             </div>
-            <button type="submit" class="btn-detail btn-submit-transaksi" style="position: relative;">Cek Sekarang</button>
+            <button
+              type="submit"
+              class="btn-detail btn-submit-transaksi"
+              style="position: relative"
+            >
+              Cek Sekarang
+            </button>
             <div id="loading-overlay" class="loading-overlay">
               <div class="spinner"></div>
             </div>
           </form>
-          
+
           <!-- Transaction Result Container -->
           <div id="transaction-result" class="transaction-result-container">
-            <div class="res-header" style="align-items: flex-start;">
-              <div style="display: flex; gap: 12px; align-items: center;">
-                <img id="res-template-image" src="" alt="Template" onerror="this.style.display='none';" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); display: none;">
+            <div class="res-header" style="align-items: flex-start">
+              <div style="display: flex; gap: 12px; align-items: center">
+                <img
+                  id="res-template-image"
+                  src=""
+                  alt="Template"
+                  onerror="this.style.display = 'none'"
+                  style="
+                    width: 50px;
+                    height: 50px;
+                    object-fit: cover;
+                    border-radius: 8px;
+                    border: 1px solid var(--border);
+                    display: none;
+                  "
+                />
                 <div>
                   <h3 id="res-template-name" class="res-title">Nama Template</h3>
                   <p id="res-category" class="res-subtitle">Kategori</p>
@@ -97,7 +119,7 @@
               </div>
               <span id="res-status" class="badge">STATUS</span>
             </div>
-            
+
             <div class="res-details">
               <div class="res-row">
                 <span class="res-label">No Invoice</span>
@@ -119,12 +141,19 @@
                 <span class="res-label">No WhatsApp</span>
                 <span id="res-wa" class="res-value">-</span>
               </div>
-              <div class="res-row" style="margin-top: 8px; border-top: 1px dashed var(--border); padding-top: 16px;">
+              <div class="res-row">
+                <span class="res-label">Produk</span>
+                <span id="res-product" class="res-value">-</span>
+              </div>
+              <div
+                class="res-row"
+                style="margin-top: 8px; border-top: 1px dashed var(--border); padding-top: 16px"
+              >
                 <span class="res-label">Total Harga</span>
                 <span id="res-amount" class="res-value amount">-</span>
               </div>
             </div>
-            
+
             <div id="res-actions" class="res-actions">
               <!-- Action buttons injected via JS -->
             </div>
