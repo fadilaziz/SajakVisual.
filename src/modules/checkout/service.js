@@ -104,12 +104,12 @@ const createCheckout = async (data) => {
     }
 
     //4.chekc if the Klikqris response really JSON
-    const contentType = response.headers.get('content-type');
-    if (!contentType || !contentType.includes('application/json')) {
-      throw new Error(
-        'Layanan pembayaran sedang dalam pemeliharaan sistem. silahkan coba beberapa saat lagi'
-      );
-    }
+    // const contentType = response.headers.get('content-type');
+    // if (!contentType || !contentType.includes('application/json')) {
+    //   throw new Error(
+    //     'Layanan pembayaran sedang dalam pemeliharaan sistem. silahkan coba beberapa saat lagi'
+    //   );
+    // }
 
     //Create expiretime
     const currenttime = new Date();
@@ -150,138 +150,19 @@ const createCheckout = async (data) => {
 };
 
 //Send invoice to user email
+import { emailMessagePending } from '../../helpers/email_messages.js';
 export const sendEmail = (data) => {
-  const formatRupiah = (number) => {
-    return new Intl.NumberFormat('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(number);
-  };
+  if (!data) {
+    throw new Error('Data tidak ditemukan');
+  }
 
-  // Send Email
-  const email_message = `
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body { font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f4f4f5; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
-        .wrapper { width: 100%; background-color: #f4f4f5; padding: 40px 0; }
-        .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); }
-        .header { text-align: center; padding: 32px 24px; background-color: #ffffff; border-bottom: 1px solid #e4e4e7; }
-        .logo { max-height: 20px; }
-        .content { padding: 32px 24px; color: #3f3f46; }
-        .badge { display: inline-block; padding: 6px 12px; background-color: #fef08a; color: #854d0e; border-radius: 9999px; font-size: 12px; font-weight: 600; margin-bottom: 24px; letter-spacing: 0.5px; }
-        .title { font-size: 24px; font-weight: 700; color: #18181b; margin: 0 0 8px 0; }
-        .text { font-size: 15px; line-height: 1.6; margin: 0 0 24px 0; }
-        .invoice-card { background-color: #fafafa; border: 1px solid #e4e4e7; border-radius: 8px; padding: 20px; margin-bottom: 24px; }
-        .row { display: table; width: 100%; margin-bottom: 12px; }
-        .row:last-child { margin-bottom: 0; }
-        .col-left { display: table-cell; font-size: 14px; color: #71717a; }
-        .col-right { display: table-cell; font-size: 14px; color: #18181b; font-weight: 600; text-align: right; }
-        .text-danger { color: #dc2626; }
-        .table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
-        .table th { padding: 12px 0; border-bottom: 2px solid #e4e4e7; font-size: 12px; color: #71717a; text-transform: uppercase; text-align: left; }
-        .table th.right { text-align: right; }
-        .table td { padding: 16px 0; border-bottom: 1px solid #e4e4e7; }
-        .table td.right { text-align: right; font-weight: 600; color: #18181b; }
-        .item-name { font-size: 15px; font-weight: 600; color: #18181b; margin: 0 0 4px 0; }
-        .item-desc { font-size: 13px; color: #71717a; margin: 0; }
-        .total-box { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 32px; display: table; width: 100%; box-sizing: border-box; }
-        .total-label { display: table-cell; font-size: 16px; font-weight: 500; color: #0f172a; vertical-align: middle; }
-        .total-amount { display: table-cell; font-size: 24px; font-weight: 700; color: #16a34a; text-align: right; vertical-align: middle; }
-        .btn { display: block; width: 100%; text-align: center; background-color: #18181b; color: #ffffff; text-decoration: none; padding: 16px; border-radius: 8px; font-size: 16px; font-weight: 600; margin-bottom: 24px; box-sizing: border-box; }
-        .footer { text-align: center; padding: 24px; font-size: 13px; color: #a1a1aa; background-color: #ffffff; }
-        .footer a { color: #18181b; text-decoration: none; font-weight: 500; }
-        @media only screen and (max-width: 600px) {
-            .wrapper { padding: 0; }
-            .container { border-radius: 0; box-shadow: none; }
-            .content { padding: 24px 16px; }
-        }
-    </style>
-</head>
-<body>
-    <div class="wrapper">
-        <div class="container">
-            <div class="header">
-                <img src="cid:logo_sajakvisual" alt="Sajak Visual" class="logo">
-            </div>
-            <div class="content">
-                <div style="text-align: center;">
-                    <span class="badge">MENUNGGU PEMBAYARAN</span>
-                    <h1 class="title">Halo, ${data.nama}</h1>
-                    <p class="text">Pesanan Anda telah kami terima. Silakan selesaikan pembayaran sebelum batas waktu berakhir untuk mengaktifkan layanan undangan digital Anda.</p>
-                </div>
-
-                <div class="invoice-card">
-                    <div class="row">
-                        <div class="col-left">Nomor Invoice</div>
-                        <div class="col-right">${data.no_invoice}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-left">Metode Pembayaran</div>
-                        <div class="col-right">QRIS</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-left">Batas Waktu</div>
-                        <div class="col-right text-danger">${new Date(data.expired_at).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}</div>
-                    </div>
-                </div>
-
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Detail Pesanan</th>
-                            <th class="right">Harga</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <p class="item-name">Template #${data.template_id}</p>
-                                <p class="item-desc">Layanan Undangan Digital</p>
-                            </td>
-                            <td class="right">${formatRupiah(data.jumlah_total)}</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div class="total-box">
-                    <div class="total-label">Total Tagihan</div>
-                    <div class="total-amount">${formatRupiah(data.jumlah_total)}</div>
-                </div>
-
-                <a href="${process.env.BASE_URL_SAJAKVISUAL || 'https://sajak-visual.vercel.app'}/payment?invoice=${data.no_invoice}" class="btn">Bayar Sekarang</a>
-
-                <p class="text" style="text-align: center; font-size: 13px; color: #71717a; margin-bottom: 0;">
-                    Invoice ini akan otomatis dibatalkan jika melewati batas waktu pembayaran.
-                </p>
-            </div>
-            <div class="footer">
-                &copy; ${new Date().getFullYear()} Sajak Visual &mdash; SaaS Digital Invitation.<br>
-                Butuh bantuan? <a href="mailto:support@sajakvisual.com">Hubungi Kami</a>
-            </div>
-        </div>
-    </div>
-</body>
-</html>`;
-
-  const data_email = {
+  let emailMessage = emailMessagePending(data);
+  const emailData = {
     subject: 'Detail Pesanan Undangan Digital - ' + data.no_invoice,
-    message: email_message,
+    message: emailMessage,
     destination: data.email,
-    attachments: [
-      {
-        filename: 'logo_sajakvisual.webp',
-        path: path.join(process.cwd(), 'src', 'public', 'img', 'logo_sajakvisual.webp'),
-        cid: 'logo_sajakvisual',
-      },
-    ],
   };
-  send_email(data_email);
+  send_email(emailData);
   return data;
 };
 
@@ -329,9 +210,16 @@ export const handlePaymentCallback = async (data) => {
   }
 };
 
-//Send SUCCESS and EXPIRED status messages
+//Send Success and Expired status messages
+import {
+  emailMessagesSuccess,
+  emailMessagesExpired,
+  ganerateToken,
+} from '../../helpers/email_messages.js';
 const sendEmailStatus = async (data) => {
+  console.log('Ini adalah fungsi Send email Status');
   try {
+    //1. Get order data
     const { data: orders, error } = await supabase
       .from('orders')
       .select('*')
@@ -341,140 +229,32 @@ const sendEmailStatus = async (data) => {
       console.error('Order not found for email notification');
       return;
     }
+    let orderData = orders[0];
+    let emailMessage;
+    console.log('ini Order data dari service', orderData);
 
-    const orderInfo = orders[0];
-
-    const formatRupiah = (number) => {
-      return new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      }).format(number);
-    };
-
-    let badgeBg = '#dcfce7';
-    let badgeColor = '#166534';
-    let titleText = `Terima Kasih, ${orderInfo.nama}!`;
-    let descText = `Pembayaran untuk pesanan Anda telah berhasil dikonfirmasi. Layanan undangan digital Anda kini sedang kami persiapkan.`;
-    let instructionHtml = `
-                    <div class="instruction-box">
-                        <h3 class="instruction-title">Langkah Selanjutnya:</h3>
-                        <ul class="instruction-list">
-                            <li>Hubungi tim admin melalui WhatsApp untuk mengisi detail mempelai dan acara.</li>
-                            <li>Siapkan foto-foto galeri yang ingin ditampilkan pada undangan.</li>
-                            <li>Proses pengerjaan akan memakan waktu 1-2 hari kerja.</li>
-                        </ul>
-                    </div>
-                    <a href="https://wa.me/6281917536832?text=Halo%20Admin%2C%20saya%20sudah%20membayar%20invoice%20${orderInfo.no_invoice}.%20Mohon%20info%20langkah%20selanjutnya." class="btn">Konfirmasi via WhatsApp</a>`;
-    let emailSubject = 'Pembayaran Berhasil - ' + orderInfo.no_invoice;
-
-    if (orderInfo.status === 'EXPIRED') {
-      badgeBg = '#fee2e2';
-      badgeColor = '#991b1b';
-      titleText = `Pembayaran Kedaluwarsa`;
-      descText = `Mohon maaf ${orderInfo.nama}, waktu pembayaran untuk pesanan Anda telah habis dan pesanan telah dibatalkan secara otomatis.`;
-      instructionHtml = `
-                    <div class="instruction-box" style="background-color: #fff1f2; border-color: #fecdd3;">
-                        <h3 class="instruction-title" style="color: #9f1239;">Apa yang harus dilakukan?</h3>
-                        <p style="margin: 0; color: #4c0519; font-size: 14px; line-height: 1.6;">Jika Anda masih ingin melanjutkan pemesanan, silakan buat pesanan baru melalui website kami.</p>
-                    </div>
-                    <a href="${process.env.BASE_URL_SAJAKVISUAL || 'https://sajak-visual.vercel.app'}" class="btn" style="background-color: #e11d48;">Buat Pesanan Baru</a>`;
-      emailSubject = 'Pembayaran Kedaluwarsa - ' + orderInfo.no_invoice;
+    // 2. Send Email Success or Expired
+    if (orderData.status === 'SUCCESS') {
+      //Ganerate token with token function
+      const token = await ganerateToken();
+      orderData.token = token;
+      emailMessage = emailMessagesSuccess(orderData);
+    } else if (orderData.status === 'EXPIRED') {
+      emailMessage = emailMessagesExpired(orderData);
     }
 
-    const email_message = `
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <style>
-            body { font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f4f4f5; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
-            .wrapper { width: 100%; background-color: #f4f4f5; padding: 40px 0; }
-            .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); }
-            .header { text-align: center; padding: 32px 24px; background-color: #ffffff; border-bottom: 1px solid #e4e4e7; }
-            .logo { max-height: 20px; }
-            .content { padding: 32px 24px; color: #3f3f46; }
-            .badge { display: inline-block; padding: 6px 12px; background-color: ${badgeBg}; color: ${badgeColor}; border-radius: 9999px; font-size: 12px; font-weight: 600; margin-bottom: 24px; letter-spacing: 0.5px; }
-            .title { font-size: 24px; font-weight: 700; color: #18181b; margin: 0 0 8px 0; }
-            .text { font-size: 15px; line-height: 1.6; margin: 0 0 24px 0; }
-            .invoice-card { background-color: #fafafa; border: 1px solid #e4e4e7; border-radius: 8px; padding: 20px; margin-bottom: 24px; }
-            .row { display: table; width: 100%; margin-bottom: 12px; }
-            .row:last-child { margin-bottom: 0; }
-            .col-left { display: table-cell; font-size: 14px; color: #71717a; }
-            .col-right { display: table-cell; font-size: 14px; color: #18181b; font-weight: 600; text-align: right; }
-            .btn { display: block; width: 100%; text-align: center; background-color: #18181b; color: #ffffff; text-decoration: none; padding: 16px; border-radius: 8px; font-size: 16px; font-weight: 600; margin-bottom: 16px; box-sizing: border-box; }
-            .btn-outline { display: block; width: 100%; text-align: center; background-color: transparent; border: 1px solid #d4d4d8; color: #18181b; text-decoration: none; padding: 16px; border-radius: 8px; font-size: 16px; font-weight: 600; margin-bottom: 24px; box-sizing: border-box; }
-            .footer { text-align: center; padding: 24px; font-size: 13px; color: #a1a1aa; background-color: #ffffff; }
-            .footer a { color: #18181b; text-decoration: none; font-weight: 500; }
-            .instruction-box { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 24px; }
-            .instruction-title { font-size: 16px; font-weight: 600; color: #0f172a; margin: 0 0 12px 0; }
-            .instruction-list { margin: 0; padding-left: 20px; color: #334155; font-size: 14px; line-height: 1.6; }
-            .instruction-list li { margin-bottom: 8px; }
-            @media only screen and (max-width: 600px) {
-                .wrapper { padding: 0; }
-                .container { border-radius: 0; box-shadow: none; }
-                .content { padding: 24px 16px; }
-            }
-        </style>
-    </head>
-    <body>
-        <div class="wrapper">
-            <div class="container">
-                <div class="header">
-                    <img src="cid:logo_sajakvisual" alt="Sajak Visual" class="logo">
-                </div>
-                <div class="content">
-                    <div style="text-align: center;">
-                        <span class="badge">${orderInfo.status}</span>
-                        <h1 class="title">${titleText}</h1>
-                        <p class="text">${descText}</p>
-                    </div>
+    console.log('ini Pesan email', emailMessage);
 
-                    <div class="invoice-card">
-                        <div class="row">
-                            <div class="col-left">Nomor Invoice</div>
-                            <div class="col-right">${orderInfo.no_invoice}</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-left">Tanggal Invoice</div>
-                            <div class="col-right">${new Date(orderInfo.created_at || Date.now()).toLocaleString('id-ID')}</div>
-                        </div>
-                        <div class="row">
-                            <div class="col-left">Jumlah Tagihan</div>
-                            <div class="col-right" style="color: #16a34a; font-size: 16px;">${formatRupiah(orderInfo.jumlah_total)}</div>
-                        </div>
-                    </div>
-
-                    ${instructionHtml}
-
-                    <a href="${process.env.BASE_URL_SAJAKVISUAL || 'https://sajak-visual.vercel.app'}/transaksi" class="btn-outline">Cek Status Pesanan</a>
-
-                </div>
-                <div class="footer">
-                    &copy; ${new Date().getFullYear()} Sajak Visual &mdash; SaaS Digital Invitation.<br>
-                    Butuh bantuan? <a href="mailto:support@sajakvisual.com">Hubungi Kami</a>
-                </div>
-            </div>
-        </div>
-    </body>
-    </html>`;
-
-    const data_email = {
-      subject: emailSubject,
-      message: email_message,
-      destination: orderInfo.email,
-      attachments: [
-        {
-          filename: 'logo_sajakvisual.webp',
-          path: path.join(process.cwd(), 'src', 'public', 'img', 'logo_sajakvisual.webp'),
-          cid: 'logo_sajakvisual',
-        },
-      ],
+    const emailData = {
+      subject:
+        orderData.status === 'SUCCESS'
+          ? 'Pesanan Berhasil - ' + orderData.no_invoice
+          : 'Pesanan Expired - ' + orderData.no_invoice,
+      message: emailMessage,
+      destination: orderData.email,
     };
-    send_email(data_email);
-    return data;
+    console.log('ini data email', emailData);
+    await send_email(emailData);
   } catch (error) {
     throw error;
   }

@@ -37,7 +37,11 @@ function populateData(data) {
   if (heroDateDisplay && data.acara.countdown_target) {
     const d = new Date(data.acara.countdown_target);
     if (!isNaN(d)) {
-      heroDateDisplay.textContent = `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}`;
+      heroDateDisplay.textContent = d.toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
     }
   }
 
@@ -179,13 +183,20 @@ function setupInteractions() {
       overlay.style.visibility = 'hidden';
       overlay.style.display = 'none';
       mainContent.style.display = 'block';
-
-      setTimeout(() => {
-        mainContent.style.opacity = '1';
-        if (typeof AOS !== 'undefined') {
-          AOS.refresh();
-        }
-      }, 50);
+      
+      // Force a reflow so the browser registers the display: block before applying the transition
+      void mainContent.offsetWidth;
+      
+      mainContent.style.opacity = '1';
+      
+      if (typeof AOS !== 'undefined') {
+        AOS.init({
+          once: true,
+          offset: 50,
+          duration: 1200,
+          easing: 'ease-out-cubic',
+        });
+      }
     }, 1000);
 
     audio

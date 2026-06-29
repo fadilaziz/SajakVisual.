@@ -17,6 +17,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: var(--font-body);
   background-color: #fdfbf7;
@@ -134,11 +138,16 @@ body {
   position: relative;
   min-height: 100vh;
   box-shadow: 0 0 20px rgba(43,65,98,0.1);
+  transition: opacity 1.2s ease, transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 /* Section Common */
+.inv-container {
+  transition: opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
 section {
-  padding: 50px 20px;
+  padding: 80px 20px;
   position: relative;
 }
 
@@ -217,6 +226,25 @@ section {
   line-height: 1.8;
   max-width: 450px;
   margin: 0 auto;
+}
+
+.ornament-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  color: var(--primary-blue);
+  opacity: 0.6;
+}
+
+.ornament-divider .line {
+  height: 1px;
+  width: 60px;
+  background-color: var(--primary-blue);
+}
+
+.ornament-divider i {
+  font-size: 1.5rem;
 }
 
 /* Countdown */
@@ -422,6 +450,7 @@ section {
   object-fit: cover;
   display: block;
   filter: sepia(0.2) contrast(1.1);
+  border-radius: 16px;
 }
 
 /* RSVP */
@@ -463,4 +492,21 @@ section {
 @media (max-width: 480px) {
   .cover-names, .main-heading, .footer-names { font-size: 3rem; }
   .cd-item span { font-size: 1.4rem; }
+}
+
+/* Cover Animations */
+.animate-cover {
+  opacity: 0;
+  animation: slideUpFade 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
