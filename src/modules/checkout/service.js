@@ -150,7 +150,7 @@ const createCheckout = async (data) => {
 };
 
 //Send invoice to user email
-export const sendEmail = async (data) => {
+export const sendEmail = (data) => {
   const formatRupiah = (number) => {
     return new Intl.NumberFormat('id-ID', {
       style: 'currency',
