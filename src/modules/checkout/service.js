@@ -227,7 +227,7 @@ export const sendEmail = async (data) => {
                     </div>
                     <div class="row">
                         <div class="col-left">Batas Waktu</div>
-                        <div class="col-right text-danger">${new Date(data.expired_at).toLocaleString('id-ID')}</div>
+                        <div class="col-right text-danger">${new Date(data.expired_at).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })}</div>
                     </div>
                 </div>
 
