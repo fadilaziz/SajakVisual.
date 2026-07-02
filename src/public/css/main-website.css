@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap');
 
 /* ==========================================================
 TEMA TERANG (LIGHT MODE)
@@ -144,7 +144,12 @@ body {
 /* Global transition for buttery smooth dark mode toggle */
 body.theme-switching,
 body.theme-switching * {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, fill 0.3s ease !important;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    fill 0.3s ease !important;
 }
 
 h1,
@@ -900,7 +905,7 @@ BOTTOM SHEET MODAL
 
 .sheet-image {
   width: 100%;
-  height: 200px;
+  height: 270px;
   background-color: var(--secondary);
   border-radius: var(--radius-md);
   margin-bottom: 16px;

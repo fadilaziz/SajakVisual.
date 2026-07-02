@@ -3,14 +3,21 @@ document.addEventListener('DOMContentLoaded', async () => {
   const slug = urlParams.get('slug') || 'rustic-elegant';
 
   try {
-    // Fetch data from API
-    const response = await fetch(`/undangan/data-invitation?slug=${slug}`);
-    const result = await response.json();
-
-    if (result.success && result.data) {
-      populateData(result.data);
+    // 1. Cek apakah ada data yang dilempar dari backend (EJS)
+    if (window.BACKEND_DATA && Object.keys(window.BACKEND_DATA).length > 0) {
+      console.log('Menggunakan data prioritas dari backend');
+      populateData(window.BACKEND_DATA);
     } else {
-      console.error('Failed to load invitation data');
+      // 2. Fallback: Fetch data from API (data.json) jika data backend kosong
+      console.log('Mengambil data fallback dari API');
+      const response = await fetch(`/undangan/data-invitation?slug=${slug}`);
+      const result = await response.json();
+
+      if (result.success && result.data) {
+        populateData(result.data);
+      } else {
+        console.error('Failed to load invitation data');
+      }
     }
   } catch (error) {
     console.error('Error fetching data:', error);

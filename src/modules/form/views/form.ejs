@@ -25,11 +25,15 @@
     <!-- Custom Styles -->
     <link rel="stylesheet" href="/css/main-website.css" />
     <link rel="stylesheet" href="/css/form.css" />
+    <link rel="stylesheet" href="/css/modal.css" />
   </head>
   <body>
     <div class="form-wrapper">
       <header class="form-header reveal-on-scroll">
-        <h1 class="form-title">Edit Data Undangan</h1>
+        <div class="header-text">
+          <h1 class="form-title">Edit Data Undangan</h1>
+          <p class="form-subtitle">Sesuaikan detail undangan digital Anda di sini.</p>
+        </div>
         
         <!-- Theme Toggle -->
         <button
@@ -48,21 +52,6 @@
             <h2 class="section-title">Pengaturan Utama</h2>
           </div>
           <div class="section-body">
-            <div class="input-group">
-              <label for="slug">URL Undangan</label>
-              <div class="input-wrapper">
-                <span class="input-prefix">sajakvisual.com/inv/</span>
-                <input
-                  type="text"
-                  id="slug"
-                  name="slug"
-                  class="form-input"
-                  placeholder="contoh: romeo-dan-juliet"
-                  required
-                />
-              </div>
-              <small class="input-hint">Gunakan huruf kecil dan tanda hubung (-).</small>
-            </div>
 
             <div class="input-group">
               <label for="countdown_target">Tanggal & Waktu Hitung Mundur (Countdown)</label>
@@ -78,10 +67,10 @@
               </div>
             </div>
 
-            <div class="input-group">
-              <label>Foto Cover (Unggah Foto)</label>
+            <div class="input-group" style="margin-top: 16px;">
+              <label>Unggah Foto Cover Prewedding</label>
               <div class="input-wrapper">
-                <i class="ph ph-image input-icon" style="z-index: 1"></i>
+                <i class="ph ph-camera input-icon" style="z-index: 1;"></i>
                 <input
                   type="file"
                   id="foto_cover"
@@ -97,39 +86,30 @@
               </div>
             </div>
 
-            <div class="input-group">
-              <label for="bg_music">Musik Latar (URL MP3)</label>
-              <div class="input-wrapper">
-                <i class="ph ph-music-notes input-icon"></i>
-                <input
-                  type="url"
-                  id="bg_music"
-                  name="bg_music"
-                  class="form-input"
-                  placeholder="https://contoh.com/music.mp3"
-                  required
-                />
-              </div>
-            </div>
+
           </div>
         </section>
 
-        <!-- Block 2: Mempelai Pria -->
-        <section class="form-section reveal-on-scroll" style="transition-delay: 200ms">
+        <!-- Block 2: Data Mempelai Pria -->
+        <section
+          class="form-section reveal-on-scroll"
+          id="mempelai-pria-section"
+          style="transition-delay: 200ms"
+        >
           <div class="section-header">
-            <h2 class="section-title">Mempelai Laki-laki</h2>
+            <h2 class="section-title">Data Mempelai Pria</h2>
           </div>
           <div class="section-body">
             <div class="input-group">
               <label for="pria_nama_lengkap">Nama Lengkap</label>
               <div class="input-wrapper">
-                <i class="ph ph-text-aa input-icon"></i>
+                <i class="ph ph-user input-icon"></i>
                 <input
                   type="text"
                   id="pria_nama_lengkap"
                   name="pria_nama_lengkap"
                   class="form-input"
-                  placeholder="contoh: Romeo Montague"
+                  placeholder="contoh: Romeo Montague, S.T."
                   required
                 />
               </div>
@@ -182,16 +162,20 @@
           </div>
         </section>
 
-        <!-- Block 3: Mempelai Wanita -->
-        <section class="form-section reveal-on-scroll" style="transition-delay: 300ms">
+        <!-- Block 3: Data Mempelai Wanita -->
+        <section
+          class="form-section reveal-on-scroll"
+          id="mempelai-wanita-section"
+          style="transition-delay: 300ms"
+        >
           <div class="section-header">
-            <h2 class="section-title">Mempelai Perempuan</h2>
+            <h2 class="section-title">Data Mempelai Wanita</h2>
           </div>
           <div class="section-body">
             <div class="input-group">
               <label for="wanita_nama_lengkap">Nama Lengkap</label>
               <div class="input-wrapper">
-                <i class="ph ph-text-aa input-icon"></i>
+                <i class="ph ph-user input-icon"></i>
                 <input
                   type="text"
                   id="wanita_nama_lengkap"
@@ -256,15 +240,135 @@
           id="events-section"
           style="transition-delay: 400ms"
         >
-          <div class="section-header">
-            <h2 class="section-title">Daftar Acara</h2>
-            <button type="button" class="btn-add-item" id="btn-add-event">
-              <i class="ph ph-plus"></i> Tambah
-            </button>
+          <div class="section-header" style="display: block;">
+            <h2 class="section-title" style="margin-bottom: 4px;">Daftar Acara</h2>
+            <p style="font-size: 13px; color: var(--form-text-muted); margin: 0;">Centang acara yang ingin disertakan di undangan Anda.</p>
           </div>
 
-          <div class="section-body" id="events-container">
-            <!-- Event items will be injected here via JS -->
+          <div class="section-body">
+            
+            <!-- Event 1: Akad Nikah -->
+            <div class="dynamic-item" style="border: 1px solid var(--form-border); padding: 20px; border-radius: 8px; margin-bottom: 24px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 class="item-title" style="margin: 0; font-size: 16px;">Akad Nikah</h3>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">
+                  <input type="checkbox" id="enable_akad" checked onchange="toggleEventInputs('akad', this.checked)" style="width: 16px; height: 16px;">
+                  Sertakan
+                </label>
+              </div>
+              <div id="akad_inputs">
+                <input type="hidden" name="wedding_events[0][tipe_acara]" value="Akad Nikah" />
+                <div class="grid-2">
+                  <div class="input-group">
+                    <label>Tanggal</label>
+                    <div class="input-wrapper">
+                      <i class="ph ph-calendar input-icon"></i>
+                      <input type="text" name="wedding_events[0][tanggal]" class="form-input" placeholder="contoh: 25 Desember 2026" required />
+                    </div>
+                  </div>
+                  <div class="input-group">
+                    <label>Waktu</label>
+                    <div class="input-wrapper">
+                      <i class="ph ph-clock input-icon"></i>
+                      <input type="text" name="wedding_events[0][waktu]" class="form-input" placeholder="contoh: 08:00 - 10:00 WIB" required />
+                    </div>
+                  </div>
+                </div>
+                <div class="input-group" style="margin-top: 16px;">
+                  <label>Nama Lokasi</label>
+                  <div class="input-wrapper">
+                    <i class="ph ph-buildings input-icon"></i>
+                    <input type="text" name="wedding_events[0][lokasi_nama]" class="form-input" placeholder="contoh: Masjid Agung" required />
+                  </div>
+                </div>
+                <div class="input-group" style="margin-top: 16px;">
+                  <label>Alamat Lengkap</label>
+                  <div class="input-wrapper">
+                    <i class="ph ph-map-pin input-icon"></i>
+                    <input type="text" name="wedding_events[0][lokasi_alamat]" class="form-input" placeholder="contoh: Jl. Raya..." required />
+                  </div>
+                </div>
+                <div class="input-group" style="margin-top: 16px;">
+                  <label>Link Google Maps</label>
+                  <div class="input-wrapper">
+                    <i class="ph ph-link input-icon"></i>
+                    <input type="url" name="wedding_events[0][maps_url]" class="form-input" placeholder="https://goo.gl/maps/..." required />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Event 2: Resepsi -->
+            <div class="dynamic-item" style="border: 1px solid var(--form-border); padding: 20px; border-radius: 8px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 class="item-title" style="margin: 0; font-size: 16px;">Resepsi</h3>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">
+                  <input type="checkbox" id="enable_resepsi" checked onchange="toggleEventInputs('resepsi', this.checked)" style="width: 16px; height: 16px;">
+                  Sertakan
+                </label>
+              </div>
+              <div id="resepsi_inputs">
+                <input type="hidden" name="wedding_events[1][tipe_acara]" value="Resepsi" />
+                <div class="grid-2">
+                  <div class="input-group">
+                    <label>Tanggal</label>
+                    <div class="input-wrapper">
+                      <i class="ph ph-calendar input-icon"></i>
+                      <input type="text" name="wedding_events[1][tanggal]" class="form-input" placeholder="contoh: 26 Desember 2026" required />
+                    </div>
+                  </div>
+                  <div class="input-group">
+                    <label>Waktu</label>
+                    <div class="input-wrapper">
+                      <i class="ph ph-clock input-icon"></i>
+                      <input type="text" name="wedding_events[1][waktu]" class="form-input" placeholder="contoh: 11:00 - 14:00 WIB" required />
+                    </div>
+                  </div>
+                </div>
+                <div class="input-group" style="margin-top: 16px;">
+                  <label>Nama Lokasi</label>
+                  <div class="input-wrapper">
+                    <i class="ph ph-buildings input-icon"></i>
+                    <input type="text" name="wedding_events[1][lokasi_nama]" class="form-input" placeholder="contoh: Gedung Serbaguna" required />
+                  </div>
+                </div>
+                <div class="input-group" style="margin-top: 16px;">
+                  <label>Alamat Lengkap</label>
+                  <div class="input-wrapper">
+                    <i class="ph ph-map-pin input-icon"></i>
+                    <input type="text" name="wedding_events[1][lokasi_alamat]" class="form-input" placeholder="contoh: Jl. Melati..." required />
+                  </div>
+                </div>
+                <div class="input-group" style="margin-top: 16px;">
+                  <label>Link Google Maps</label>
+                  <div class="input-wrapper">
+                    <i class="ph ph-link input-icon"></i>
+                    <input type="url" name="wedding_events[1][maps_url]" class="form-input" placeholder="https://goo.gl/maps/..." required />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <script>
+              function toggleEventInputs(eventId, isEnabled) {
+                const container = document.getElementById(`${eventId}_inputs`);
+                const inputs = container.querySelectorAll('input');
+                inputs.forEach(input => {
+                  if (input.type !== 'hidden') {
+                    input.disabled = !isEnabled;
+                    // Jaga required status
+                    if (isEnabled) {
+                      input.required = true;
+                    } else {
+                      input.required = false;
+                    }
+                  }
+                });
+                container.style.opacity = isEnabled ? '1' : '0.5';
+                container.style.pointerEvents = isEnabled ? 'auto' : 'none';
+              }
+            </script>
+
           </div>
         </section>
 
@@ -294,8 +398,30 @@
       </form>
     </div>
 
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal-overlay">
+      <div class="modal-content">
+        <i class="ph ph-check-circle modal-icon"></i>
+        <h3 class="modal-title">Berhasil Tersimpan!</h3>
+        <p class="modal-desc">Data undangan Anda telah diperbarui. Berikut adalah tautan undangan yang siap Anda sebarkan ke tamu spesial Anda.</p>
+        
+        <div class="modal-link-box">
+          <span class="modal-link-text" id="modal-link-text">http://localhost:3000/invitation/slug</span>
+          <button class="btn-copy" id="btn-copy-link" aria-label="Salin Tautan">
+            <i class="ph ph-copy"></i>
+          </button>
+        </div>
+        
+        <button class="btn-close-modal" id="btn-close-modal">Salin & Tutup</button>
+      </div>
+    </div>
+
     <!-- Toast Notification -->
     <div id="toast-notification" class="toast">Data berhasil disimpan!</div>
+
+    <script>
+      window.INITIAL_DATA = <%- typeof undangan !== 'undefined' ? JSON.stringify(undangan) : 'null' %>;
+    </script>
 
     <script src="/javascript/main-website.js"></script>
     <script src="/javascript/form.js"></script>

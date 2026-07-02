@@ -36,12 +36,13 @@ routes.use('/api', dashboardRoutes);
 
 //Invitation Routes
 routes.use('/undangan', invitationRoutes);
+routes.use('/invitation', invitationRoutes);
 
 //Transection Check
 routes.use('/api/transection', transectionCheckRoutes);
 
 //Form edit invitation
 routes.use('/', formRoutes);
-routes.use('/api/form', formRoutes);
+routes.use('/api', formRoutes);
 
 export default routes;

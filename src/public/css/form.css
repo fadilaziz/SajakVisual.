@@ -30,20 +30,29 @@ body {
 .form-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 40px;
-  padding-top: 20px;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--form-border);
+}
+
+.header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .form-title {
-  font-size: 1.75rem;
-  font-weight: 700;
+  font-size: 1.35rem;
+  font-weight: 600;
   margin: 0;
   color: var(--form-text);
+  letter-spacing: -0.01em;
 }
 
 .form-subtitle {
-  font-size: 0.95rem;
+  font-size: 0.875rem;
   color: var(--form-text-muted);
   margin: 0;
 }
@@ -121,9 +130,9 @@ body {
 
 .input-group label {
   display: block;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--form-text);
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--form-text-muted);
 }
 
 .input-wrapper {
@@ -325,22 +334,27 @@ body {
 /* Toast */
 .toast {
   position: fixed;
-  bottom: -100px;
+  top: -100px;
   left: 50%;
   transform: translateX(-50%);
   background-color: #18181b;
-  color: #fff;
+  color: #ffffff;
   padding: 12px 24px;
   border-radius: 999px;
   font-size: 0.9rem;
   font-weight: 500;
   box-shadow: var(--shadow-md);
-  transition: bottom 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transition: top 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   z-index: 100;
 }
 
 .toast.show {
-  bottom: 24px;
+  top: 24px;
+}
+
+.dark .toast {
+  background-color: #ffffff;
+  color: #18181b;
 }
 
 /* Animations */

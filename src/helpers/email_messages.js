@@ -22,8 +22,8 @@ export const emailMessagePending = (data) => {
         })
       : '-';
     const productName = `Template #${data?.template_id || ''} - Layanan Undangan Digital`;
-    const paymentLink = `${process.env.BASE_URL_SAJAKVISUAL || 'https://sajak-visual.vercel.app'}/payment?invoice=${invoiceNumber}`;
-    const expiredDateStr = data?.expired_at 
+    const paymentLink = `${process.env.BASE_URL_SAJAKVISUAL}payment?invoice=${invoiceNumber}`;
+    const expiredDateStr = data?.expired_at
       ? new Date(data.expired_at).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta' })
       : '-';
 
@@ -198,7 +198,7 @@ export const emailMessagePending = (data) => {
       color: #737373;
       margin: 4px 0;
     }
-    
+
     /* Mobile Responsiveness */
     @media only screen and (max-width: 600px) {
       .email-wrapper { padding: 0; background-color: #ffffff; }
@@ -271,9 +271,9 @@ export const emailMessagePending = (data) => {
         <!-- Call to Action -->
         <div class="cta-container">
           <a href="${paymentLink}" class="btn-primary btn-margin">Bayar Sekarang</a>
-          <a href="https://wa.me/6281917536832?text=Halo%20Admin%2C%20saya%20butuh%20bantuan%20terkait%20pesanan%20dengan%20invoice%20${invoiceNumber}." class="btn-secondary btn-margin">Hubungi Admin via WhatsApp</a>
+          <a href="https://wa.me/6282229482731?text=Halo%20Admin%2C%20saya%20butuh%20bantuan%20terkait%20pesanan%20dengan%20invoice%20${invoiceNumber}." class="btn-secondary btn-margin">Hubungi Admin via WhatsApp</a>
         </div>
-        
+
         <p class="success-text" style="text-align: center; margin-top: 20px; font-size: 13px;">
           Invoice ini akan otomatis dibatalkan jika melewati batas waktu pembayaran.
         </p>
@@ -309,7 +309,7 @@ export const emailMessagesSuccess = (orderData) => {
     const invoiceNumber = orderData?.no_invoice || 'SJV-XXXXXX';
     const customerName = orderData?.nama || 'Pelanggan';
     const token = orderData?.token;
-    const invitationlink = `${process.env.BASE_URL_SAJAKVISUAL || 'https://sajak-visual.vercel.app'}/edit/${invoiceNumber}?token=${token}`;
+    const invitationlink = `${process.env.BASE_URL_SAJAKVISUAL}form/${invoiceNumber}?token=${token}`;
     const totalAmount = orderData?.jumlah_total ? formatRupiah(orderData.jumlah_total) : 'Rp -';
     const purchaseDate = orderData?.created_at
       ? new Date(orderData.created_at).toLocaleDateString('id-ID', {
@@ -631,9 +631,8 @@ export const emailMessagesSuccess = (orderData) => {
         <!-- Call to Action -->
         <div class="cta-container">
           <a href="${invitationlink}" class="btn-primary btn-margin">Edit Data Undangan</a>
-          <a href="#" class="btn-primary btn-margin">Salin Link Undangan</a>
           <a href="#" class="btn-primary btn-margin">Lihat Undangan</a>
-          <a href="https://wa.me/6281917536832?text=Halo%20Admin%2C%20saya%20sudah%20membayar%20invoice%20${invoiceNumber}.%20Mohon%20info%20langkah%20selanjutnya." class="btn-secondary btn-margin">Konfirmasi via WhatsApp</a>
+          <a href="https://wa.me/6282229482731?text=Halo%20Admin%2C%20saya%20sudah%20membayar%20invoice%20${invoiceNumber}.%20Mohon%20info%20langkah%20selanjutnya." class="btn-secondary btn-margin">Konfirmasi via WhatsApp</a>
         </div>
       </div>
 

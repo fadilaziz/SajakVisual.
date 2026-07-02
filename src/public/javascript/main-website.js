@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Add a small rotation animation
       themeIcon.style.transform = 'rotate(180deg)';
       themeIcon.style.transition = 'transform 0.3s ease';
-      
+
       setTimeout(() => {
         themeIcon.style.transform = 'rotate(0deg)';
         document.body.classList.remove('theme-switching');
@@ -360,21 +360,23 @@ document.addEventListener('DOMContentLoaded', () => {
   // Filter Categories Functionality
   if (filterDropdown) {
     const filterItems = filterDropdown.querySelectorAll('.filter-dropdown-item');
-    filterItems.forEach(item => {
+    filterItems.forEach((item) => {
       item.addEventListener('click', (e) => {
         e.preventDefault();
         const category = item.textContent.trim();
         // Remove active state from others
-        filterItems.forEach(i => i.style.color = 'var(--text-secondary)');
+        filterItems.forEach((i) => (i.style.color = 'var(--text-secondary)'));
         item.style.color = 'var(--primary)';
 
         if (category === 'Terbaru' || category === 'Semua') {
           renderProducts(allProducts); // or sort by latest if date exists
         } else {
-          const filtered = allProducts.filter((p) => p.kategori.toLowerCase() === category.toLowerCase());
+          const filtered = allProducts.filter(
+            (p) => p.kategori.toLowerCase() === category.toLowerCase()
+          );
           renderProducts(filtered);
         }
-        
+
         // Hide dropdown
         filterDropdown.classList.remove('active');
       });
@@ -454,7 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnDemo = document.getElementById('sheet-btn-demo');
     if (btnDemo) {
       btnDemo.onclick = () => {
-        window.location.href = `/undangan/template?slug=${encodeURIComponent(product.slug)}`;
+        window.location.href = `/undangan/preview/${encodeURIComponent(product.slug)}`;
       };
     }
 
