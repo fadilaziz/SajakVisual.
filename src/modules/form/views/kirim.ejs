@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kirim Undangan - Sajak Visual</title>
+    <link rel="icon" type="image/webp" href="/img/favicon.webp" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/main-website.css" />
+    <link rel="stylesheet" href="/css/form.css" />
+  </head>
+  <body>
+    <div class="form-wrapper">
+
+      <!-- ── Header ── -->
+      <!-- ── Header ── -->
+      <header class="form-header">
+        <div class="header-text">
+          <h1 class="form-title">Kirim Undangan</h1>
+        </div>
+        <button class="theme-toggle-btn" id="theme-toggle" aria-label="Toggle Dark Mode">
+          <i class="ph ph-moon"></i>
+        </button>
+      </header>
+
+      <!-- ── Tab Bar ── -->
+      <nav class="form-tab-bar">
+        <div class="tab-bar-inner">
+          <a class="tab-bar-item" href="/form/<%= undangan.invoice_order %>/edit">
+            <i class="ph ph-pencil-line"></i>
+            <span>Edit</span>
+          </a>
+          <a class="tab-bar-item" href="/form/<%= undangan.invoice_order %>/preview">
+            <i class="ph ph-eye"></i>
+            <span>Preview</span>
+          </a>
+          <a class="tab-bar-item active" href="/form/<%= undangan.invoice_order %>/kirim">
+            <i class="ph ph-paper-plane-tilt"></i>
+            <span>Kirim</span>
+          </a>
+        </div>
+      </nav>
+
+      <!-- ── Kirim Content ── -->
+      <div style="margin-top: 20px;">
+
+        <!-- Mode Tabs -->
+        <div class="kirim-tabs">
+          <button type="button" class="kirim-tab active" id="tab-manual" onclick="switchMode('manual')">
+            <i class="ph ph-pencil-simple"></i>
+            <span>Input Manual</span>
+          </button>
+          <button type="button" class="kirim-tab" id="tab-excel" onclick="switchMode('excel')">
+            <i class="ph ph-file-xls"></i>
+            <span>Import Excel</span>
+          </button>
+        </div>
+
+        <!-- Panel: Input Manual -->
+        <div class="kirim-panel" id="panel-manual">
+          <p class="kirim-panel-hint">Tambahkan penerima undangan satu per satu.</p>
+
+          <div class="recipient-table-wrapper">
+            <div class="recipient-table-header">
+              <span>Nama</span>
+              <span>No WA</span>
+              <span>Email</span>
+              <span style="text-align: center;">Aksi</span>
+            </div>
+            <div id="recipient-list">
+              <!-- rows inserted by JS -->
+            </div>
+          </div>
+
+          <button type="button" class="btn-add-recipient" id="btn-add-recipient">
+            <i class="ph ph-plus"></i>
+            Tambah Penerima
+          </button>
+        </div>
+
+        <!-- Panel: Import Excel -->
+        <div class="kirim-panel" id="panel-excel" style="display:none;">
+          <p class="kirim-panel-hint">
+            Unggah file <strong>.xlsx</strong>, <strong>.xls</strong>, atau <strong>.csv</strong>
+            dengan kolom: <strong>Nama</strong>, <strong>Email</strong>, <strong>No HP</strong>.
+          </p>
+
+          <div class="excel-drop-zone" id="excel-drop-zone">
+            <i class="ph ph-file-arrow-up excel-drop-icon"></i>
+            <p class="excel-drop-title">Seret &amp; letakkan file di sini</p>
+            <p class="excel-drop-sub">atau</p>
+            <label for="excel-file-input" class="btn-pick-file">
+              <i class="ph ph-upload-simple"></i> Pilih File
+            </label>
+            <input type="file" id="excel-file-input" accept=".xlsx,.xls,.csv" style="display:none;" />
+          </div>
+
+          <div class="excel-template-download" id="excel-template-wrapper">
+            <i class="ph ph-info"></i>
+            <span>Belum punya format data? <a href="#" onclick="downloadTemplate(event)" class="template-link">Unduh templat (.csv)</a></span>
+          </div>
+
+          <div class="excel-preview" id="excel-preview" style="display:none;">
+            <div class="excel-preview-header">
+              <div class="excel-file-info">
+                <i class="ph ph-file-xls" style="font-size:1.5rem; color:var(--form-text);"></i>
+                <span id="excel-file-name" class="excel-file-name-text"></span>
+              </div>
+              <button type="button" class="btn-remove-excel" id="btn-remove-excel" aria-label="Hapus file">
+                <i class="ph ph-x"></i>
+              </button>
+            </div>
+            <div class="recipient-table-wrapper">
+              <div class="recipient-table-header">
+                <span>Nama</span>
+                <span>No WA</span>
+                <span>Email</span>
+                <span style="text-align: center;">Aksi</span>
+              </div>
+              <div id="excel-recipient-list"></div>
+            </div>
+            <p id="excel-row-count" class="excel-row-count"></p>
+          </div>
+        </div>
+
+      </div>
+      <!-- Toast -->
+      <div id="toast-notification" class="toast"></div>
+
+    </div><!-- end form-wrapper -->
+
+    <script>
+      window.INITIAL_DATA = <%- typeof undangan !== 'undefined' ? JSON.stringify(undangan) : 'null' %>;
+    </script>
+    <script src="/javascript/main-website.js"></script>
+    <script src="/javascript/kirim.js"></script>
+  </body>
+</html>

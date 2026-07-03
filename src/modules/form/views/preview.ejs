@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Preview Undangan - Sajak Visual</title>
+    <link rel="icon" type="image/webp" href="/img/favicon.webp" />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/main-website.css" />
+    <link rel="stylesheet" href="/css/form.css" />
+  </head>
+  <body>
+    <div class="form-wrapper preview-page-wrapper">
+
+      <!-- ── Header ── -->
+      <!-- ── Header ── -->
+      <header class="form-header">
+        <div class="header-text">
+          <h1 class="form-title">Preview Undangan</h1>
+        </div>
+        <div class="preview-header-right">
+          <button class="theme-toggle-btn" id="theme-toggle" aria-label="Toggle Dark Mode">
+            <i class="ph ph-moon"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- ── Tab Bar ── -->
+      <nav class="form-tab-bar">
+        <div class="tab-bar-inner">
+          <a class="tab-bar-item" href="/form/<%= undangan.invoice_order %>/edit">
+            <i class="ph ph-pencil-line"></i>
+            <span>Edit</span>
+          </a>
+          <a class="tab-bar-item active" href="/form/<%= undangan.invoice_order %>/preview">
+            <i class="ph ph-eye"></i>
+            <span>Preview</span>
+          </a>
+          <a class="tab-bar-item" href="/form/<%= undangan.invoice_order %>/kirim">
+            <i class="ph ph-paper-plane-tilt"></i>
+            <span>Kirim</span>
+          </a>
+        </div>
+      </nav>
+
+      <!-- ── Preview Stage ── -->
+      <div class="preview-stage" id="preview-stage">
+
+        <!-- Phone Mockup -->
+        <div class="phone-mockup" id="phone-mockup">
+          <div class="phone-frame">
+            <div class="phone-notch"></div>
+            <div class="phone-screen">
+              <!-- Loading overlay -->
+              <div class="iframe-loading-overlay" id="loading-overlay">
+                <div class="iframe-spinner"></div>
+              </div>
+              <% if (undangan.slug) { %>
+                <iframe
+                  id="preview-iframe"
+                  src="/invitation/<%= undangan.slug %>"
+                  title="Preview Undangan"
+                  onload="document.getElementById('loading-overlay').style.opacity='0'; setTimeout(()=>document.getElementById('loading-overlay').style.display='none',300)"
+                ></iframe>
+              <% } %>
+            </div>
+            <div class="phone-home-bar"></div>
+          </div>
+        </div>
+
+        <!-- Desktop Mockup (hidden by default) -->
+
+        <!-- Hint jika belum ada slug -->
+        <% if (!undangan.slug) { %>
+          <div class="preview-hint">
+            <i class="ph ph-info"></i>
+            Simpan data undangan terlebih dahulu agar preview dapat ditampilkan.
+          </div>
+          <a href="/form/<%= undangan.invoice_order %>/edit" class="btn-refresh-preview">
+            <i class="ph ph-pencil-line"></i> Kembali ke Edit
+          </a>
+        <% } %>
+
+      </div><!-- end preview-stage -->
+
+    </div><!-- end form-wrapper -->
+
+    <script src="/javascript/main-website.js"></script>
+    <script src="/javascript/preview.js"></script>
+  </body>
+</html>

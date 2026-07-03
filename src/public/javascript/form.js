@@ -1,6 +1,58 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Dynamic Events have been replaced with static Akad and Resepsi toggles in HTML
 
+  // --- Dynamic Love Story ---
+  const lsContainer = document.getElementById('love-story-container');
+  const btnAddLS = document.getElementById('btn-add-love-story');
+  let lsIndex = 0;
+
+  const createLoveStoryItem = (tahun = '', judul = '', cerita = '') => {
+    const idx = lsIndex++;
+    const html = `
+      <div class="dynamic-item" id="ls-${idx}">
+        <button type="button" class="btn-remove-item" onclick="removeLoveStory(${idx})" aria-label="Hapus">
+          <i class="ph ph-trash"></i>
+        </button>
+        <h3 class="item-title">Momen ${idx + 1}</h3>
+        <div class="grid-2">
+          <div class="input-group">
+            <label>Tahun</label>
+            <div class="input-wrapper">
+              <i class="ph ph-calendar input-icon"></i>
+              <input type="text" name="love_story[${idx}][tahun]" class="form-input" placeholder="contoh: 2020" value="${tahun}" />
+            </div>
+          </div>
+          <div class="input-group">
+            <label>Judul / Subtext</label>
+            <div class="input-wrapper">
+              <i class="ph ph-tag input-icon"></i>
+              <input type="text" name="love_story[${idx}][judul]" class="form-input" placeholder="contoh: Pertama Bertemu" value="${judul}" />
+            </div>
+          </div>
+        </div>
+        <div class="input-group">
+          <label>Cerita</label>
+          <textarea name="love_story[${idx}][cerita]" class="form-input form-textarea" rows="4" placeholder="Ceritakan kisah cinta Anda di momen ini...">${cerita}</textarea>
+        </div>
+      </div>
+    `;
+    lsContainer.insertAdjacentHTML('beforeend', html);
+  };
+
+  window.removeLoveStory = (idx) => {
+    const item = document.getElementById(`ls-${idx}`);
+    if (item) {
+      item.style.opacity = '0';
+      item.style.transform = 'translateY(-10px)';
+      setTimeout(() => item.remove(), 200);
+    }
+  };
+
+  btnAddLS.addEventListener('click', () => createLoveStoryItem());
+
+  // Add 1 default love story item
+  createLoveStoryItem();
+
   // --- Dynamic Gallery ---
   const galleryContainer = document.getElementById('gallery-container');
   const btnAddGallery = document.getElementById('btn-add-gallery');
@@ -141,6 +193,20 @@ document.addEventListener('DOMContentLoaded', () => {
       payload.wedding_events = Object.values(eventMap);
       payload.wedding_galleries = Object.values(galleryMap);
 
+      // Kumpulkan Love Story
+      const lsMap = {};
+      for (let [key, value] of formData.entries()) {
+        if (value instanceof File) continue;
+        const match = key.match(/love_story\[(\d+)\]\[(.+)\]/);
+        if (match) {
+          const idx = match[1];
+          const prop = match[2];
+          if (!lsMap[idx]) lsMap[idx] = {};
+          lsMap[idx][prop] = value;
+        }
+      }
+      payload.love_story = Object.values(lsMap).filter((ls) => ls.tahun || ls.judul || ls.cerita);
+
       // Append date created_at to payload
       payload.created_at = new Date().toISOString();
 
@@ -190,7 +256,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // 2. Bungkus ke dalam FormData baru
       const finalFormData = new FormData();
 
-      // A. Masukkan data teks (kita ubah jadi 1 string)
+      // A. Masukkan data teks (ubah jadi 1 string)
       finalFormData.append('data_undangan', JSON.stringify(payload));
 
       // B. Masukkan File Foto Cover
@@ -199,7 +265,17 @@ document.addEventListener('DOMContentLoaded', () => {
         finalFormData.append('foto_cover', inputCover.files[0]);
       }
 
-      // C. Masukkan File Galeri (foto baru yang diunggah)
+      // C. Masukkan File Foto Mempelai
+      const inputPria = document.getElementById('foto_pria');
+      if (inputPria && inputPria.files[0]) {
+        finalFormData.append('foto_pria', inputPria.files[0]);
+      }
+      const inputWanita = document.getElementById('foto_wanita');
+      if (inputWanita && inputWanita.files[0]) {
+        finalFormData.append('foto_wanita', inputWanita.files[0]);
+      }
+
+      // D. Masukkan File Galeri (foto baru yang diunggah)
       galleryInputs.forEach((input) => {
         if (input.files && input.files.length > 0) {
           finalFormData.append('foto_galeri', input.files[0]);
@@ -305,6 +381,15 @@ document.addEventListener('DOMContentLoaded', () => {
     if (data.pria_ayah) document.getElementById('pria_ayah').value = data.pria_ayah;
     if (data.pria_ibu) document.getElementById('pria_ibu').value = data.pria_ibu;
 
+    if (data.foto_pria) {
+      const label = document.querySelector('label[for="foto_pria"] .file-name');
+      if (label) {
+        label.textContent = data.foto_pria;
+        label.style.color = 'var(--form-text)';
+      }
+      document.getElementById('foto_pria').required = false;
+    }
+
     // 3. Mempelai Wanita
     if (data.wanita_nama_lengkap)
       document.getElementById('wanita_nama_lengkap').value = data.wanita_nama_lengkap;
@@ -313,14 +398,23 @@ document.addEventListener('DOMContentLoaded', () => {
     if (data.wanita_ayah) document.getElementById('wanita_ayah').value = data.wanita_ayah;
     if (data.wanita_ibu) document.getElementById('wanita_ibu').value = data.wanita_ibu;
 
+    if (data.foto_wanita) {
+      const label = document.querySelector('label[for="foto_wanita"] .file-name');
+      if (label) {
+        label.textContent = data.foto_wanita;
+        label.style.color = 'var(--form-text)';
+      }
+      document.getElementById('foto_wanita').required = false;
+    }
+
     // 4. Events
     if (data.wedding_events && data.wedding_events.length > 0) {
       // By default HTML has both checked, so we uncheck them first if we have data to process
       document.getElementById('enable_akad').checked = false;
-      if (typeof toggleEventInputs === 'function') toggleEventInputs('akad', false);
+      if (typeof toggleEvent === 'function') toggleEvent('akad', false);
 
       document.getElementById('enable_resepsi').checked = false;
-      if (typeof toggleEventInputs === 'function') toggleEventInputs('resepsi', false);
+      if (typeof toggleEvent === 'function') toggleEvent('resepsi', false);
 
       data.wedding_events.forEach((event) => {
         let prefix = '';
@@ -329,11 +423,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (tipe.includes('akad')) {
           prefix = '0';
           document.getElementById('enable_akad').checked = true;
-          if (typeof toggleEventInputs === 'function') toggleEventInputs('akad', true);
+          if (typeof toggleEvent === 'function') toggleEvent('akad', true);
         } else if (tipe.includes('resepsi')) {
           prefix = '1';
           document.getElementById('enable_resepsi').checked = true;
-          if (typeof toggleEventInputs === 'function') toggleEventInputs('resepsi', true);
+          if (typeof toggleEvent === 'function') toggleEvent('resepsi', true);
         }
 
         if (prefix) {
@@ -359,7 +453,16 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // 5. Gallery
+    // 5. Love Story
+    if (data.love_story && data.love_story.length > 0) {
+      lsContainer.innerHTML = '';
+      lsIndex = 0;
+      data.love_story.forEach((ls) => {
+        createLoveStoryItem(ls.tahun || '', ls.judul || '', ls.cerita || '');
+      });
+    }
+
+    // 6. Gallery
     if (data.wedding_galleries && data.wedding_galleries.length > 0) {
       // Clear the default gallery item added by createGalleryItem() above
       galleryContainer.innerHTML = '';

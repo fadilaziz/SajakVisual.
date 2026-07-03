@@ -1,51 +1,61 @@
 import service from './service.js';
 
-export const getForm = async (req, res) => {
+// Helper: ambil & siapkan data undangan
+async function fetchUndangan(invoice) {
+  const dataDummy = {
+    status: 'pending',
+    slug: '',
+    pria_nama_lengkap: 'Romeo Motague',
+    pria_nama_panggilan: 'Romeo',
+    pria_ayah: 'Bpk. Romeo',
+    pria_ibu: 'Ibu. Romeo',
+    wanita_nama_lengkap: 'Juliet Capulet',
+    wanita_nama_panggilan: 'Juliet',
+    wanita_ayah: 'Bpk. Juliet',
+    wanita_ibu: 'Ibu Juliet',
+    countdown_target: '2026-08-28T19:00:00+00:00',
+  };
+  const finalData = { ...dataDummy, invoice_order: invoice };
+  let data = await service.saveInvoiceData(finalData);
+  data = await service.getInformationData(data);
+  return data;
+}
+
+// Redirect /form/:invoice → /form/:invoice/edit
+export const getForm = (req, res) => {
+  res.redirect(`/form/${req.params.invoice}/edit`);
+};
+
+// Edit Page
+export const getEdit = async (req, res) => {
   try {
-    const invoice = req.params.invoice;
-    const token = req.query.token;
-
-    if (!token && !invoice) {
-      return res.status(404).json({
-        status: 404,
-        success: false,
-        message: 'Token or invoice not found',
-      });
-    }
-
-    const dataDummyJson = {
-      status: 'pending',
-      slug: '',
-      pria_nama_lengkap: 'Romeo Motague',
-      pria_nama_panggilan: 'Romeo',
-      pria_ayah: 'Bpk. Romeo',
-      pria_ibu: 'Ibu. Romeo',
-      wanita_nama_lengkap: 'Juliet Cpulet',
-      wanita_nama_panggilan: 'Juliet',
-      wanita_ayah: 'Bpk. Juliet',
-      wanita_ibu: 'Ibu Juliet',
-      countdown_target: '2026-08-28T19:00:00+00:00',
-    };
-
-    const finalInsertData = {
-      ...dataDummyJson,
-      invoice_order: invoice,
-    };
-
-    //Save invoice data to supabase
-    let data = await service.saveInvoiceData(finalInsertData);
-
-    //Get information data by invoice
-    data = await service.getInformationData(data);
-
-    res.render('form/views/form.ejs', { undangan: data });
+    const data = await fetchUndangan(req.params.invoice);
+    res.render('form/views/edit.ejs', { undangan: data });
   } catch (error) {
     console.log(error);
-    return res.json({
-      status: 500,
-      success: false,
-      message: error.message || 'Internal server error',
-    });
+    res.json({ status: 500, success: false, message: error.message || 'Internal server error' });
+  }
+};
+
+// Preview Page
+export const getPreview = async (req, res) => {
+  try {
+    const data = await fetchUndangan(req.params.invoice);
+    res.render('form/views/preview.ejs', { undangan: data });
+  } catch (error) {
+    console.log(error);
+    res.json({ status: 500, success: false, message: error.message || 'Internal server error' });
+  }
+};
+
+// Send Invitation Page
+export const getKirim = async (req, res) => {
+  try {
+    const data = await fetchUndangan(req.params.invoice);
+    res.render('form/views/kirim.ejs', { undangan: data });
+  } catch (error) {
+    console.log(error);
+    res.json({ status: 500, success: false, message: error.message || 'Internal server error' });
   }
 };
 
@@ -58,6 +68,9 @@ export const formEdit = async (req, res) => {
     const fileGaleri = req.files
       ? req.files.filter((file) => file.fieldname === 'foto_galeri')
       : [];
+
+    console.log('ini data invitation', invitationData);
+    return;
 
     //Ganerate slug from name
     const slug = `${invitationData.pria_nama_panggilan}-${invitationData.wanita_nama_panggilan}`;

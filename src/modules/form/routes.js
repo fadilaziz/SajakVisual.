@@ -2,15 +2,20 @@ import express from 'express';
 import multer from 'multer';
 
 const router = express.Router();
-import { getForm, formEdit } from './controller.js';
+import { getForm, getEdit, getPreview, getKirim, formEdit } from './controller.js';
 
 // Setup multer untuk mengurai FormData (simpan sementara di memory)
 const upload = multer({ storage: multer.memoryStorage() });
 
-//Render form invitation
+// Render form invitation (redirects to /edit)
 router.get('/form/:invoice', getForm);
 
-//Handle submit form dengan multer
+// New split routes
+router.get('/form/:invoice/edit', getEdit);
+router.get('/form/:invoice/preview', getPreview);
+router.get('/form/:invoice/kirim', getKirim);
+
+// Handle submit form dengan multer
 router.post('/edit', upload.any(), formEdit);
 
 export default router;
