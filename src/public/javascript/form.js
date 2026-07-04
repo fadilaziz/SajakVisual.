@@ -383,9 +383,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // --- Populate Initial Data ---
-  if (window.INITIAL_DATA && Object.keys(window.INITIAL_DATA).length > 0) {
-    const data = window.INITIAL_DATA;
-
+  const populateFormData = (data) => {
     // 1. Pengaturan Utama
     if (data.countdown_target) {
       const d = new Date(data.countdown_target);
@@ -488,7 +486,7 @@ document.addEventListener('DOMContentLoaded', () => {
       lsContainer.innerHTML = '';
       lsIndex = 0;
       data.love_story.forEach((ls) => {
-        createLoveStoryItem(ls.tahun || '', ls.judul || '', ls.cerita || '');
+        createLoveStoryItem(ls.tahun || '', ls.subtext || ls.judul || '', ls.text || ls.cerita || '');
       });
     }
 
@@ -515,6 +513,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     }
+  };
+
+  // Fetch data asinkron dari API agar aman dari inspect HTML EJS
+  if (window.INITIAL_DATA && window.INITIAL_DATA.invoice_order) {
+    fetch(`/api/form/${window.INITIAL_DATA.invoice_order}/data`)
+      .then((res) => res.json())
+      .then((result) => {
+        if (result.success && result.data) {
+          populateFormData(result.data);
+        }
+      })
+      .catch((err) => console.error('Gagal memuat data undangan:', err));
   }
 });
 

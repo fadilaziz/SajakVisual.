@@ -38,7 +38,8 @@ const getInformationData = async (invoice) => {
         `
     *,
     wedding_events (*),
-    wedding_galleries (*)
+    wedding_galleries (*),
+    love_story (*)
   `
       )
       .eq('invoice_order', invoice)
@@ -58,6 +59,7 @@ const getInformationData = async (invoice) => {
 
 //Update information data
 const updateInvitationData = async (data) => {
+  console.log('ini data invitation', data);
   try {
     const { data: updatedData, error } = await supabase
       .from('invitation_information')
@@ -65,14 +67,49 @@ const updateInvitationData = async (data) => {
       .eq('invoice_order', data.invoice_order);
 
     if (error) {
-      console.error('Gagal memperbarui data:', error);
+      console.error('Gagal memperbarui data invitation:', error);
       return { error: error.message };
     }
 
+    console.log('data Invitation berhasil disimpan');
+
     return updatedData;
   } catch (error) {
+    console.log('gagal memperbarui data invitation ', error);
     throw error;
   }
+};
+
+//Save Lovestort data
+const saveLoveStoryData = async (data, id) => {
+  if (data.length === 0) {
+    console.log('Tidak ada data love story yang diupload. Melewati update love story...');
+    return;
+  }
+
+  console.log('ini data lovestory', data);
+
+  const finalLovestory = data.map((item) => {
+    return {
+      invitation_id: id,
+      tahun: item.tahun,
+      subtext: item.judul,
+      text: item.cerita,
+    };
+  });
+
+  const { error: errDelete } = await supabase.from('love_story').delete().eq('invitation_id', id);
+  if (errDelete) throw errDelete;
+
+  const { error: errInsert } = await supabase
+    .from('love_story')
+    .insert(finalLovestory)
+    .select('id');
+
+  if (errInsert) throw errInsert;
+  console.log('data LoveStory berhasil di perbarui');
+
+  return;
 };
 
 //Update event data
@@ -199,7 +236,7 @@ const saveUrlPhotoCover = async (data, id) => {
 
     return;
   } catch (error) {
-    console.error('Gagal memperbarui data:', error);
+    console.error('Gagal memperbarui data savePhoto :', error);
     throw error;
   }
 };
@@ -208,6 +245,7 @@ export default {
   saveInvoiceData,
   getInformationData,
   updateInvitationData,
+  saveLoveStoryData,
   updateEventData,
   savePhotoData,
   saveUrlPhoto,

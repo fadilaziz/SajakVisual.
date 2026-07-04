@@ -29,8 +29,18 @@ export const getForm = (req, res) => {
 // Edit Page
 export const getEdit = async (req, res) => {
   try {
+    res.render('form/views/edit.ejs', { undangan: { invoice_order: req.params.invoice } });
+  } catch (error) {
+    console.log(error);
+    res.json({ status: 500, success: false, message: error.message || 'Internal server error' });
+  }
+};
+
+// API: Ambil data undangan lengkap (fetch terpisah)
+export const getFormData = async (req, res) => {
+  try {
     const data = await fetchUndangan(req.params.invoice);
-    res.render('form/views/edit.ejs', { undangan: data });
+    res.json({ status: 200, success: true, data });
   } catch (error) {
     console.log(error);
     res.json({ status: 500, success: false, message: error.message || 'Internal server error' });
@@ -75,6 +85,8 @@ export const formEdit = async (req, res) => {
       ? req.files.filter((file) => file.fieldname === 'foto_galeri')
       : [];
 
+    console.log('ini data invitation', invitationData);
+
     //Ganerate slug from name
     const slug = `${invitationData.pria_nama_panggilan}-${invitationData.wanita_nama_panggilan}`;
 
@@ -95,9 +107,12 @@ export const formEdit = async (req, res) => {
       invoice_order: invitationData.invoice_order,
     };
 
-    // console.log(payload);
     //Update information invitation data
     await service.updateInvitationData(payload);
+
+    //Save LoveStory Data
+    const loveStoryData = invitationData.love_story;
+    await service.saveLoveStoryData(loveStoryData, invitationData.id);
 
     //Assign invitation id to event data
     const idUndangan = invitationData.id;
@@ -108,7 +123,8 @@ export const formEdit = async (req, res) => {
         invitation_id: idUndangan,
       };
     });
-    // console.log(invitationFinalData);
+
+    //Update event data
     await service.updateEventData(invitationFinalData, idUndangan);
 
     const oldGaleri = invitationData.galeri_lama;

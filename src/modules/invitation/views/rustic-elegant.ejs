@@ -306,11 +306,11 @@
 
     <!-- JS -->
     <div id="__backend_data__" style="display:none"
-      data-payload='<%= typeof data !== "undefined" && data ? JSON.stringify(data) : "null" %>'
+      data-payload="<%= typeof data !== 'undefined' && data ? encodeURIComponent(JSON.stringify(data)) : 'null' %>"
     ></div>
     <script>
       window.BACKEND_DATA = JSON.parse(
-        document.getElementById('__backend_data__').dataset.payload
+        decodeURIComponent(document.getElementById('__backend_data__').dataset.payload)
       );
     </script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>

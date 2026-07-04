@@ -7,7 +7,8 @@ const getAllDataInvitation = async (slug) => {
       `
     *,
     wedding_events (*),
-    wedding_galleries (*)
+    wedding_galleries (*),
+    love_story (*)
   `
     )
     .eq('slug', slug)

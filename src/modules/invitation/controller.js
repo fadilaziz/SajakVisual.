@@ -24,8 +24,6 @@ export const renderPublicTemplate = async (req, res) => {
 
     let data = await service.getAllDataInvitation(slug);
 
-    console.log('ini data invitation_information', data);
-
     if (!data) {
       return res.status(404).send('Waduh, undangan tidak ditemukan!');
     }
@@ -48,7 +46,7 @@ export const renderPublicTemplate = async (req, res) => {
         nama_panggilan: data.pria_nama_panggilan,
         ayah: data.pria_ayah,
         ibu: data.pria_ibu,
-        foto: data.pria_foto ? SUPABASE_BUCKET_URL + data.pria_foto : '',
+        foto: (data.foto_pria || data.pria_foto) ? SUPABASE_BUCKET_URL + (data.foto_pria || data.pria_foto) : '',
       },
 
       mempelai_wanita: {
@@ -56,7 +54,7 @@ export const renderPublicTemplate = async (req, res) => {
         nama_panggilan: data.wanita_nama_panggilan,
         ayah: data.wanita_ayah,
         ibu: data.wanita_ibu,
-        foto: data.wanita_foto ? SUPABASE_BUCKET_URL + data.wanita_foto : '',
+        foto: (data.foto_wanita || data.wanita_foto) ? SUPABASE_BUCKET_URL + (data.foto_wanita || data.wanita_foto) : '',
       },
 
       acara: {
@@ -87,6 +85,12 @@ export const renderPublicTemplate = async (req, res) => {
       galeri_foto:
         data.wedding_galleries && data.wedding_galleries.length > 0
           ? data.wedding_galleries.map((g) => SUPABASE_BUCKET_URL + g.foto_url)
+          : [],
+
+      // Teruskan data kisah cinta (urutkan tahun jika ada)
+      love_story:
+        data.love_story && data.love_story.length > 0
+          ? data.love_story.sort((a, b) => String(a.tahun).localeCompare(String(b.tahun)))
           : [],
     };
 

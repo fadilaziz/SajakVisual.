@@ -203,8 +203,8 @@ function generateLoveStory(stories) {
       <span class="ls-year">${item.tahun || ''}</span>
       <div class="ls-content">
         <div class="ls-divider"></div>
-        <h4>${item.judul || ''}</h4>
-        <p>${item.cerita || ''}</p>
+        <h4>${item.subtext || item.judul || ''}</h4>
+        <p>${item.text || item.cerita || ''}</p>
       </div>`;
     container.appendChild(el);
   });

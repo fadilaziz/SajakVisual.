@@ -329,11 +329,11 @@
     </div><!-- end form-wrapper -->
 
     <div id="__app_data__" style="display:none"
-      data-initial='<%= typeof undangan !== "undefined" && undangan ? JSON.stringify(undangan) : "null" %>'
+      data-initial="<%= typeof undangan !== 'undefined' && undangan ? encodeURIComponent(JSON.stringify(undangan)) : 'null' %>"
     ></div>
     <script>
       window.INITIAL_DATA = JSON.parse(
-        document.getElementById('__app_data__').dataset.initial
+        decodeURIComponent(document.getElementById('__app_data__').dataset.initial)
       );
 
       function toggleEvent(id, enabled) {
