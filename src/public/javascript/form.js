@@ -160,6 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const eventMap = {};
       const galleryMap = {};
+      const lsMap = {};
 
       for (let [key, value] of formData.entries()) {
         // Abaikan file dari object payload teks
@@ -183,28 +184,25 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!galleryMap[idx]) galleryMap[idx] = {};
             galleryMap[idx][prop] = value;
           }
+        } else if (key.startsWith('love_story')) {
+          // Parse: love_story[0][tahun] — jangan masuk ke payload mentah
+          const match = key.match(/love_story\[(\d+)\]\[(.+)\]/);
+          if (match) {
+            const idx = match[1];
+            const prop = match[2];
+            if (!lsMap[idx]) lsMap[idx] = {};
+            lsMap[idx][prop] = value;
+          }
         } else {
           // General properties
           payload[key] = value;
         }
       }
 
-      // Convert map to array
+      // Convert maps to arrays
       payload.wedding_events = Object.values(eventMap);
       payload.wedding_galleries = Object.values(galleryMap);
 
-      // Kumpulkan Love Story
-      const lsMap = {};
-      for (let [key, value] of formData.entries()) {
-        if (value instanceof File) continue;
-        const match = key.match(/love_story\[(\d+)\]\[(.+)\]/);
-        if (match) {
-          const idx = match[1];
-          const prop = match[2];
-          if (!lsMap[idx]) lsMap[idx] = {};
-          lsMap[idx][prop] = value;
-        }
-      }
       payload.love_story = Object.values(lsMap).filter((ls) => ls.tahun || ls.judul || ls.cerita);
 
       // Append date created_at to payload
@@ -250,6 +248,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Tambahkan galeri lama ke object teks
       payload.galeri_lama = galeriLama;
+
+      // Kumpulkan URL cover/mempelai lama dari layar jika tidak ada file baru
+      let fotoCoverLama = null;
+      const inputCoverEl = document.getElementById('foto_cover');
+      if (inputCoverEl && (!inputCoverEl.files || inputCoverEl.files.length === 0)) {
+        const label = document.querySelector('label[for="foto_cover"] .file-name');
+        if (label && label.textContent !== 'Belum ada gambar') {
+          fotoCoverLama = label.textContent.trim();
+        }
+      }
+
+      let fotoPriaLama = null;
+      const inputPriaEl = document.getElementById('foto_pria');
+      if (inputPriaEl && (!inputPriaEl.files || inputPriaEl.files.length === 0)) {
+        const label = document.querySelector('label[for="foto_pria"] .file-name');
+        if (label && label.textContent !== 'Belum ada gambar') {
+          fotoPriaLama = label.textContent.trim();
+        }
+      }
+
+      let fotoWanitaLama = null;
+      const inputWanitaEl = document.getElementById('foto_wanita');
+      if (inputWanitaEl && (!inputWanitaEl.files || inputWanitaEl.files.length === 0)) {
+        const label = document.querySelector('label[for="foto_wanita"] .file-name');
+        if (label && label.textContent !== 'Belum ada gambar') {
+          fotoWanitaLama = label.textContent.trim();
+        }
+      }
+
+      payload.foto_cover_lama = fotoCoverLama;
+      payload.foto_pria_lama = fotoPriaLama;
+      payload.foto_wanita_lama = fotoWanitaLama;
 
       console.log('Payload teks siap dikirim:', payload);
 

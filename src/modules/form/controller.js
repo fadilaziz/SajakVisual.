@@ -65,12 +65,15 @@ export const formEdit = async (req, res) => {
   try {
     //Retrieve photo data, if available.
     const fileCover = req.files ? req.files.find((file) => file.fieldname === 'foto_cover') : null;
+    const fileFotoPria = req.files
+      ? req.files.find((file) => file.fieldname === 'foto_pria')
+      : null;
+    const fileFotoWanita = req.files
+      ? req.files.find((file) => file.fieldname === 'foto_wanita')
+      : null;
     const fileGaleri = req.files
       ? req.files.filter((file) => file.fieldname === 'foto_galeri')
       : [];
-
-    console.log('ini data invitation', invitationData);
-    return;
 
     //Ganerate slug from name
     const slug = `${invitationData.pria_nama_panggilan}-${invitationData.wanita_nama_panggilan}`;
@@ -91,7 +94,8 @@ export const formEdit = async (req, res) => {
       countdown_target: invitationData.countdown_target,
       invoice_order: invitationData.invoice_order,
     };
-    console.log(payload);
+
+    // console.log(payload);
     //Update information invitation data
     await service.updateInvitationData(payload);
 
@@ -104,13 +108,22 @@ export const formEdit = async (req, res) => {
         invitation_id: idUndangan,
       };
     });
-    console.log(invitationFinalData);
+    // console.log(invitationFinalData);
     await service.updateEventData(invitationFinalData, idUndangan);
 
     const oldGaleri = invitationData.galeri_lama;
 
     //Save photo data if available
-    let data = await service.savePhotoData(fileCover, fileGaleri, oldGaleri);
+    let data = await service.savePhotoData(
+      fileCover,
+      fileFotoPria,
+      fileFotoWanita,
+      fileGaleri,
+      oldGaleri,
+      invitationData.foto_cover_lama,
+      invitationData.foto_pria_lama,
+      invitationData.foto_wanita_lama
+    );
 
     //Save url photo galeri
     data = await service.saveUrlPhoto(data, idUndangan);

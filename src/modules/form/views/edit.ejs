@@ -328,8 +328,13 @@
 
     </div><!-- end form-wrapper -->
 
+    <div id="__app_data__" style="display:none"
+      data-initial='<%= typeof undangan !== "undefined" && undangan ? JSON.stringify(undangan) : "null" %>'
+    ></div>
     <script>
-      window.INITIAL_DATA = <%- typeof undangan !== 'undefined' ? JSON.stringify(undangan) : 'null' %>;
+      window.INITIAL_DATA = JSON.parse(
+        document.getElementById('__app_data__').dataset.initial
+      );
 
       function toggleEvent(id, enabled) {
         const container = document.getElementById(`${id}_inputs`);

@@ -24,6 +24,8 @@ export const renderPublicTemplate = async (req, res) => {
 
     let data = await service.getAllDataInvitation(slug);
 
+    console.log('ini data invitation_information', data);
+
     if (!data) {
       return res.status(404).send('Waduh, undangan tidak ditemukan!');
     }
@@ -88,7 +90,7 @@ export const renderPublicTemplate = async (req, res) => {
           : [],
     };
 
-    console.log('formatUntukTemplate', formatUntukTemplate);
+    // console.log('formatUntukTemplate', formatUntukTemplate);
 
     // 3. RENDER KE TEMPLATE EJS
     // Pastikan path EJS-mu sudah sesuai dengan letak foldernya

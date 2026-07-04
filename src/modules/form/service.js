@@ -102,15 +102,32 @@ const updateEventData = async (data, id) => {
 
 //Save photo Data
 import { savePhoto } from '../../helpers/save_photo.js';
-const savePhotoData = async (fileCover, fileGaleri, oldGaleri) => {
-  let coverUrl = null;
+const savePhotoData = async (
+  fileCover,
+  fileFotoPria,
+  fileFotoWanita,
+  fileGaleri,
+  oldGaleri,
+  oldCover = null,
+  oldFotoPria = null,
+  oldFotoWanita = null
+) => {
+  let coverUrl = oldCover;
+  let priaUrl = oldFotoPria;
+  let wanitaUrl = oldFotoWanita;
   const galeriUrls = [];
-
-  console.log(oldGaleri);
 
   //Upload photo data if exists
   if (fileCover) {
     coverUrl = await savePhoto(fileCover, 'cover');
+  }
+
+  if (fileFotoPria) {
+    priaUrl = await savePhoto(fileFotoPria, 'file_pria');
+  }
+
+  if (fileFotoWanita) {
+    wanitaUrl = await savePhoto(fileFotoWanita, 'file_wanita');
   }
 
   if (fileGaleri.length > 0) {
@@ -121,18 +138,20 @@ const savePhotoData = async (fileCover, fileGaleri, oldGaleri) => {
   }
 
   const mergeGaleri = [...oldGaleri, ...galeriUrls];
-  console.log(mergeGaleri);
 
   const urlPhoto = {
     cover: coverUrl,
+    file_pria: priaUrl,
+    file_wanita: wanitaUrl,
     galeri: mergeGaleri,
   };
+
+  console.log('ini url photo', urlPhoto);
 
   return urlPhoto;
 };
 
 const saveUrlPhoto = async (data, id) => {
-  console.log('ini data galeri', data);
   try {
     if (!data.galeri || data.galeri.length === 0) {
       console.log('Tidak ada foto baru yang diupload. Melewati update galeri...');
@@ -160,16 +179,18 @@ const saveUrlPhoto = async (data, id) => {
 };
 
 const saveUrlPhotoCover = async (data, id) => {
-  console.log('ini data cover', data);
+  console.log('ini data foto', data);
   try {
-    if (!data.cover || data.cover.length === 0) {
+    if (!data.cover && !data.file_pria && !data.file_wanita) {
       console.log('Tidak ada foto baru yang diupload. Melewati update galeri...');
       return;
     }
 
+    console.log('ini data foto pria dan wanita', data.file_pria, data.file_wanita);
+
     const { error: errUpdate } = await supabase
       .from('invitation_information')
-      .update({ foto_cover: data.cover })
+      .update({ foto_cover: data.cover, foto_pria: data.file_pria, foto_wanita: data.file_wanita })
       .eq('id', id);
 
     if (errUpdate) throw errUpdate;
