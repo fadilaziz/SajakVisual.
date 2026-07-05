@@ -521,6 +521,12 @@ document.addEventListener('DOMContentLoaded', () => {
       .then((res) => res.json())
       .then((result) => {
         if (result.success && result.data) {
+          if (result.data.id) {
+            window.INITIAL_DATA.id = result.data.id;
+          }
+          if (result.data.orders && result.data.orders.template_id !== undefined) {
+            window.INITIAL_DATA.template_id = result.data.orders.template_id;
+          }
           populateFormData(result.data);
         }
       })

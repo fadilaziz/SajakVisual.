@@ -2,9 +2,11 @@ import service from './service.js';
 
 // Helper: ambil & siapkan data undangan
 async function fetchUndangan(invoice) {
+  //Generate Dinamis Slug
+  const dinamisSlug = `draft-${Date.now()}`;
   const dataDummy = {
     status: 'pending',
-    slug: '',
+    slug: dinamisSlug,
     pria_nama_lengkap: 'Romeo Motague',
     pria_nama_panggilan: 'Romeo',
     pria_ayah: 'Bpk. Romeo',
@@ -36,7 +38,7 @@ export const getEdit = async (req, res) => {
   }
 };
 
-// API: Ambil data undangan lengkap (fetch terpisah)
+// Get Invitation Data
 export const getFormData = async (req, res) => {
   try {
     const data = await fetchUndangan(req.params.invoice);
@@ -86,7 +88,6 @@ export const formEdit = async (req, res) => {
       : [];
 
     console.log('ini data invitation', invitationData);
-
     //Ganerate slug from name
     const slug = `${invitationData.pria_nama_panggilan}-${invitationData.wanita_nama_panggilan}`;
 

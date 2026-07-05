@@ -1,5 +1,6 @@
 import supabase from '../../../database/supabase.js';
 
+//Save DummyData Information
 const saveInvoiceData = async (finalInsertData) => {
   try {
     const { data: existingData } = await supabase
@@ -27,6 +28,7 @@ const saveInvoiceData = async (finalInsertData) => {
   }
 };
 
+//Get DummyData Information
 const getInformationData = async (invoice) => {
   if (!invoice) {
     throw new Error('Invoice tidak ada');
@@ -37,6 +39,7 @@ const getInformationData = async (invoice) => {
       .select(
         `
     *,
+    orders(template_id),
     wedding_events (*),
     wedding_galleries (*),
     love_story (*)
