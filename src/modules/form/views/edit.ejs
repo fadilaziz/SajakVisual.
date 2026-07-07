@@ -291,7 +291,52 @@
             <div class="section-body" id="love-story-container"></div>
           </section>
 
-          <!-- Block 6: Galeri Foto -->
+          <!-- Block 6: Info Hadiah (Rekening & E-Wallet) -->
+          <section class="form-section reveal-on-scroll" id="gift-section" style="transition-delay: 440ms">
+            <div class="section-header">
+              <h2 class="section-title">Info Hadiah (Rekening &amp; E-Wallet)</h2>
+            </div>
+            <div class="section-body">
+              <div class="grid-2">
+                <div class="input-group">
+                  <label for="nama_bank">Nama Bank / E-Wallet</label>
+                  <div class="input-wrapper">
+                    <i class="ph ph-bank input-icon"></i>
+                    <select id="nama_bank" name="nama_bank" class="form-input" style="height: 48px; appearance: none; -webkit-appearance: none; padding-right: 40px;">
+                      <option value="" disabled selected>-- Pilih Bank / E-Wallet --</option>
+                      <option value="BRI">Bank BRI</option>
+                      <option value="BNI">Bank BNI</option>
+                      <option value="BSI">Bank BSI</option>
+                      <option value="Mandiri">Bank Mandiri</option>
+                      <option value="BCA">Bank BCA</option>
+                      <option value="GoPay">GoPay</option>
+                      <option value="OVO">OVO</option>
+                      <option value="DANA">DANA</option>
+                      <option value="LinkAja">LinkAja</option>
+                      <option value="ShopeePay">ShopeePay</option>
+                    </select>
+                    <i class="ph ph-caret-down" style="position: absolute; right: 16px; color: var(--form-text-muted); pointer-events: none;"></i>
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label for="pemilik_rekening">Nama Pemilik Rekening / Akun</label>
+                  <div class="input-wrapper">
+                    <i class="ph ph-user input-icon"></i>
+                    <input type="text" id="pemilik_rekening" name="pemilik_rekening" class="form-input" placeholder="contoh: Romeo Montague" />
+                  </div>
+                </div>
+              </div>
+              <div class="input-group" style="margin-top: 20px;">
+                <label id="label_no_rekening" for="no_rekening">Nomor Rekening / Nomor Telepon</label>
+                <div class="input-wrapper">
+                  <i id="icon_no_rekening" class="ph ph-credit-card input-icon"></i>
+                  <input type="text" id="no_rekening" name="no_rekening" class="form-input" placeholder="contoh: 1234567890 atau 0812xxxx" />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Block 7: Galeri Foto -->
           <section class="form-section reveal-on-scroll" id="gallery-section" style="transition-delay: 480ms">
             <div class="section-header">
               <h2 class="section-title">Galeri Foto</h2>

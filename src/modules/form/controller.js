@@ -115,6 +115,14 @@ export const formEdit = async (req, res) => {
     const loveStoryData = invitationData.love_story;
     await service.saveLoveStoryData(loveStoryData, invitationData.id);
 
+    //Save Gift (Present) Data
+    const presentData = {
+      nama_bank: invitationData.nama_bank,
+      rek: invitationData.no_rekening,
+      pemilik: invitationData.pemilik_rekening,
+    };
+    await service.savePresentData(presentData, invitationData.id);
+
     //Assign invitation id to event data
     const idUndangan = invitationData.id;
     const dataAcaraDariFrontend = invitationData.wedding_events;

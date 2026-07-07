@@ -116,6 +116,52 @@ document.addEventListener('DOMContentLoaded', () => {
   // Add 1 default gallery
   createGalleryItem();
 
+  // --- Bank / E-Wallet Dynamic Label & Placeholder Transitions ---
+  const selectBank = document.getElementById('nama_bank');
+  const labelNoRek = document.getElementById('label_no_rekening');
+  const iconNoRek = document.getElementById('icon_no_rekening');
+  const inputNoRek = document.getElementById('no_rekening');
+
+  if (selectBank) {
+    selectBank.addEventListener('change', () => {
+      const value = selectBank.value;
+      const isEWallet = ['GoPay', 'OVO', 'DANA', 'LinkAja', 'ShopeePay'].includes(value);
+
+      // Animation: Fade out, update, and fade back in
+      const elementsToAnimate = [];
+      if (labelNoRek) elementsToAnimate.push(labelNoRek);
+      if (iconNoRek) elementsToAnimate.push(iconNoRek);
+      if (inputNoRek) elementsToAnimate.push(inputNoRek);
+
+      elementsToAnimate.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(4px)';
+        el.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+      });
+
+      setTimeout(() => {
+        if (isEWallet) {
+          if (labelNoRek) labelNoRek.textContent = 'Nomor Telepon (E-Wallet)';
+          if (inputNoRek) inputNoRek.placeholder = 'contoh: 081234567890';
+          if (iconNoRek) {
+            iconNoRek.className = 'ph ph-phone input-icon';
+          }
+        } else {
+          if (labelNoRek) labelNoRek.textContent = 'Nomor Rekening Bank';
+          if (inputNoRek) inputNoRek.placeholder = 'contoh: 1234567890';
+          if (iconNoRek) {
+            iconNoRek.className = 'ph ph-credit-card input-icon';
+          }
+        }
+
+        elementsToAnimate.forEach(el => {
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+        });
+      }, 200);
+    });
+  }
+
   // --- Custom File Input Change Listener ---
   document.addEventListener('change', (e) => {
     if (e.target.classList.contains('form-file-hidden')) {
@@ -512,6 +558,27 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
       });
+    }
+
+    // 7. Info Hadiah (Present)
+    if (data.present && data.present.length > 0) {
+      const p = data.present[0];
+      const selectBank = document.getElementById('nama_bank');
+      if (selectBank) {
+        selectBank.value = p.nama_bank || '';
+        // Trigger manual change to apply the layout & placeholder changes
+        const event = document.createEvent('HTMLEvents');
+        event.initEvent('change', true, false);
+        selectBank.dispatchEvent(event);
+      }
+      const pemilikInput = document.getElementById('pemilik_rekening');
+      if (pemilikInput) {
+        pemilikInput.value = p.pemilik || '';
+      }
+      const noRekInput = document.getElementById('no_rekening');
+      if (noRekInput) {
+        noRekInput.value = p.rek || '';
+      }
     }
   };
 

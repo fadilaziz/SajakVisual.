@@ -92,6 +92,16 @@ export const renderPublicTemplate = async (req, res) => {
         data.love_story && data.love_story.length > 0
           ? data.love_story.sort((a, b) => String(a.tahun).localeCompare(String(b.tahun)))
           : [],
+
+      // Teruskan data rekening untuk fitur kirim hadiah
+      rekening:
+        data.present && data.present.length > 0
+          ? data.present.map((p) => ({
+              bank: p.nama_bank,
+              nama: p.pemilik,
+              nomor: p.rek,
+            }))
+          : [],
     };
 
     // console.log('formatUntukTemplate', formatUntukTemplate);

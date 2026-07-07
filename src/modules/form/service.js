@@ -42,7 +42,8 @@ const getInformationData = async (invoice) => {
     orders(template_id),
     wedding_events (*),
     wedding_galleries (*),
-    love_story (*)
+    love_story (*),
+    present (*)
   `
       )
       .eq('invoice_order', invoice)
@@ -111,6 +112,38 @@ const saveLoveStoryData = async (data, id) => {
 
   if (errInsert) throw errInsert;
   console.log('data LoveStory berhasil di perbarui');
+
+  return;
+};
+
+//Save Present/Gift data
+const savePresentData = async (data, id) => {
+  // Delete existing present records first
+  const { error: errDelete } = await supabase
+    .from('present')
+    .delete()
+    .eq('invitation_id', id);
+  if (errDelete) throw errDelete;
+
+  // If the fields are empty, we don't insert a new one
+  if (!data || !data.nama_bank || !data.rek) {
+    console.log('Tidak ada data bank/rekening yang diisi. Melewati insert...');
+    return;
+  }
+
+  const finalPresent = {
+    invitation_id: id,
+    nama_bank: data.nama_bank,
+    pemilik: data.pemilik || '-',
+    rek: data.rek
+  };
+
+  const { error: errInsert } = await supabase
+    .from('present')
+    .insert(finalPresent);
+
+  if (errInsert) throw errInsert;
+  console.log('data Present berhasil diperbarui');
 
   return;
 };
@@ -249,6 +282,7 @@ export default {
   getInformationData,
   updateInvitationData,
   saveLoveStoryData,
+  savePresentData,
   updateEventData,
   savePhotoData,
   saveUrlPhoto,

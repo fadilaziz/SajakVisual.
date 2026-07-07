@@ -53,8 +53,8 @@ body {
 }
 
 .section-title {
-  font-family: var(--font-body);
-  font-size: 0.9rem;
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
   letter-spacing: 2px;
   color: var(--primary-blue);
   text-align: center;
@@ -159,7 +159,7 @@ body {
 }
 
 section {
-  padding: 80px 20px;
+  padding: 60px 24px;
   position: relative;
 }
 
@@ -225,7 +225,7 @@ section {
 /* Greeting Section */
 .greeting-section {
   text-align: center;
-  padding: 40px 20px;
+  padding: 60px 24px;
 }
 
 .bismillah-text {
@@ -442,8 +442,8 @@ section {
 }
 
 .timeline .event h3 {
-  font-family: var(--font-body);
-  font-size: 1.1rem;
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
   font-weight: 600;
   margin-bottom: 5px;
   color: var(--primary-blue);
@@ -543,7 +543,7 @@ section {
 /* RSVP */
 .rsvp-section {
   text-align: center;
-  padding-bottom: 80px;
+  padding: 60px 24px;
 }
 
 .tree-sketch {
@@ -736,7 +736,7 @@ section {
    LOVE STORY
 ═══════════════════════════════════ */
 .love-story-section {
-  padding: 70px 24px;
+  padding: 60px 24px;
   background: var(--bg-cream);
   text-align: center;
   position: relative;
@@ -773,7 +773,7 @@ section {
   padding: 24px 28px;
   position: relative;
   text-align: center;
-  box-shadow: 0 2px 12px rgba(43,65,98,0.06);
+  box-shadow: 0 2px 12px rgba(43, 65, 98, 0.06);
 }
 
 .ls-item::before {
@@ -884,49 +884,50 @@ section {
 .gift-card {
   background: #fff;
   border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 20px 24px;
-  min-width: 220px;
-  max-width: 280px;
+  border-radius: 14px;
+  padding: 28px 36px;
+  min-width: 290px;
+  max-width: 380px;
   text-align: center;
+  box-shadow: 0 4px 12px rgba(43, 65, 98, 0.05);
 }
 .gift-bank {
   font-family: var(--font-heading);
-  font-size: 0.9rem;
+  font-size: 1.15rem;
   letter-spacing: 1px;
   color: var(--primary-blue);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 .gift-name {
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   color: var(--text-dark);
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 .gift-norek-wrap {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 12px;
 }
 .gift-norek {
   font-family: var(--font-heading);
-  font-size: 1rem;
+  font-size: 1.2rem;
   letter-spacing: 2px;
   color: var(--text-dark);
 }
 .btn-copy-rek {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 6px 12px;
+  gap: 6px;
+  padding: 8px 16px;
   background: var(--primary-blue);
   color: #fff;
   border: none;
   border-radius: 20px;
   font-family: var(--font-body);
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
 }
 .btn-copy-rek:hover {
   background: var(--light-blue);
