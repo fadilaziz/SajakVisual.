@@ -987,12 +987,23 @@ section {
     transform: translateY(0);
   }
 }
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
 .comment-author {
   font-family: var(--font-heading);
   font-size: 0.8rem;
   color: var(--primary-blue);
   letter-spacing: 0.5px;
-  margin-bottom: 6px;
+  margin-bottom: 0;
+}
+.comment-time {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  opacity: 0.7;
 }
 .comment-text {
   font-size: 0.85rem;

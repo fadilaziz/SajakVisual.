@@ -281,6 +281,7 @@
         <p data-aos="fade-up" data-aos-delay="150">Sampaikan doa dan ucapan terbaik Anda untuk kedua mempelai.</p>
 
         <form class="comment-form" id="comment-form" data-aos="fade-up" data-aos-delay="200">
+          <input type="hidden" name="invitation_id" id="comment-invitation-id" value="<%= data.id %>" />
           <input type="text" id="comment-name" class="rsvp-input" placeholder="Nama Anda" required />
           <textarea id="comment-message" class="comment-textarea" placeholder="Tuliskan doa & ucapan..." rows="3" required></textarea>
           <button type="submit" class="btn-solid">Kirim Ucapan</button>

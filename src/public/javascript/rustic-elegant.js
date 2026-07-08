@@ -50,14 +50,20 @@ function populateData(data) {
   if (heroDate && data.acara?.countdown_target) {
     const d = new Date(data.acara.countdown_target);
     if (!isNaN(d)) {
-      heroDate.textContent = d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+      heroDate.textContent = d.toLocaleDateString('id-ID', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      });
     }
   }
 
   // ── Mempelai ────────────────────────────────────────────────────────────────
   setText('nickname-pria', pria);
   setText('fullname-pria', data.mempelai_pria?.nama_lengkap || '');
-  setText('parents-pria',
+  setText(
+    'parents-pria',
     `Bapak ${data.mempelai_pria?.nama_ayah || '...'} & Ibu ${data.mempelai_pria?.nama_ibu || '...'}`
   );
   const fotoPria = document.getElementById('photo-pria');
@@ -65,7 +71,8 @@ function populateData(data) {
 
   setText('nickname-wanita', wanita);
   setText('fullname-wanita', data.mempelai_wanita?.nama_lengkap || '');
-  setText('parents-wanita',
+  setText(
+    'parents-wanita',
     `Bapak ${data.mempelai_wanita?.nama_ayah || '...'} & Ibu ${data.mempelai_wanita?.nama_ibu || '...'}`
   );
   const fotoWanita = document.getElementById('photo-wanita');
@@ -87,7 +94,10 @@ function populateData(data) {
   if (data.acara?.akad) {
     const locRaw = data.acara.akad.lokasi_nama || '';
     setText('loc-name', locRaw.split('(')[0].trim());
-    setText('loc-address', locRaw + (data.acara.akad.lokasi_alamat ? ', ' + data.acara.akad.lokasi_alamat : ''));
+    setText(
+      'loc-address',
+      locRaw + (data.acara.akad.lokasi_alamat ? ', ' + data.acara.akad.lokasi_alamat : '')
+    );
     const btnMaps = document.getElementById('btn-maps');
     if (btnMaps && data.acara.akad.maps_url) btnMaps.href = data.acara.akad.maps_url;
   }
@@ -103,7 +113,13 @@ function populateData(data) {
     // Kalender dinamis berdasarkan tanggal akad
     const d = new Date(data.acara.countdown_target);
     if (!isNaN(d)) {
-      generateCalendar(d.getFullYear(), d.getMonth(), d.getDate(), data.acara.akad.tanggal, data.acara.akad.waktu?.split('-')[0]?.trim() || '');
+      generateCalendar(
+        d.getFullYear(),
+        d.getMonth(),
+        d.getDate(),
+        data.acara.akad.tanggal,
+        data.acara.akad.waktu?.split('-')[0]?.trim() || ''
+      );
     }
   }
 
@@ -121,6 +137,11 @@ function populateData(data) {
   if (data.rekening && data.rekening.length > 0) {
     generateGiftCards(data.rekening);
   }
+
+  // ── Ucapan / Komentar ───────────────────────────────────────────────────────
+  if (data.comment && data.comment.length > 0) {
+    generateComments(data.comment);
+  }
 }
 
 // ── Helper setText ────────────────────────────────────────────────────────────
@@ -136,13 +157,33 @@ function startCountdown(targetDateString) {
     const distance = countDownDate - Date.now();
     if (distance < 0) {
       clearInterval(timerInterval);
-      ['cd-days', 'cd-hours', 'cd-minutes', 'cd-seconds'].forEach(id => setText(id, '00'));
+      ['cd-days', 'cd-hours', 'cd-minutes', 'cd-seconds'].forEach((id) => setText(id, '00'));
       return;
     }
-    setText('cd-days',    Math.floor(distance / 86400000).toString().padStart(2, '0'));
-    setText('cd-hours',   Math.floor((distance % 86400000) / 3600000).toString().padStart(2, '0'));
-    setText('cd-minutes', Math.floor((distance % 3600000) / 60000).toString().padStart(2, '0'));
-    setText('cd-seconds', Math.floor((distance % 60000) / 1000).toString().padStart(2, '0'));
+    setText(
+      'cd-days',
+      Math.floor(distance / 86400000)
+        .toString()
+        .padStart(2, '0')
+    );
+    setText(
+      'cd-hours',
+      Math.floor((distance % 86400000) / 3600000)
+        .toString()
+        .padStart(2, '0')
+    );
+    setText(
+      'cd-minutes',
+      Math.floor((distance % 3600000) / 60000)
+        .toString()
+        .padStart(2, '0')
+    );
+    setText(
+      'cd-seconds',
+      Math.floor((distance % 60000) / 1000)
+        .toString()
+        .padStart(2, '0')
+    );
   }, 1000);
 }
 
@@ -151,21 +192,38 @@ function generateCalendar(year, monthIndex, highlightDay, dateStr, timeStr) {
   const calGrid = document.querySelector('.cal-grid');
   if (!calGrid) return;
 
-  const monthNames = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const monthNames = [
+    'Januari',
+    'Februari',
+    'Maret',
+    'April',
+    'Mei',
+    'Juni',
+    'Juli',
+    'Agustus',
+    'September',
+    'Oktober',
+    'November',
+    'Desember',
+  ];
   setText('cal-month-year', `${monthNames[monthIndex]}, ${year}`);
 
-  const firstDay  = new Date(year, monthIndex, 1).getDay(); // 0=Sun
+  const firstDay = new Date(year, monthIndex, 1).getDay(); // 0=Sun
   const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
   // Adjust to Mon-start: Sun(0) → index 6
-  const offset = (firstDay === 0) ? 6 : firstDay - 1;
+  const offset = firstDay === 0 ? 6 : firstDay - 1;
 
-  let html = '<div class="cal-head">M</div><div class="cal-head">S</div><div class="cal-head">S</div><div class="cal-head">R</div><div class="cal-head">K</div><div class="cal-head">J</div><div class="cal-head">S</div>';
+  let html =
+    '<div class="cal-head">M</div><div class="cal-head">S</div><div class="cal-head">S</div><div class="cal-head">R</div><div class="cal-head">K</div><div class="cal-head">J</div><div class="cal-head">S</div>';
   for (let i = 0; i < offset; i++) html += `<div class="cal-day empty"></div>`;
   for (let i = 1; i <= daysInMonth; i++) {
     html += `<div class="cal-day ${i === highlightDay ? 'highlight' : ''}">${i}</div>`;
   }
   calGrid.innerHTML = html;
-  setText('cal-footer-text', `${highlightDay} ${monthNames[monthIndex]} ${year} • Hari Pernikahan Kami • ${timeStr}`);
+  setText(
+    'cal-footer-text',
+    `${highlightDay} ${monthNames[monthIndex]} ${year} • Hari Pernikahan Kami • ${timeStr}`
+  );
 }
 
 // ── Galeri ───────────────────────────────────────────────────────────────────
@@ -233,7 +291,7 @@ function generateGiftCards(rekenings) {
   });
 }
 
-window.copyRek = function(id) {
+window.copyRek = function (id) {
   const el = document.getElementById(id);
   if (!el) return;
   navigator.clipboard.writeText(el.textContent).then(() => {
@@ -244,12 +302,12 @@ window.copyRek = function(id) {
 // ── RSVP & Komentar ──────────────────────────────────────────────────────────
 function setupInteractions() {
   // Buka undangan
-  const btnOpen    = document.getElementById('btn-open-invitation');
-  const overlay    = document.getElementById('cover-overlay');
+  const btnOpen = document.getElementById('btn-open-invitation');
+  const overlay = document.getElementById('cover-overlay');
   const mainContent = document.getElementById('main-content');
-  const audio      = document.getElementById('bg-audio');
+  const audio = document.getElementById('bg-audio');
   const musicControl = document.getElementById('music-control');
-  const musicIcon  = musicControl?.querySelector('i');
+  const musicIcon = musicControl?.querySelector('i');
   let isPlaying = false;
 
   if (btnOpen) {
@@ -266,17 +324,25 @@ function setupInteractions() {
         }
       }, 1000);
 
-      audio?.play().then(() => {
-        isPlaying = true;
-        if (musicControl) musicControl.style.display = 'flex';
-        musicIcon?.classList.replace('ph-play', 'ph-pause');
-      }).catch(() => {});
+      audio
+        ?.play()
+        .then(() => {
+          isPlaying = true;
+          if (musicControl) musicControl.style.display = 'flex';
+          musicIcon?.classList.replace('ph-play', 'ph-pause');
+        })
+        .catch(() => {});
     });
   }
 
   musicControl?.addEventListener('click', () => {
-    if (isPlaying) { audio.pause(); musicIcon?.classList.replace('ph-pause', 'ph-play'); }
-    else           { audio.play();  musicIcon?.classList.replace('ph-play', 'ph-pause'); }
+    if (isPlaying) {
+      audio.pause();
+      musicIcon?.classList.replace('ph-pause', 'ph-play');
+    } else {
+      audio.play();
+      musicIcon?.classList.replace('ph-play', 'ph-pause');
+    }
     isPlaying = !isPlaying;
   });
 
@@ -285,7 +351,7 @@ function setupInteractions() {
   if (rsvpForm) {
     rsvpForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const nama  = document.getElementById('rsvp-name').value.trim();
+      const nama = document.getElementById('rsvp-name').value.trim();
       const hadir = document.querySelector('input[name="rsvp-hadir"]:checked')?.value;
       if (!nama) return;
       showToast(`Terima kasih, ${nama}! Konfirmasi Anda telah kami terima.`);
@@ -298,28 +364,85 @@ function setupInteractions() {
   if (commentForm) {
     commentForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const nama   = document.getElementById('comment-name').value.trim();
-      const pesan  = document.getElementById('comment-message').value.trim();
+      const nama = document.getElementById('comment-name').value.trim();
+      const pesan = document.getElementById('comment-message').value.trim();
+      const invitation_id = document.getElementById('comment-invitation-id')?.value;
       if (!nama || !pesan) return;
-      addComment(nama, pesan);
-      commentForm.reset();
+      fetch(`/invitation/comment`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: nama,
+          message: pesan,
+          invitation_id,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.status === 'success' || data.success) {
+            generateComments(data.data);
+            commentForm.reset();
+          } else {
+            showToast(data.message);
+          }
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+          showToast('Terjadi kesalahan saat mengirim komentar.');
+        });
     });
   }
 }
 
-function addComment(nama, pesan) {
+function generateComments(comments) {
   const list = document.getElementById('comment-list');
   if (!list) return;
-  const item = document.createElement('div');
-  item.className = 'comment-item';
-  item.innerHTML = `
-    <p class="comment-author">${escHtml(nama)}</p>
-    <p class="comment-text">${escHtml(pesan)}</p>`;
-  list.prepend(item);
+  list.innerHTML = '';
+  comments.forEach((c) => {
+    const item = document.createElement('div');
+    item.className = 'comment-item';
+    item.innerHTML = `
+      <div class="comment-header">
+        <span class="comment-author">${escHtml(c.nama)}</span>
+        <span class="comment-time">${formatTime(c.created_at)}</span>
+      </div>
+      <p class="comment-text">${escHtml(c.ucapan || '')}</p>`;
+    list.prepend(item);
+  });
+}
+
+function formatTime(dateString) {
+  if (!dateString) return '';
+  const d = new Date(dateString);
+  if (isNaN(d.getTime())) return '';
+
+  const now = new Date();
+  const diffMs = now - d;
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
+
+  if (diffMs < 60000) {
+    return 'baru saja';
+  } else if (diffMins < 60) {
+    return `${diffMins} menit yang lalu`;
+  } else if (diffHours < 24) {
+    return `${diffHours} jam yang lalu`;
+  } else if (diffDays < 7) {
+    return `${diffDays} hari yang lalu`;
+  } else {
+    const months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
+      'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'
+    ];
+    return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+  }
 }
 
 function escHtml(str) {
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
 function showToast(msg) {
@@ -327,10 +450,13 @@ function showToast(msg) {
   if (!toast) {
     toast = document.createElement('div');
     toast.id = 'inv-toast';
-    toast.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--primary-blue);color:#fff;padding:12px 24px;border-radius:30px;font-family:var(--font-body);font-size:0.85rem;z-index:9999;opacity:0;transition:opacity 0.3s ease;pointer-events:none;';
+    toast.style.cssText =
+      'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--primary-blue);color:#fff;padding:12px 24px;border-radius:30px;font-family:var(--font-body);font-size:0.85rem;z-index:9999;opacity:0;transition:opacity 0.3s ease;pointer-events:none;';
     document.body.appendChild(toast);
   }
   toast.textContent = msg;
   toast.style.opacity = '1';
-  setTimeout(() => { toast.style.opacity = '0'; }, 3000);
+  setTimeout(() => {
+    toast.style.opacity = '0';
+  }, 3000);
 }

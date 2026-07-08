@@ -9,7 +9,8 @@ const getAllDataInvitation = async (slug) => {
     wedding_events (*),
     wedding_galleries (*),
     love_story (*),
-    present (*)
+    present (*),
+    comment (*)
   `
     )
     .eq('slug', slug)
@@ -18,4 +19,22 @@ const getAllDataInvitation = async (slug) => {
   return data;
 };
 
-export default { getAllDataInvitation };
+const saveCommentData = async (nama, ucapan, invitation_id) => {
+  const { error: insertError } = await supabase.from('comment').insert({
+    invitation_id,
+    nama,
+    ucapan,
+  });
+  if (insertError) throw insertError;
+
+  // Get All Comment Data Based on id_invitation
+  const { data: getData, error: selectError } = await supabase
+    .from('comment')
+    .select('*')
+    .eq('invitation_id', invitation_id);
+  if (selectError) throw selectError;
+
+  return getData;
+};
+
+export default { getAllDataInvitation, saveCommentData };

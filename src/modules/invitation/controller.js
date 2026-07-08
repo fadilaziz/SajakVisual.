@@ -35,8 +35,9 @@ export const renderPublicTemplate = async (req, res) => {
 
     const SUPABASE_BUCKET_URL = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/SajakVisual_bucket/`;
 
-    // Rakit datanya
+    // Format Data
     const formatUntukTemplate = {
+      id: data.id,
       slug: data.slug || '',
       bg_music: data.bg_music || '',
       foto_cover: data.foto_cover ? SUPABASE_BUCKET_URL + data.foto_cover : '',
@@ -46,7 +47,10 @@ export const renderPublicTemplate = async (req, res) => {
         nama_panggilan: data.pria_nama_panggilan,
         ayah: data.pria_ayah,
         ibu: data.pria_ibu,
-        foto: (data.foto_pria || data.pria_foto) ? SUPABASE_BUCKET_URL + (data.foto_pria || data.pria_foto) : '',
+        foto:
+          data.foto_pria || data.pria_foto
+            ? SUPABASE_BUCKET_URL + (data.foto_pria || data.pria_foto)
+            : '',
       },
 
       mempelai_wanita: {
@@ -54,7 +58,10 @@ export const renderPublicTemplate = async (req, res) => {
         nama_panggilan: data.wanita_nama_panggilan,
         ayah: data.wanita_ayah,
         ibu: data.wanita_ibu,
-        foto: (data.foto_wanita || data.wanita_foto) ? SUPABASE_BUCKET_URL + (data.foto_wanita || data.wanita_foto) : '',
+        foto:
+          data.foto_wanita || data.wanita_foto
+            ? SUPABASE_BUCKET_URL + (data.foto_wanita || data.wanita_foto)
+            : '',
       },
 
       acara: {
@@ -81,19 +88,16 @@ export const renderPublicTemplate = async (req, res) => {
         countdown_target: data.countdown_target ? data.countdown_target.replace('+00:00', '') : '',
       },
 
-      // Sulap Array of Objects jadi Array of Strings
       galeri_foto:
         data.wedding_galleries && data.wedding_galleries.length > 0
           ? data.wedding_galleries.map((g) => SUPABASE_BUCKET_URL + g.foto_url)
           : [],
 
-      // Teruskan data kisah cinta (urutkan tahun jika ada)
       love_story:
         data.love_story && data.love_story.length > 0
           ? data.love_story.sort((a, b) => String(a.tahun).localeCompare(String(b.tahun)))
           : [],
 
-      // Teruskan data rekening untuk fitur kirim hadiah
       rekening:
         data.present && data.present.length > 0
           ? data.present.map((p) => ({
@@ -102,17 +106,43 @@ export const renderPublicTemplate = async (req, res) => {
               nomor: p.rek,
             }))
           : [],
+
+      comment:
+        data.comment && data.comment.length > 0
+          ? data.comment.map((c) => ({
+              nama: c.nama,
+              ucapan: c.ucapan,
+              created_at: c.created_at,
+            }))
+          : [],
     };
 
-    // console.log('formatUntukTemplate', formatUntukTemplate);
-
     // 3. RENDER KE TEMPLATE EJS
-    // Pastikan path EJS-mu sudah sesuai dengan letak foldernya
     res.render('invitation/views/rustic-elegant.ejs', { data: formatUntukTemplate });
   } catch (error) {
     console.error('Gagal merender undangan:', error);
-    // Tampilkan pesan error sederhana di layar pengunjung jika server bermasalah
     return res.status(500).send('Terjadi kesalahan pada server saat memuat undangan.');
+  }
+};
+
+//Save Comment Data
+export const saveCommentData = async (req, res) => {
+  try {
+    const { name, message, invitation_id } = req.body;
+    const comment = await service.saveCommentData(name, message, invitation_id);
+    console.log('comment', comment);
+    return res.status(200).json({
+      success: true,
+      status: 'success',
+      data: comment,
+      message: 'Komentar berhasil dikirim!',
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: error.message || 'Internal server error',
+    });
   }
 };
 
