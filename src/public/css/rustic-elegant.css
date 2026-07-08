@@ -1,10 +1,10 @@
 :root {
-  --primary-blue: #2b4162;
-  --light-blue: #3e5c76;
+  --primary-blue: #2c2c2c;
+  --light-blue: #4a4a4a;
   --bg-cream: #fdfbf7;
-  --text-dark: #1a2a40;
-  --text-muted: #4a5d73;
-  --border-color: #8da4b8;
+  --text-dark: #1f1f1f;
+  --text-muted: #666666;
+  --border-color: #d1c7bd;
 
   --font-cursive: 'Alex Brush', cursive;
   --font-heading: 'Cinzel', serif;
@@ -147,7 +147,7 @@ body {
   background: transparent;
   position: relative;
   min-height: 100vh;
-  box-shadow: 0 0 20px rgba(43, 65, 98, 0.1);
+  box-shadow: 0 0 20px rgba(34, 34, 34, 0.08);
   transition:
     opacity 1.2s ease,
     transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -305,6 +305,7 @@ section {
 }
 
 .calendar-box h3 {
+  font-family: var(--font-heading);
   text-align: center;
   font-size: 1rem;
   color: var(--primary-blue);
@@ -367,6 +368,7 @@ section {
 }
 
 .location-name {
+  font-family: var(--font-heading);
   font-size: 1.1rem;
   color: var(--primary-blue);
   font-weight: 500;
@@ -518,26 +520,58 @@ section {
 
 /* Gallery Grid */
 .gallery-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
+  column-count: 2;
+  column-gap: 12px;
   padding: 20px 0;
 }
 
 .gallery-photo {
+  display: block;
   width: 100%;
+  break-inside: avoid;
+  margin-bottom: 12px;
   border: none;
   padding: 0;
   background: transparent;
+  overflow: hidden;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(34, 34, 34, 0.05);
 }
 
 .gallery-photo img {
   width: 100%;
-  aspect-ratio: 1;
+  height: 100%;
   object-fit: cover;
   display: block;
   filter: sepia(0.2) contrast(1.1);
-  border-radius: 16px;
+  transition: transform 0.5s ease;
+}
+
+.gallery-photo:hover img {
+  transform: scale(1.05);
+}
+
+/* Aspect ratios for masonry staggered grid */
+.gallery-photo:nth-child(4n + 1) {
+  aspect-ratio: 3/4;
+}
+
+.gallery-photo:nth-child(4n + 2) {
+  aspect-ratio: 1/1;
+}
+
+.gallery-photo:nth-child(4n + 3) {
+  aspect-ratio: 4/3;
+}
+
+.gallery-photo:nth-child(4n + 4) {
+  aspect-ratio: 1/1;
+}
+
+/* Dynamic full width if there is only 1 image in the gallery */
+.gallery-photo:only-child {
+  column-span: all;
+  aspect-ratio: 16/9;
 }
 
 /* RSVP */
@@ -609,6 +643,17 @@ section {
   }
 }
 
+@media (max-width: 600px) {
+  .couple-wrapper {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  .couple-divider {
+    padding: 20px 0;
+  }
+}
+
 /* Cover Animations */
 .animate-cover {
   opacity: 0;
@@ -667,6 +712,7 @@ section {
   gap: 24px;
   flex-wrap: wrap;
   margin-top: 32px;
+  align-items: center;
 }
 .couple-card {
   flex: 1;
@@ -758,22 +804,43 @@ section {
 
 .ls-connector {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
+  position: relative;
+  margin: 15px 0;
+}
+
+.ls-connector::before {
+  content: '';
+  width: 1px;
+  height: 20px;
+  background: var(--border-color);
+  margin-bottom: 8px;
+  opacity: 0.6;
+}
+
+.ls-connector::after {
+  content: '';
+  width: 1px;
+  height: 20px;
+  background: var(--border-color);
+  margin-top: 8px;
+  opacity: 0.6;
+}
+
+.ls-connector i {
   color: var(--border-color);
-  font-size: 1rem;
-  margin: 4px 0;
-  opacity: 0.7;
+  font-size: 1.1rem;
 }
 
 .ls-item {
   background: #fff;
-  border: 1px solid #d4c9b8;
-  border-radius: 4px;
-  padding: 24px 28px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 28px;
   position: relative;
   text-align: center;
-  box-shadow: 0 2px 12px rgba(43, 65, 98, 0.06);
+  box-shadow: 0 2px 12px rgba(34, 34, 34, 0.06);
 }
 
 .ls-item::before {
@@ -781,12 +848,14 @@ section {
 }
 
 .ls-year {
-  font-family: var(--font-cursive);
-  font-size: 2.4rem;
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 600;
   color: var(--primary-blue);
   display: block;
   margin-bottom: 8px;
   line-height: 1;
+  letter-spacing: 1px;
 }
 
 .ls-content {
@@ -938,7 +1007,7 @@ section {
 ═══════════════════════════════════ */
 .comment-section {
   padding: 60px 24px;
-  background: #f4f0e8;
+  background: white;
   text-align: center;
 }
 .comment-form {

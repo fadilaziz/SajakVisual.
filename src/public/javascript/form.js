@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnAddGallery = document.getElementById('btn-add-gallery');
   let galleryIndex = 0;
   let galleryCount = 0;
-  const MAX_GALLERY = 4;
+  const MAX_GALLERY = 8;
 
   const createGalleryItem = () => {
     if (galleryCount >= MAX_GALLERY) {

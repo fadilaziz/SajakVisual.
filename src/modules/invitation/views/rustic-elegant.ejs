@@ -2,13 +2,19 @@
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Undangan Pernikahan - Rustic Elegant</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@400;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@400;600&family=Montserrat:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -33,43 +39,91 @@
     <div id="cover-overlay">
       <button class="back-btn"><i class="ph ph-arrow-left"></i></button>
       <div class="cover-content">
-        <p class="pre-title animate-cover" style="margin-bottom: 20px; animation-delay: 0.2s">UNDANGAN PERNIKAHAN</p>
+        <p class="pre-title animate-cover" style="margin-bottom: 20px; animation-delay: 0.2s">
+          UNDANGAN PERNIKAHAN
+        </p>
 
-        <div class="cover-names animate-cover" id="cover-names" style="margin: 20px 0; animation-delay: 0.5s">... & ...</div>
+        <div
+          class="cover-names animate-cover"
+          id="cover-names"
+          style="margin: 20px 0; animation-delay: 0.5s"
+        >
+          ... & ...
+        </div>
 
-        <p class="cover-date animate-cover" id="cover-date" style="margin-bottom: 30px; animation-delay: 0.8s">...</p>
+        <p
+          class="cover-date animate-cover"
+          id="cover-date"
+          style="margin-bottom: 30px; animation-delay: 0.8s"
+        >
+          ...
+        </p>
 
         <!-- Nama Penerima Undangan -->
-        <div class="cover-recipient animate-cover" id="cover-recipient" style="animation-delay: 1.0s; display: none;">
+        <div
+          class="cover-recipient animate-cover"
+          id="cover-recipient"
+          style="animation-delay: 1s; display: none"
+        >
           <span class="recipient-label">Kepada yth bapak/Ibu/Saudara/i ,</span>
           <span class="recipient-name" id="recipient-name"></span>
         </div>
 
-        <button id="btn-open-invitation" class="btn-open animate-cover" style="animation-delay: 1.2s">Buka Undangan</button>
+        <button
+          id="btn-open-invitation"
+          class="btn-open animate-cover"
+          style="animation-delay: 1.2s"
+        >
+          Buka Undangan
+        </button>
       </div>
     </div>
 
     <!-- ═══════════════════════════════════════════ -->
     <!-- MAIN CONTENT -->
     <!-- ═══════════════════════════════════════════ -->
-    <div class="inv-container" id="main-content" style="display: none; opacity: 0;">
-
+    <div class="inv-container" id="main-content" style="display: none; opacity: 0">
       <!-- 2. HERO / FOTO COVER -->
       <section class="hero-section">
         <div class="photo-frame">
           <img id="hero-img" src="" alt="Cover Photo" class="hero-photo" />
           <div class="photo-overlay"></div>
         </div>
-        <div class="hero-text-container" data-aos="fade-up" data-aos-duration="1500" data-aos-delay="300">
-          <p class="pre-title" style="color: #fff; margin-bottom: 5px;">PERNIKAHAN</p>
-          <h1 class="main-heading" id="hero-names" style="color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">... & ...</h1>
-          <p class="hero-date-text" id="hero-date-display" style="color: #fff; font-family: var(--font-heading); font-size: 1.2rem; letter-spacing: 3px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); margin-top: 10px;">...</p>
+        <div
+          class="hero-text-container"
+          data-aos="fade-up"
+          data-aos-duration="1500"
+          data-aos-delay="300"
+        >
+          <p class="pre-title" style="color: #fff; margin-bottom: 5px">PERNIKAHAN</p>
+          <h1
+            class="main-heading"
+            id="hero-names"
+            style="color: #fff; text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5)"
+          >
+            ... & ...
+          </h1>
+          <p
+            class="hero-date-text"
+            id="hero-date-display"
+            style="
+              color: #fff;
+              font-family: var(--font-heading);
+              font-size: 1.2rem;
+              letter-spacing: 3px;
+              text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+              margin-top: 10px;
+            "
+          >
+            ...
+          </p>
         </div>
       </section>
 
       <!-- 3. PROFIL MEMPELAI -->
       <section class="couple-section">
         <h2 class="section-title" data-aos="fade-up" data-aos-delay="100">MEMPELAI</h2>
+        <div class="couple-wrapper">
           <!-- Mempelai Pria -->
           <div class="couple-card" data-aos="fade-right" data-aos-delay="200">
             <div class="couple-photo-wrap">
@@ -98,7 +152,12 @@
 
       <!-- 4. PEMBUKA / GREETING -->
       <section class="greeting-section">
-        <div class="ornament-divider" style="margin-bottom: 25px;" data-aos="fade-up" data-aos-delay="100">
+        <div
+          class="ornament-divider"
+          style="margin-bottom: 25px"
+          data-aos="fade-up"
+          data-aos-delay="100"
+        >
           <span class="line"></span><i class="ph ph-leaf"></i><span class="line"></span>
         </div>
 
@@ -107,16 +166,39 @@
         </p>
         <p class="quran-source" data-aos="fade-up" data-aos-delay="180">(QS. Ar-Rum: 21)</p>
 
-        <h2 class="bismillah-text" data-aos="fade-up" data-aos-delay="200">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم</h2>
+        <h2 class="bismillah-text" data-aos="fade-up" data-aos-delay="200">
+          بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم
+        </h2>
 
         <p class="greeting-text" data-aos="fade-up" data-aos-delay="300">
-          <span style="font-family: var(--font-body); font-size: 1.1rem; color: var(--primary-blue); font-weight: 600; display: inline-block; margin-bottom: 12px;">Assalamu'alaikum Warahmatullahi Wabarakatuh</span><br />
-          Maha Suci Allah yang telah menciptakan makhluk-Nya berpasang-pasangan. Dengan memohon rahmat dan rida Allah Subhanahu Wa Ta'ala, kami bermaksud menyelenggarakan acara pernikahan putra-putri kami.<br /><br />
-          Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir memberikan doa restu kepada kedua mempelai.<br /><br />
-          <span style="font-style: italic; color: var(--text-muted);">Atas kehadiran serta doa restunya, kami mengucapkan terima kasih yang sebesar-besarnya.</span>
+          <span
+            style="
+              font-family: var(--font-body);
+              font-size: 1.1rem;
+              color: var(--primary-blue);
+              font-weight: 600;
+              display: inline-block;
+              margin-bottom: 12px;
+            "
+            >Assalamu'alaikum Warahmatullahi Wabarakatuh</span
+          ><br />
+          Maha Suci Allah yang telah menciptakan makhluk-Nya berpasang-pasangan. Dengan memohon
+          rahmat dan rida Allah Subhanahu Wa Ta'ala, kami bermaksud menyelenggarakan acara
+          pernikahan putra-putri kami.<br /><br />
+          Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan
+          hadir memberikan doa restu kepada kedua mempelai.<br /><br />
+          <span style="font-style: italic; color: var(--text-muted)"
+            >Atas kehadiran serta doa restunya, kami mengucapkan terima kasih yang
+            sebesar-besarnya.</span
+          >
         </p>
 
-        <div class="ornament-divider" style="margin-top: 35px;" data-aos="fade-up" data-aos-delay="400">
+        <div
+          class="ornament-divider"
+          style="margin-top: 35px"
+          data-aos="fade-up"
+          data-aos-delay="400"
+        >
           <span class="line"></span><i class="ph ph-leaf"></i><span class="line"></span>
         </div>
       </section>
@@ -181,14 +263,19 @@
         </div>
         <h3 class="location-name" id="loc-name" data-aos="fade-up" data-aos-delay="300">...</h3>
         <p class="location-address" id="loc-address" data-aos="fade-up" data-aos-delay="400">...</p>
-        <a href="#" id="btn-maps" target="_blank" class="btn-solid" data-aos="fade-up" data-aos-delay="500">Buka Google Maps</a>
+        <a
+          href="#"
+          id="btn-maps"
+          target="_blank"
+          class="btn-solid"
+          data-aos="fade-up"
+          data-aos-delay="500"
+          >Buka Google Maps</a
+        >
       </section>
 
       <!-- 7. LOVE STORY -->
       <section class="love-story-section">
-        <div class="ornament-divider" data-aos="fade-up" data-aos-delay="100">
-          <span class="line"></span><i class="ph ph-heart"></i><span class="line"></span>
-        </div>
         <h2 class="section-title" data-aos="fade-up" data-aos-delay="150">LOVE STORY</h2>
 
         <div class="love-story-items" id="love-story-container">
@@ -198,7 +285,10 @@
             <div class="ls-content">
               <div class="ls-divider"></div>
               <h4>Pertama Bertemu</h4>
-              <p>Kisah cinta kami dimulai dari pertemuan yang tak terduga, momen yang mengubah segalanya.</p>
+              <p>
+                Kisah cinta kami dimulai dari pertemuan yang tak terduga, momen yang mengubah
+                segalanya.
+              </p>
             </div>
           </div>
 
@@ -210,7 +300,9 @@
             <div class="ls-content">
               <div class="ls-divider"></div>
               <h4>Mulai Bersama</h4>
-              <p>Kami mulai menjalani hari-hari bersama, belajar mengenal satu sama lain lebih dalam.</p>
+              <p>
+                Kami mulai menjalani hari-hari bersama, belajar mengenal satu sama lain lebih dalam.
+              </p>
             </div>
           </div>
 
@@ -222,12 +314,13 @@
             <div class="ls-content">
               <div class="ls-divider"></div>
               <h4>Menuju Pelaminan</h4>
-              <p>Dengan penuh syukur dan cinta, kami melangkah bersama menuju babak baru kehidupan.</p>
+              <p>
+                Dengan penuh syukur dan cinta, kami melangkah bersama menuju babak baru kehidupan.
+              </p>
             </div>
           </div>
         </div>
       </section>
-
 
       <!-- 8. GALERI FOTO -->
       <section class="gallery-section" data-aos="fade-up">
@@ -237,10 +330,23 @@
         </div>
       </section>
 
-      <!-- 9. RSVP -->
+      <!-- 9. HADIAH / REKENING -->
+      <section class="gift-section">
+        <h2 class="section-title" data-aos="fade-up" data-aos-delay="150">KIRIM HADIAH</h2>
+        <p class="gift-desc" data-aos="fade-up" data-aos-delay="200">
+          Bagi yang ingin memberikan hadiah, dapat melalui transfer ke rekening berikut:
+        </p>
+        <div class="gift-cards" id="gift-cards" data-aos="fade-up" data-aos-delay="250">
+          <!-- Diisi oleh JS -->
+        </div>
+      </section>
+
+      <!-- 10. RSVP -->
       <section class="rsvp-section">
         <h2 class="rsvp-heading" data-aos="fade-up" data-aos-delay="200">KONFIRMASI KEHADIRAN</h2>
-        <p data-aos="fade-up" data-aos-delay="300">Mohon konfirmasi kehadiran Anda untuk membantu kami mempersiapkan hari spesial ini.</p>
+        <p data-aos="fade-up" data-aos-delay="300">
+          Mohon konfirmasi kehadiran Anda untuk membantu kami mempersiapkan hari spesial ini.
+        </p>
 
         <form class="rsvp-form" id="rsvp-form" data-aos="fade-up" data-aos-delay="350">
           <input type="text" id="rsvp-name" class="rsvp-input" placeholder="Nama Anda" required />
@@ -256,34 +362,42 @@
         </form>
 
         <p class="thank-you-text" data-aos="fade-up" data-aos-delay="500">
-          Kami sangat bersyukur atas doa dan dukungan dari keluarga serta sahabat. Kehadiran Anda akan membuat hari kami semakin bermakna.
+          Kami sangat bersyukur atas doa dan dukungan dari keluarga serta sahabat. Kehadiran Anda
+          akan membuat hari kami semakin bermakna.
         </p>
-        <h1 class="footer-names" id="footer-names" data-aos="fade-up" data-aos-delay="600">... & ...</h1>
-      </section>
-
-      <!-- 10. HADIAH / REKENING -->
-      <section class="gift-section">
-        <div class="ornament-divider" data-aos="fade-up" data-aos-delay="100">
-          <span class="line"></span><i class="ph ph-gift"></i><span class="line"></span>
-        </div>
-        <h2 class="section-title" data-aos="fade-up" data-aos-delay="150">KIRIM HADIAH</h2>
-        <p class="gift-desc" data-aos="fade-up" data-aos-delay="200">
-          Bagi yang ingin memberikan hadiah, dapat melalui transfer ke rekening berikut:
-        </p>
-        <div class="gift-cards" id="gift-cards" data-aos="fade-up" data-aos-delay="250">
-          <!-- Diisi oleh JS -->
-        </div>
+        <h1 class="footer-names" id="footer-names" data-aos="fade-up" data-aos-delay="600">
+          ... & ...
+        </h1>
       </section>
 
       <!-- 11. KOMENTAR -->
       <section class="comment-section">
         <h2 class="section-title" data-aos="fade-up" data-aos-delay="100">UCAPAN & DOA</h2>
-        <p data-aos="fade-up" data-aos-delay="150">Sampaikan doa dan ucapan terbaik Anda untuk kedua mempelai.</p>
+        <p data-aos="fade-up" data-aos-delay="150">
+          Sampaikan doa dan ucapan terbaik Anda untuk kedua mempelai.
+        </p>
 
         <form class="comment-form" id="comment-form" data-aos="fade-up" data-aos-delay="200">
-          <input type="hidden" name="invitation_id" id="comment-invitation-id" value="<%= data.id %>" />
-          <input type="text" id="comment-name" class="rsvp-input" placeholder="Nama Anda" required />
-          <textarea id="comment-message" class="comment-textarea" placeholder="Tuliskan doa & ucapan..." rows="3" required></textarea>
+          <input
+            type="hidden"
+            name="invitation_id"
+            id="comment-invitation-id"
+            value="<%= data.id %>"
+          />
+          <input
+            type="text"
+            id="comment-name"
+            class="rsvp-input"
+            placeholder="Nama Anda"
+            required
+          />
+          <textarea
+            id="comment-message"
+            class="comment-textarea"
+            placeholder="Tuliskan doa & ucapan..."
+            rows="3"
+            required
+          ></textarea>
           <button type="submit" class="btn-solid">Kirim Ucapan</button>
         </form>
 
@@ -294,16 +408,18 @@
 
       <!-- 12. FOOTER -->
       <footer class="inv-footer">
-        <div class="ornament-divider" style="margin-bottom: 20px;">
+        <div class="ornament-divider" style="margin-bottom: 20px">
           <span class="line"></span><i class="ph ph-sparkle"></i><span class="line"></span>
         </div>
         <p class="footer-brand">Undangan By <strong>SajakVisual</strong></p>
       </footer>
-
-    </div><!-- end main-content -->
+    </div>
+    <!-- end main-content -->
 
     <!-- JS -->
-    <div id="__backend_data__" style="display:none"
+    <div
+      id="__backend_data__"
+      style="display: none"
       data-payload="<%= typeof data !== 'undefined' && data ? encodeURIComponent(JSON.stringify(data)) : 'null' %>"
     ></div>
     <script>

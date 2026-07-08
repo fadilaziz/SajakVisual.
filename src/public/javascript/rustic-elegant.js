@@ -64,7 +64,7 @@ function populateData(data) {
   setText('fullname-pria', data.mempelai_pria?.nama_lengkap || '');
   setText(
     'parents-pria',
-    `Bapak ${data.mempelai_pria?.nama_ayah || '...'} & Ibu ${data.mempelai_pria?.nama_ibu || '...'}`
+    `Bapak ${data.mempelai_pria?.ayah || '...'} & Ibu ${data.mempelai_pria?.ibu || '...'}`
   );
   const fotoPria = document.getElementById('photo-pria');
   if (fotoPria && data.mempelai_pria?.foto) fotoPria.src = data.mempelai_pria.foto;
@@ -73,7 +73,7 @@ function populateData(data) {
   setText('fullname-wanita', data.mempelai_wanita?.nama_lengkap || '');
   setText(
     'parents-wanita',
-    `Bapak ${data.mempelai_wanita?.nama_ayah || '...'} & Ibu ${data.mempelai_wanita?.nama_ibu || '...'}`
+    `Bapak ${data.mempelai_wanita?.ayah || '...'} & Ibu ${data.mempelai_wanita?.ibu || '...'}`
   );
   const fotoWanita = document.getElementById('photo-wanita');
   if (fotoWanita && data.mempelai_wanita?.foto) fotoWanita.src = data.mempelai_wanita.foto;
@@ -346,7 +346,7 @@ function setupInteractions() {
     isPlaying = !isPlaying;
   });
 
-  // RSVP form
+  // RSVP Form
   const rsvpForm = document.getElementById('rsvp-form');
   if (rsvpForm) {
     rsvpForm.addEventListener('submit', (e) => {
@@ -359,7 +359,7 @@ function setupInteractions() {
     });
   }
 
-  // Komentar form
+  // Comment form
   const commentForm = document.getElementById('comment-form');
   if (commentForm) {
     commentForm.addEventListener('submit', (e) => {
@@ -434,8 +434,18 @@ function formatTime(dateString) {
     return `${diffDays} hari yang lalu`;
   } else {
     const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
-      'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'Mei',
+      'Jun',
+      'Jul',
+      'Agt',
+      'Sep',
+      'Okt',
+      'Nov',
+      'Des',
     ];
     return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
   }

@@ -2,7 +2,7 @@ import service from './service.js';
 import path from 'path';
 import fs from 'fs';
 
-//render invitation
+//Render Invitation
 export const renderTemplate = async (req, res) => {
   try {
     const slug = req.params.slug;
@@ -17,7 +17,7 @@ export const renderTemplate = async (req, res) => {
   }
 };
 
-//Render publix version
+//Render Public Version
 export const renderPublicTemplate = async (req, res) => {
   try {
     const slug = req.params.slug;
@@ -117,7 +117,7 @@ export const renderPublicTemplate = async (req, res) => {
           : [],
     };
 
-    // 3. RENDER KE TEMPLATE EJS
+    // 3. Render Data To Template
     res.render('invitation/views/rustic-elegant.ejs', { data: formatUntukTemplate });
   } catch (error) {
     console.error('Gagal merender undangan:', error);
@@ -146,12 +146,12 @@ export const saveCommentData = async (req, res) => {
   }
 };
 
-//get data invitation
+//Get Data Invitation
 export const getDataInvitation = async (req, res) => {
   try {
     const slug = req.query.slug;
 
-    //Read data invitation from JSON file
+    //Read Data Invitation JSON
     let dummyData = path.resolve('src/public/data.json');
     const data = JSON.parse(fs.readFileSync(dummyData, 'utf-8'));
 
