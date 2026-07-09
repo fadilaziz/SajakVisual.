@@ -6,6 +6,7 @@ const getAllDataInvitation = async (slug) => {
     .select(
       `
     *,
+    templates(*),
     wedding_events (*),
     wedding_galleries (*),
     love_story (*),

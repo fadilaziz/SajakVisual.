@@ -15,6 +15,15 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a,
+input,
+textarea,
+select {
+  outline: none;
 }
 
 html {
@@ -617,19 +626,39 @@ section {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  width: 45px;
-  height: 45px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
-  background: var(--primary-blue);
-  color: #fff;
-  border: none;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(4px);
+  color: var(--primary-blue);
+  border: 1px solid var(--border-color);
   display: none;
   justify-content: center;
   align-items: center;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   cursor: pointer;
-  z-index: 100;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+#music-control:hover {
+  background: #fff;
+  transform: scale(1.05);
+}
+
+#music-control i.spinning {
+  animation: spin-music 3s linear infinite;
+}
+
+@keyframes spin-music {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 480px) {

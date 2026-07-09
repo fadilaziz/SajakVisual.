@@ -104,7 +104,13 @@ function populateData(data) {
 
   // ── Audio ───────────────────────────────────────────────────────────────────
   if (data.bg_music) {
-    document.getElementById('bg-audio').src = data.bg_music;
+    let fileName = data.bg_music.trim();
+    if (!fileName.toLowerCase().endsWith('.mp3')) {
+      fileName += '.mp3';
+    }
+    const audioSrc = `/music/${fileName}`;
+    console.log('Audio Source:', audioSrc);
+    document.getElementById('bg-audio').src = audioSrc;
   }
 
   // ── Countdown ───────────────────────────────────────────────────────────────
@@ -310,6 +316,47 @@ function setupInteractions() {
   const musicIcon = musicControl?.querySelector('i');
   let isPlaying = false;
 
+  // Fungsi helper untuk memulai pemutaran audio
+  const playAudio = () => {
+    if (audio && audio.src && !isPlaying) {
+      audio
+        .play()
+        .then(() => {
+          isPlaying = true;
+          if (musicControl) musicControl.style.display = 'flex';
+          musicIcon?.classList.replace('ph-play', 'ph-pause');
+          musicIcon?.classList.add('spinning');
+        })
+        .catch((err) => {
+          // Silent catch: autoplay block is handled by interaction events
+        });
+    }
+  };
+
+  // Fungsi helper untuk menjeda audio
+  const pauseAudio = () => {
+    if (audio && isPlaying) {
+      audio.pause();
+      isPlaying = false;
+      musicIcon?.classList.replace('ph-pause', 'ph-play');
+      musicIcon?.classList.remove('spinning');
+    }
+  };
+
+  // 1. Coba Autoplay secara langsung saat halaman siap
+  if (audio && audio.src) {
+    playAudio();
+  }
+
+  // 2. Fallback Autoplay: Mulai putar saat pengguna pertama kali berinteraksi dengan layar
+  const startAutoplayOnInteraction = () => {
+    playAudio();
+    document.removeEventListener('click', startAutoplayOnInteraction);
+    document.removeEventListener('touchstart', startAutoplayOnInteraction);
+  };
+  document.addEventListener('click', startAutoplayOnInteraction);
+  document.addEventListener('touchstart', startAutoplayOnInteraction);
+
   if (btnOpen) {
     btnOpen.addEventListener('click', () => {
       overlay.style.opacity = '0';
@@ -320,30 +367,22 @@ function setupInteractions() {
         void mainContent.offsetWidth;
         mainContent.style.opacity = '1';
         if (typeof AOS !== 'undefined') {
-          AOS.init({ once: true, offset: 50, duration: 1200, easing: 'ease-out-cubic' });
+          AOS.init({ once: true, offset: 50, duration: 2000, easing: 'ease-out-cubic' });
         }
       }, 1000);
 
-      audio
-        ?.play()
-        .then(() => {
-          isPlaying = true;
-          if (musicControl) musicControl.style.display = 'flex';
-          musicIcon?.classList.replace('ph-play', 'ph-pause');
-        })
-        .catch(() => {});
+      // Pastikan audio berputar saat tombol "Buka Undangan" diklik (gesture user)
+      playAudio();
     });
   }
 
-  musicControl?.addEventListener('click', () => {
+  musicControl?.addEventListener('click', (e) => {
+    e.stopPropagation(); // Mencegah terpicunya kembali autoplay dari document listener
     if (isPlaying) {
-      audio.pause();
-      musicIcon?.classList.replace('ph-pause', 'ph-play');
+      pauseAudio();
     } else {
-      audio.play();
-      musicIcon?.classList.replace('ph-play', 'ph-pause');
+      playAudio();
     }
-    isPlaying = !isPlaying;
   });
 
   // RSVP Form
@@ -368,6 +407,14 @@ function setupInteractions() {
       const pesan = document.getElementById('comment-message').value.trim();
       const invitation_id = document.getElementById('comment-invitation-id')?.value;
       if (!nama || !pesan) return;
+
+      // Mode Demo: tambahkan komentar lokal ke UI jika invitation_id kosong
+      if (!invitation_id || invitation_id.trim() === '') {
+        addLocalComment(nama, pesan);
+        commentForm.reset();
+        return;
+      }
+
       fetch(`/invitation/comment`, {
         method: 'POST',
         headers: {
@@ -411,6 +458,20 @@ function generateComments(comments) {
       <p class="comment-text">${escHtml(c.ucapan || '')}</p>`;
     list.prepend(item);
   });
+}
+
+function addLocalComment(nama, pesan) {
+  const list = document.getElementById('comment-list');
+  if (!list) return;
+  const item = document.createElement('div');
+  item.className = 'comment-item';
+  item.innerHTML = `
+    <div class="comment-header">
+      <span class="comment-author">${escHtml(nama)}</span>
+      <span class="comment-time">baru saja</span>
+    </div>
+    <p class="comment-text">${escHtml(pesan)}</p>`;
+  list.prepend(item);
 }
 
 function formatTime(dateString) {

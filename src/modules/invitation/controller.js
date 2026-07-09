@@ -38,7 +38,9 @@ export const renderPublicTemplate = async (req, res) => {
     // Format Data
     const formatUntukTemplate = {
       id: data.id,
+
       slug: data.slug || '',
+      template_slug: data.templates.slug || '',
       bg_music: data.bg_music || '',
       foto_cover: data.foto_cover ? SUPABASE_BUCKET_URL + data.foto_cover : '',
 
@@ -117,8 +119,12 @@ export const renderPublicTemplate = async (req, res) => {
           : [],
     };
 
+    console.log('Format undangan', formatUntukTemplate);
+
     // 3. Render Data To Template
-    res.render('invitation/views/rustic-elegant.ejs', { data: formatUntukTemplate });
+    res.render(`invitation/views/${formatUntukTemplate.template_slug}.ejs`, {
+      data: formatUntukTemplate,
+    });
   } catch (error) {
     console.error('Gagal merender undangan:', error);
     return res.status(500).send('Terjadi kesalahan pada server saat memuat undangan.');

@@ -382,7 +382,7 @@
             type="hidden"
             name="invitation_id"
             id="comment-invitation-id"
-            value="<%= data.id %>"
+            value="<%= typeof data !== 'undefined' && data ? data.id : '' %>"
           />
           <input
             type="text"
