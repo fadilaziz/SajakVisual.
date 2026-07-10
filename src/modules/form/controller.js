@@ -1,4 +1,5 @@
 import service from './service.js';
+import xlsx from 'xlsx';
 
 // Helper: ambil & siapkan data undangan
 async function fetchUndangan(invoice) {
@@ -169,5 +170,48 @@ export const formEdit = async (req, res) => {
       success: false,
       message: error.message || 'Internal server error',
     });
+  }
+};
+
+//Excel Data from Frontend
+export const ExcelData = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res
+        .status(400)
+        .json({ status: 400, success: false, message: 'Tidak ada file yang diunggah' });
+    }
+
+    // Read Excel File
+    const workbook = xlsx.read(req.file.buffer, { type: 'buffer' });
+    const sheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
+
+    //Is files xlsx
+    if (req.file.mimetype !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+      return res.json({ status: 400, success: false, message: 'File bukan xlsx' });
+    }
+
+    // Convert Excel rows to JSON format
+    const rows = xlsx.utils.sheet_to_json(sheet);
+
+    // Ambil data undangan untuk mendapatkan ID invitation
+    const undangan = await fetchUndangan(req.params.invoice);
+    const invitationId = undangan.id;
+
+    // Tambahkan invitation_id ke setiap baris data
+    const data = rows.map((row) => ({
+      ...row,
+      invitation_id: invitationId,
+    }));
+
+    //Save Excel data
+    await service.saveExcelData(data);
+
+    console.log(data);
+    res.json({ status: 200, success: true, data });
+  } catch (error) {
+    console.log(error);
+    res.json({ status: 500, success: false, message: error.message || 'Internal server error' });
   }
 };

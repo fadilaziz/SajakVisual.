@@ -119,10 +119,7 @@ const saveLoveStoryData = async (data, id) => {
 //Save Present/Gift data
 const savePresentData = async (data, id) => {
   // Delete existing present records first
-  const { error: errDelete } = await supabase
-    .from('present')
-    .delete()
-    .eq('invitation_id', id);
+  const { error: errDelete } = await supabase.from('present').delete().eq('invitation_id', id);
   if (errDelete) throw errDelete;
 
   // If the fields are empty, we don't insert a new one
@@ -135,12 +132,10 @@ const savePresentData = async (data, id) => {
     invitation_id: id,
     nama_bank: data.nama_bank,
     pemilik: data.pemilik || '-',
-    rek: data.rek
+    rek: data.rek,
   };
 
-  const { error: errInsert } = await supabase
-    .from('present')
-    .insert(finalPresent);
+  const { error: errInsert } = await supabase.from('present').insert(finalPresent);
 
   if (errInsert) throw errInsert;
   console.log('data Present berhasil diperbarui');
@@ -274,6 +269,32 @@ const saveUrlPhotoCover = async (data, id) => {
   } catch (error) {
     console.error('Gagal memperbarui data savePhoto :', error);
     throw error;
+  }
+};
+
+//Save Excel Data
+const saveExcelData = async (data) => {
+  if (!data) {
+    try {
+      const { error: errDelete } = await supabase
+        .from('invitation_excel')
+        .delete()
+        .eq('id', data.id);
+      if (errDelete) throw errDelete;
+
+      const { error: errInsert } = await supabase
+        .from('invitation_excel')
+        .insert(data)
+        .select('id');
+      if (errInsert) throw errInsert;
+
+      console.log('data berhasil di perbarui');
+
+      return;
+    } catch (error) {
+      console.error('Gagal memperbarui data savePhoto :', error);
+      throw error;
+    }
   }
 };
 

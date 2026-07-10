@@ -141,57 +141,64 @@
     const fn = document.getElementById('excel-file-name');
     if (fn) fn.textContent = file.name;
 
-    if (/\.csv$/i.test(file.name)) {
-      const reader = new FileReader();
-      reader.onload = e => parseCSV(e.target.result);
-      reader.readAsText(file, 'UTF-8');
-    } else {
-      const reader = new FileReader();
-      reader.onload = e => {
-        if (window.XLSX) {
-          try {
-            const wb = window.XLSX.read(e.target.result, { type: 'binary' });
-            const ws = wb.Sheets[wb.SheetNames[0]];
-            parseRaw(window.XLSX.utils.sheet_to_json(ws, { header: 1 }));
-          } catch { toast('Gagal baca Excel. Coba simpan sebagai CSV.'); }
-        } else {
-          toast('Simpan file Excel sebagai .csv lalu unggah kembali.');
-        }
-      };
-      reader.readAsBinaryString(file);
+    const invoice = window.INITIAL_DATA?.invoice_order;
+    if (!invoice) {
+      toast('Invoice ID tidak ditemukan.');
+      return;
     }
-  }
 
-  function parseCSV(text) {
-    const rows = text.split(/\r?\n/)
-      .filter(l => l.trim())
-      .map(l => l.split(/[,;]\s*/).map(c => c.replace(/^"|"$/g, '').trim()));
-    parseRaw(rows);
-  }
+    toast('Mengunggah dan membaca file excel...');
 
-  function parseRaw(rows) {
-    if (!rows.length) return;
-    const first = rows[0].map(c => String(c).toLowerCase());
-    const hasH  = first.some(c => ['nama','name','email','phone','hp','handphone'].includes(c));
-    const data  = hasH ? rows.slice(1) : rows;
+    const formData = new FormData();
+    formData.append('file', file);
 
-    let ni = 0, ei = 1, pi = 2;
-    if (hasH) first.forEach((h, i) => {
-      if (/nama|name/.test(h))                   ni = i;
-      if (/email/.test(h))                        ei = i;
-      if (/hp|phone|handphone|wa|no|nomor/.test(h)) pi = i;
-    });
+    fetch(`/form/${invoice}/excel`, {
+      method: 'POST',
+      body: formData,
+    })
+      .then(res => res.json())
+      .then(resData => {
+        if (resData.success && resData.data) {
+          // Petakan data dari backend ke field nama, email, phone
+          excelRecipients = resData.data.map(row => {
+            let nama = '';
+            let email = '';
+            let phone = '';
+            for (let key in row) {
+              const k = key.toLowerCase().trim();
+              if (k.includes('nama') || k.includes('name')) {
+                nama = String(row[key] || '').trim();
+              } else if (k.includes('email')) {
+                email = String(row[key] || '').trim();
+              } else if (
+                k.includes('hp') ||
+                k.includes('phone') ||
+                k.includes('wa') ||
+                k.includes('telp') ||
+                k.includes('nomor') ||
+                k.includes('no')
+              ) {
+                phone = String(row[key] || '').trim();
+              }
+            }
+            return {
+              nama,
+              email,
+              phone,
+              invitation_id: row.invitation_id
+            };
+          }).filter(r => r.nama || r.email);
 
-    excelRecipients = data
-      .filter(r => r.some(c => String(c).trim()))
-      .map(r => ({
-        nama:  String(r[ni] || '').trim(),
-        email: String(r[ei] || '').trim(),
-        phone: String(r[pi] || '').trim(),
-      }))
-      .filter(r => r.nama || r.email);
-
-    renderExcel();
+          renderExcel();
+          toast('File excel berhasil diimpor.');
+        } else {
+          toast(resData.message || 'Gagal memproses file excel.');
+        }
+      })
+      .catch(err => {
+        console.error('Error uploading file:', err);
+        toast('Terjadi kesalahan saat mengunggah file.');
+      });
   }
 
   function renderExcel() {

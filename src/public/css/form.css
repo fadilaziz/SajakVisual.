@@ -91,7 +91,10 @@ body {
   cursor: pointer;
   white-space: nowrap;
   text-decoration: none;
-  transition: color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
   position: relative;
 }
 
@@ -113,11 +116,15 @@ body {
 .tab-bar-item.active {
   background: var(--form-bg);
   color: var(--form-text);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 1px 4px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(0, 0, 0, 0.06);
 }
 
 .dark .tab-bar-item.active {
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 1px 4px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
 .tab-bar-item.active i {
@@ -273,7 +280,6 @@ body {
   min-height: 100px;
   line-height: 1.6;
 }
-
 
 /* Adjust padding if icon/prefix is present */
 .input-wrapper .input-icon ~ .form-input {
@@ -579,11 +585,14 @@ body {
   background-color: var(--form-card);
   border: 1px solid var(--form-border);
   border-radius: var(--radius-md);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
   opacity: 0;
   visibility: hidden;
   transform: translateY(-6px) scale(0.97);
-  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+  transition:
+    opacity 0.18s ease,
+    transform 0.18s ease,
+    visibility 0.18s ease;
   z-index: 200;
   overflow: hidden;
 }
@@ -762,7 +771,7 @@ body {
 .preview-device-btn.active {
   background: var(--form-bg);
   color: var(--form-text);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 /* Preview stage — the area that contains the mockup */
@@ -787,8 +796,14 @@ body {
 }
 
 @keyframes popIn {
-  from { opacity: 0; transform: scale(0.92) translateY(12px); }
-  to   { opacity: 1; transform: scale(1)    translateY(0); }
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 .phone-frame {
@@ -799,8 +814,8 @@ body {
   border: 8px solid var(--form-text);
   box-shadow:
     0 0 0 2px var(--form-border),
-    0 24px 60px rgba(0,0,0,0.25),
-    inset 0 0 0 1px rgba(255,255,255,0.08);
+    0 24px 60px rgba(0, 0, 0, 0.25),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -861,7 +876,7 @@ body {
   background: var(--form-bg);
   border-radius: 12px;
   border: 1px solid var(--form-border);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
   overflow: hidden;
 }
 
@@ -886,9 +901,15 @@ body {
   border-radius: 50%;
 }
 
-.desktop-dots span:nth-child(1) { background: #ff5f57; }
-.desktop-dots span:nth-child(2) { background: #ffbd2e; }
-.desktop-dots span:nth-child(3) { background: #28c840; }
+.desktop-dots span:nth-child(1) {
+  background: #ff5f57;
+}
+.desktop-dots span:nth-child(2) {
+  background: #ffbd2e;
+}
+.desktop-dots span:nth-child(3) {
+  background: #28c840;
+}
 
 .desktop-url-bar {
   flex: 1;
@@ -971,7 +992,9 @@ body {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Responsive: on small screens scale phone down more */
@@ -1052,8 +1075,14 @@ body {
 }
 
 @keyframes fadePanel {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Recipient Table */
@@ -1092,8 +1121,14 @@ body {
 }
 
 @keyframes rowSlideIn {
-  from { opacity: 0; transform: translateX(-8px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .recipient-row input {
@@ -1135,7 +1170,9 @@ body {
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), var(--shadow-2xs);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    var(--shadow-2xs);
   transition: all 0.2s ease;
   white-space: nowrap;
 }
@@ -1153,7 +1190,9 @@ body {
   background: linear-gradient(to bottom, #ffffff, #e6e6e6);
   color: #111111;
   border: 1px solid #d1d1d1;
-  box-shadow: inset 0 1px 0 #ffffff, var(--shadow-2xs);
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    var(--shadow-2xs);
 }
 
 .dark .btn-row-send:hover {
@@ -1362,6 +1401,7 @@ body {
   background: var(--muted);
   border: 1px solid var(--form-border);
   border-radius: var(--radius-md);
+  margin-bottom: 10px;
 }
 
 .excel-file-info {
@@ -1451,7 +1491,7 @@ body {
     max-width: 100%;
     justify-content: center;
   }
-  
+
   /* Keep table layout on mobile by enforcing a min-width on grid elements */
   .recipient-table-header,
   .recipient-row {
